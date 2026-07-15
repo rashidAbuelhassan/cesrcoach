@@ -80,8 +80,8 @@ can be promoted from Admin → Members.
 
 ## Database
 
-Everything lives in the Supabase project `My CESR Companion`
-(`pciyyphxlywzwnptrzmq`) in tables prefixed `coach_` (profiles, event types,
+Everything lives in the Supabase project `CESR Coach`
+(`wxllqckypgfqlhslhkkw`) in tables prefixed `coach_` (profiles, event types,
 events, bookings, videos, documents, consultants, settings) with row-level
 security throughout: members see published content and their own bookings;
 admins manage everything. Storage buckets: `coach-branding` (public),
