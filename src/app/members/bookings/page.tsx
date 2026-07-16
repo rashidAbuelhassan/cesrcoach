@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import BookingBoard from "@/components/members/BookingBoard";
 import type { Booking, CoachEvent, EventType } from "@/lib/types";
@@ -41,12 +42,13 @@ export default async function BookingsPage() {
   }
 
   return (
-    <BookingBoard
-      userId={user!.id}
-      eventTypes={(eventTypes as EventType[]) ?? []}
-      events={(events as CoachEvent[]) ?? []}
-      myBookings={(myBookings as Booking[]) ?? []}
-      bookedCounts={bookedCounts}
-    />
+    <Suspense>
+      <BookingBoard
+        eventTypes={(eventTypes as EventType[]) ?? []}
+        events={(events as CoachEvent[]) ?? []}
+        myBookings={(myBookings as Booking[]) ?? []}
+        bookedCounts={bookedCounts}
+      />
+    </Suspense>
   );
 }

@@ -1,16 +1,18 @@
 import { createClient } from "@/lib/supabase/server";
 import SettingsManager from "@/components/admin/SettingsManager";
-import type { Consultant } from "@/lib/types";
+import type { Consultant, EventType } from "@/lib/types";
 
 export const metadata = { title: "Settings · Admin" };
 
 export default async function AdminSettingsPage() {
   const supabase = await createClient();
 
-  const [{ data: settings }, { data: consultants }] = await Promise.all([
-    supabase.from("coach_settings").select("*"),
-    supabase.from("coach_consultants").select("*").order("sort_order"),
-  ]);
+  const [{ data: settings }, { data: consultants }, { data: eventTypes }] =
+    await Promise.all([
+      supabase.from("coach_settings").select("*"),
+      supabase.from("coach_consultants").select("*").order("sort_order"),
+      supabase.from("coach_event_types").select("*").order("sort_order"),
+    ]);
 
   const map: Record<string, Record<string, unknown>> = {};
   for (const s of settings ?? []) map[s.key] = s.value;
@@ -22,6 +24,7 @@ export default async function AdminSettingsPage() {
       contactEmail={(map.contact_email?.text as string) ?? ""}
       adminEmails={((map.admin_emails?.emails as string[]) ?? []).join(", ")}
       consultants={(consultants as Consultant[]) ?? []}
+      eventTypes={(eventTypes as EventType[]) ?? []}
     />
   );
 }

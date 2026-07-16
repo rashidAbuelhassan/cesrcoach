@@ -1,13 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Booking, CoachEvent, EventType } from "@/lib/types";
 import { daysUntil, formatDateTime, formatDuration } from "@/lib/utils";
 
+function formatPrice(price: number | null | undefined) {
+  const n = Number(price ?? 0);
+  return n > 0 ? `£${n % 1 === 0 ? n.toFixed(0) : n.toFixed(2)}` : null;
+}
+
 interface Props {
-  userId: string;
   eventTypes: EventType[];
   events: CoachEvent[];
   myBookings: Booking[];
@@ -15,17 +19,48 @@ interface Props {
 }
 
 export default function BookingBoard({
-  userId,
   eventTypes,
   events,
   myBookings,
   bookedCounts,
 }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const paymentReturn = searchParams.get("payment");
   const [filter, setFilter] = useState<string>("all");
   const [bookingEvent, setBookingEvent] = useState<CoachEvent | null>(null);
-  const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
+  const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(
+    () =>
+      paymentReturn === "success"
+        ? {
+            kind: "ok",
+            text: "✓ Payment received — your booking is confirmed. (If it still shows pending, refresh in a few seconds.)",
+          }
+        : paymentReturn === "cancelled"
+          ? { kind: "err", text: "Payment was cancelled — your seat was not booked." }
+          : null
+  );
   const [cancelling, setCancelling] = useState<string | null>(null);
+  const handledReturn = useRef(false);
+
+  // returning from an abandoned Stripe Checkout: release the held seat
+  // immediately instead of waiting for the checkout to expire
+  useEffect(() => {
+    if (handledReturn.current || !paymentReturn) return;
+    handledReturn.current = true;
+
+    const bookingId = searchParams.get("booking");
+    if (paymentReturn === "cancelled" && bookingId) {
+      const supabase = createClient();
+      supabase
+        .from("coach_bookings")
+        .update({ status: "cancelled", updated_at: new Date().toISOString() })
+        .eq("id", bookingId)
+        .eq("payment_status", "unpaid")
+        .then(() => router.refresh());
+    }
+    window.history.replaceState(null, "", "/members/bookings");
+  }, [paymentReturn, searchParams, router]);
 
   const myActiveByEvent = useMemo(() => {
     const m = new Map<string, Booking>();
@@ -120,6 +155,7 @@ export default function BookingBoard({
                   </div>
                   <div className="flex items-center gap-2">
                     <StatusChip status={b.status} />
+                    <PaymentChip booking={b} />
                     {active && future && (
                       <button
                         onClick={() => cancelBooking(b)}
@@ -246,7 +282,11 @@ export default function BookingBoard({
                       disabled={left === 0 || (t?.requires_portfolio && !lead)}
                       className="btn-liquid w-full py-2.5 text-sm"
                     >
-                      {left === 0 ? "Fully booked" : "Book this session"}
+                      {left === 0
+                        ? "Fully booked"
+                        : formatPrice(t?.price_gbp)
+                          ? `Book for ${formatPrice(t?.price_gbp)}`
+                          : "Book this session"}
                     </button>
                   )}
                 </div>
@@ -259,7 +299,6 @@ export default function BookingBoard({
       {bookingEvent && (
         <BookingModal
           event={bookingEvent}
-          userId={userId}
           onClose={() => setBookingEvent(null)}
           onBooked={() => {
             setBookingEvent(null);
@@ -273,6 +312,24 @@ export default function BookingBoard({
       )}
     </div>
   );
+}
+
+function PaymentChip({ booking }: { booking: Booking }) {
+  if (booking.payment_status === "paid") {
+    return (
+      <span className="chip border-emerald-400/30 bg-emerald-400/10 text-emerald-200">
+        💳 Paid{booking.amount_paid_gbp ? ` £${Number(booking.amount_paid_gbp)}` : ""}
+      </span>
+    );
+  }
+  if (booking.payment_status === "refunded") {
+    return (
+      <span className="chip border-sky-400/30 bg-sky-400/10 text-sky-200">
+        💳 Refunded
+      </span>
+    );
+  }
+  return null;
 }
 
 function StatusChip({ status }: { status: Booking["status"] }) {
@@ -293,12 +350,10 @@ function StatusChip({ status }: { status: Booking["status"] }) {
 
 function BookingModal({
   event,
-  userId,
   onClose,
   onBooked,
 }: {
   event: CoachEvent;
-  userId: string;
   onClose: () => void;
   onBooked: () => void;
 }) {
@@ -310,29 +365,41 @@ function BookingModal({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const price = formatPrice(t?.price_gbp);
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
-    const supabase = createClient();
-    const { error } = await supabase.from("coach_bookings").insert({
-      event_id: event.id,
-      user_id: userId,
-      portfolio_url: needsPortfolio ? portfolioUrl : null,
-      notes: notes || null,
-    });
-    setLoading(false);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event_id: event.id,
+          portfolio_url: needsPortfolio ? portfolioUrl : undefined,
+          notes: notes || undefined,
+        }),
+      });
+      const data = await res.json();
 
-    if (error) {
-      setError(
-        error.message.includes("duplicate")
-          ? "You already have a booking for this session."
-          : error.message
-      );
-      return;
+      if (!res.ok) {
+        setError(data.error ?? "Something went wrong. Please try again.");
+        setLoading(false);
+        return;
+      }
+      if (data.url) {
+        // paid session → hand over to Stripe Checkout
+        window.location.assign(data.url);
+        return;
+      }
+      setLoading(false);
+      onBooked();
+    } catch {
+      setError("Network error — please try again.");
+      setLoading(false);
     }
-    onBooked();
   }
 
   return (
@@ -415,8 +482,20 @@ function BookingModal({
             />
           </div>
 
+          {price && (
+            <p className="rounded-2xl border border-cyan-300/20 bg-cyan-300/8 px-4 py-3 text-xs leading-relaxed text-cyan-100/90">
+              💳 This session costs <strong>{price}</strong>. You&apos;ll be taken
+              to our secure Stripe checkout — your place is confirmed as soon as
+              payment completes.
+            </p>
+          )}
+
           <button type="submit" disabled={loading || !agreed} className="btn-liquid w-full py-3 text-sm">
-            {loading ? "Booking…" : "Confirm my booking"}
+            {loading
+              ? "One moment…"
+              : price
+                ? `Pay ${price} & book`
+                : "Confirm my booking"}
           </button>
         </form>
       </div>

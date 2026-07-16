@@ -131,6 +131,26 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
               >
                 {b.status}
               </span>
+              {b.payment_status === "paid" && (
+                <span className="chip border-emerald-400/30 bg-emerald-400/10 text-emerald-200">
+                  💳 Paid £{Number(b.amount_paid_gbp ?? 0)}
+                </span>
+              )}
+              {b.payment_status === "unpaid" && b.status !== "cancelled" && (
+                <span className="chip border-amber-400/30 bg-amber-400/10 text-amber-200">
+                  💳 Awaiting payment
+                </span>
+              )}
+              {b.payment_status === "refunded" && (
+                <span className="chip border-sky-400/30 bg-sky-400/10 text-sky-200">
+                  💳 Refunded
+                </span>
+              )}
+              {b.payment_status === "paid" && b.status === "cancelled" && (
+                <span className="chip border-red-400/30 bg-red-400/10 text-red-200">
+                  ⚠ Refund due — issue it in the Stripe dashboard
+                </span>
+              )}
               <div className="flex shrink-0 flex-wrap gap-2">
                 {b.status === "pending" && (
                   <button

@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import type { Consultant } from "@/lib/types";
+import type { Consultant, EventType } from "@/lib/types";
 import { site } from "@/config/site";
 
 interface Props {
@@ -13,6 +13,7 @@ interface Props {
   contactEmail: string;
   adminEmails: string;
   consultants: Consultant[];
+  eventTypes: EventType[];
 }
 
 export default function SettingsManager(props: Props) {
@@ -194,8 +195,106 @@ export default function SettingsManager(props: Props) {
         </button>
       </form>
 
+      <PricingEditor eventTypes={props.eventTypes} />
+
       <ConsultantEditor consultants={props.consultants} />
     </div>
+  );
+}
+
+/* ---------------- session pricing ---------------- */
+
+function PricingEditor({ eventTypes }: { eventTypes: EventType[] }) {
+  const router = useRouter();
+  const [prices, setPrices] = useState<Record<string, string>>(
+    Object.fromEntries(
+      eventTypes.map((t) => [t.id, t.price_gbp != null ? String(t.price_gbp) : ""])
+    )
+  );
+  const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setMessage(null);
+    const supabase = createClient();
+
+    for (const t of eventTypes) {
+      const raw = prices[t.id]?.trim() ?? "";
+      const value = raw === "" ? null : Number(raw);
+      if (value != null && (isNaN(value) || value < 0)) {
+        setMessage({ kind: "err", text: `"${t.name}": enter a valid price (or leave empty for free).` });
+        setSaving(false);
+        return;
+      }
+      const { error } = await supabase
+        .from("coach_event_types")
+        .update({ price_gbp: value })
+        .eq("id", t.id);
+      if (error) {
+        setMessage({ kind: "err", text: error.message });
+        setSaving(false);
+        return;
+      }
+    }
+    setMessage({ kind: "ok", text: "✓ Prices saved. New bookings use them immediately." });
+    setSaving(false);
+    router.refresh();
+  }
+
+  return (
+    <form onSubmit={save} className="glass max-w-2xl space-y-4 rounded-3xl p-6 sm:p-8">
+      <h2 className="text-lg font-bold">💳 Session pricing</h2>
+      <p className="text-sm text-mist/55">
+        Price in GBP per participant. Leave empty (or 0) to make a session type
+        free — free sessions skip Stripe checkout and are confirmed manually.
+      </p>
+      {message && (
+        <p
+          className={`rounded-xl border px-4 py-3 text-sm ${
+            message.kind === "ok"
+              ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
+              : "border-red-400/30 bg-red-400/10 text-red-200"
+          }`}
+        >
+          {message.text}
+        </p>
+      )}
+      <div className="space-y-3">
+        {eventTypes.map((t) => (
+          <div key={t.id} className="flex items-center gap-4">
+            <span
+              className="chip shrink-0"
+              style={{
+                borderColor: `${t.color}55`,
+                background: `${t.color}18`,
+                color: t.color ?? undefined,
+              }}
+            >
+              {t.name}
+            </span>
+            <div className="ml-auto flex items-center gap-2">
+              <span className="text-mist/50">£</span>
+              <input
+                type="number"
+                min={0}
+                step="0.01"
+                className="field w-28 text-right"
+                placeholder="free"
+                value={prices[t.id] ?? ""}
+                onChange={(e) =>
+                  setPrices((p) => ({ ...p, [t.id]: e.target.value }))
+                }
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+      <button type="submit" disabled={saving} className="btn-liquid px-8 py-2.5 text-sm">
+        {saving ? "Saving…" : "Save prices"}
+      </button>
+    </form>
   );
 }
 

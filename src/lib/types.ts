@@ -46,12 +46,18 @@ export interface CoachEvent {
 }
 
 export type BookingStatus = "pending" | "confirmed" | "cancelled" | "completed";
+export type PaymentStatus = "not_required" | "unpaid" | "paid" | "refunded";
 
 export interface Booking {
   id: string;
   event_id: string;
   user_id: string;
   status: BookingStatus;
+  payment_status: PaymentStatus;
+  stripe_session_id: string | null;
+  stripe_payment_intent: string | null;
+  amount_paid_gbp: number | null;
+  paid_at: string | null;
   portfolio_url: string | null;
   notes: string | null;
   admin_notes: string | null;

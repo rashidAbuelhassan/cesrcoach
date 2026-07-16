@@ -60,6 +60,27 @@ Two ways — pick whichever you prefer:
 Site name, tagline and contact email live in `src/config/site.ts` (and can
 also be overridden from Admin → Settings).
 
+## Payments (Stripe)
+
+Bookings use a **pay-to-book** flow: booking a priced session creates a
+pending booking and redirects to Stripe Checkout. Payment success (via
+webhook) auto-confirms the booking; an abandoned/expired checkout releases
+the seat. Free sessions (price empty/0) skip checkout and are confirmed
+manually. Prices are edited in **Admin → Settings → Session pricing**.
+Refunds are issued manually from the Stripe dashboard — the admin bookings
+list flags paid-but-cancelled bookings that need one.
+
+Required server env vars (Vercel → Project → Settings → Environment Variables):
+
+| Variable | Where to find it |
+| --- | --- |
+| `STRIPE_SECRET_KEY` | Stripe dashboard → Developers → API keys (`sk_test_…` first) |
+| `STRIPE_WEBHOOK_SECRET` | Stripe dashboard → Developers → Webhooks → endpoint signing secret |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase dashboard → Project Settings → API |
+
+The webhook endpoint is `https://<your-domain>/api/stripe/webhook` and must
+subscribe to `checkout.session.completed` and `checkout.session.expired`.
+
 ## Getting started
 
 ```bash
