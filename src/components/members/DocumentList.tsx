@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import type { Doc } from "@/lib/types";
-import { createClient } from "@/lib/supabase/client";
 
 export default function DocumentList({ docs }: { docs: Doc[] }) {
   const categories = useMemo(
@@ -10,32 +9,24 @@ export default function DocumentList({ docs }: { docs: Doc[] }) {
     [docs]
   );
   const [category, setCategory] = useState("All");
-  const [busy, setBusy] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
 
   const filtered =
     category === "All" ? docs : docs.filter((d) => d.category === category);
 
-  async function download(doc: Doc) {
-    setError(null);
+  /** Uploaded files open in the protected reader; external links open normally. */
+  function open(doc: Doc) {
+    if (doc.file_path) {
+      window.open(
+        `/reader/${doc.id}`,
+        `cesr-reader-${doc.id}`,
+        "noopener,width=1100,height=900,menubar=no,toolbar=no,location=no,status=no"
+      );
+      return;
+    }
     if (doc.external_url) {
       window.open(doc.external_url, "_blank", "noopener");
-      return;
     }
-    if (!doc.file_path) return;
-
-    setBusy(doc.id);
-    const supabase = createClient();
-    const { data, error } = await supabase.storage
-      .from("coach-documents")
-      .createSignedUrl(doc.file_path, 300, { download: true });
-    setBusy(null);
-
-    if (error || !data?.signedUrl) {
-      setError("Could not generate the download link. Please try again.");
-      return;
-    }
-    window.location.assign(data.signedUrl);
   }
 
   if (docs.length === 0) {
@@ -83,7 +74,14 @@ export default function DocumentList({ docs }: { docs: Doc[] }) {
               📄
             </span>
             <div className="min-w-0 flex-1">
-              <p className="font-semibold">{d.title}</p>
+              <p className="font-semibold">
+                {d.title}
+                {d.file_path && (
+                  <span className="ml-2 align-middle text-[10px] font-semibold text-cyan-300/70">
+                    🔒 VIEW ONLY
+                  </span>
+                )}
+              </p>
               <p className="truncate text-xs text-mist/50">
                 {d.category}
                 {d.file_size_kb
@@ -96,12 +94,8 @@ export default function DocumentList({ docs }: { docs: Doc[] }) {
                 {d.description ? ` · ${d.description}` : ""}
               </p>
             </div>
-            <button
-              onClick={() => download(d)}
-              disabled={busy === d.id}
-              className="btn-liquid px-5 py-2 text-xs"
-            >
-              {busy === d.id ? "Preparing…" : "⬇ Download"}
+            <button onClick={() => open(d)} className="btn-liquid px-5 py-2 text-xs">
+              {d.file_path ? "📖 Open reader" : "↗ Open link"}
             </button>
           </li>
         ))}

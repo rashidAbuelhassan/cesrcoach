@@ -257,6 +257,27 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* Protected reader: never render to paper or PDF-print */
+body:has(.reader-protected) {
+  overscroll-behavior: none;
+}
+@media print {
+  .reader-protected,
+  .reader-protected * {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  .reader-protected::after {
+    content: "This document is view-only and cannot be printed.";
+    display: block !important;
+    visibility: visible !important;
+    padding: 4rem;
+    text-align: center;
+    font-size: 14pt;
+    color: #000;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

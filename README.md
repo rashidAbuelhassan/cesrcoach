@@ -18,8 +18,8 @@ Home Screen on iOS & Android).
 ### Member area (`/members`) — free registration
 - **Video library** — pre-recorded presentations (YouTube / Vimeo / Loom /
   MP4 links), filterable by category, played in a glass modal.
-- **Document library** — downloadable templates & guides served from private
-  Supabase Storage via short-lived signed URLs.
+- **Document library** — view-only PDFs opened in a protected reader window
+  (see *Document protection* below).
 - **Bookings** — members can book the three session formats:
   1. **Portfolio Clinic** — 30-minute one-to-one; the booking form *requires*
      a portfolio link and the member must acknowledge the **3-week advance
@@ -59,6 +59,30 @@ Two ways — pick whichever you prefer:
 
 Site name, tagline and contact email live in `src/config/site.ts` (and can
 also be overridden from Admin → Settings).
+
+## Document protection
+
+Uploaded documents open in `/reader/[id]` — a standalone window that renders
+the PDF to `<canvas>` with pdf.js, so the browser's native PDF toolbar (and
+its download/print buttons) never appears. The file itself is streamed through
+`/api/documents/[id]/stream`, which re-checks the session on every request and
+returns `no-store` — no signed storage URL ever reaches the browser, so there
+is no link to copy or share.
+
+Each page is stamped **into the pixels** with the viewer's name, email and the
+time it was opened, so any screenshot or photograph identifies who leaked it.
+On top of that the reader blocks right-click, copy, drag, Ctrl/Cmd+S and
+Ctrl/Cmd+P, blanks itself on print, and blurs whenever the window loses focus.
+
+**Limits, honestly:** no website can prevent a screenshot or a phone camera —
+that capability doesn't exist in browsers. A technically capable user can also
+recover the bytes from devtools. The watermark is the real control here: it
+makes leaks traceable rather than impossible. Files linked as *external URLs*
+(Google Drive etc.) bypass all of this — upload files directly to keep them
+protected.
+
+`pdfjs-dist` is intentionally pinned to **4.x**; v5/v6 rely on very new JS
+APIs that even current Chromium lacks, which breaks the reader for many users.
 
 ## Payments (Stripe)
 

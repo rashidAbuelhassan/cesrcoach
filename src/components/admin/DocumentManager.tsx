@@ -120,7 +120,10 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
         <div>
           <h1 className="text-3xl font-bold">📄 Documents</h1>
           <p className="mt-2 text-mist/60">
-            Upload templates, checklists and guides for members to download.
+            Upload PDFs for members to read. Uploaded files open in the secure
+            view-only reader — no downloading or printing, and every page is
+            watermarked with the reader&apos;s name and email. External links
+            can&apos;t be protected this way.
           </p>
         </div>
         <button onClick={openCreate} className="btn-liquid px-6 py-2.5 text-sm">
@@ -217,7 +220,10 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
             </div>
             <div>
               <label className="label">
-                Upload file {editing?.file_path ? "(replaces the current file)" : ""}
+                Upload PDF {editing?.file_path ? "(replaces the current file)" : ""}
+                <span className="ml-1 font-normal text-cyan-300/70">
+                  — protected, view-only
+                </span>
               </label>
               <input
                 ref={fileRef}
@@ -227,7 +233,12 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
               />
             </div>
             <div>
-              <label className="label">…or link to an external file</label>
+              <label className="label">
+                …or link to an external file
+                <span className="ml-1 font-normal text-amber-300/70">
+                  — opens externally, not protected
+                </span>
+              </label>
               <input
                 type="url"
                 className="field"

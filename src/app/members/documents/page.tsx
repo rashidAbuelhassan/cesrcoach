@@ -18,8 +18,9 @@ export default async function DocumentsPage() {
       <header>
         <h1 className="text-3xl font-bold">📄 Document library</h1>
         <p className="mt-2 text-mist/60">
-          Templates, checklists and guides — download what you need for your
-          portfolio.
+          Templates, checklists and guides. Documents open in our secure
+          reader — they&apos;re for your personal study and can&apos;t be
+          downloaded or printed.
         </p>
       </header>
       <DocumentList docs={(docs as Doc[]) ?? []} />
