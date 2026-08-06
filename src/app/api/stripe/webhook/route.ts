@@ -40,6 +40,12 @@ export async function POST(request: Request) {
     if (!bookingId) return NextResponse.json({ received: true });
 
     if (event.type === "checkout.session.completed") {
+      // count the redemption only once the money is in
+      const discountCode = session.metadata?.discount_code;
+      if (discountCode) {
+        await admin.rpc("coach_redeem_discount", { p_code: discountCode });
+      }
+
       await admin
         .from("coach_bookings")
         .update({

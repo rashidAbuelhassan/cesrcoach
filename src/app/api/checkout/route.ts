@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe } from "@/lib/stripe";
+import { validateDiscount } from "@/lib/discounts";
 import { daysUntil } from "@/lib/utils";
 import type { CoachEvent, EventType } from "@/lib/types";
 
@@ -21,7 +22,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Not signed in." }, { status: 401 });
   }
 
-  let body: { event_id?: string; portfolio_url?: string; notes?: string };
+  let body: {
+    event_id?: string;
+    portfolio_url?: string;
+    notes?: string;
+    discount_code?: string;
+  };
   try {
     body = await request.json();
   } catch {
@@ -65,10 +71,30 @@ export async function POST(request: Request) {
     }
   }
 
-  const priceGbp = Number(type.price_gbp ?? 0);
+  const listPriceGbp = Number(type.price_gbp ?? 0);
+  const admin = createAdminClient();
+
+  // Re-validate any discount here rather than trusting the amount the
+  // browser showed — this is the figure the member is actually charged.
+  let discountGbp = 0;
+  let discountCode: string | null = null;
+  if (body.discount_code && listPriceGbp > 0 && admin) {
+    const check = await validateDiscount(
+      admin,
+      body.discount_code,
+      event.event_type_id,
+      listPriceGbp
+    );
+    if (!check.ok) {
+      return NextResponse.json({ error: check.error }, { status: 400 });
+    }
+    discountGbp = check.discountGbp;
+    discountCode = check.code;
+  }
+
+  const priceGbp = Math.max(0, listPriceGbp - discountGbp);
   const isPaid = priceGbp > 0;
 
-  const admin = createAdminClient();
   if (isPaid && (!admin || !getStripe())) {
     return NextResponse.json(
       {
@@ -82,6 +108,9 @@ export async function POST(request: Request) {
   // Create the booking (capacity + duplicate constraints enforced in the DB).
   // The service client is used so payment fields can be written; user identity
   // is taken from the authenticated session above, never from the request body.
+  // a code worth 100% leaves nothing to charge — the seat is comped
+  const fullyDiscounted = !isPaid && listPriceGbp > 0;
+
   const writer = admin ?? supabase;
   const { data: booking, error: insertError } = await writer
     .from("coach_bookings")
@@ -90,7 +119,16 @@ export async function POST(request: Request) {
       user_id: user.id,
       portfolio_url: type.requires_portfolio ? body.portfolio_url : null,
       notes: body.notes || null,
-      payment_status: isPaid ? "unpaid" : "not_required",
+      discount_code: discountCode,
+      discount_gbp: discountGbp || null,
+      payment_status: isPaid ? "unpaid" : fullyDiscounted ? "paid" : "not_required",
+      ...(fullyDiscounted
+        ? {
+            status: "confirmed",
+            amount_paid_gbp: 0,
+            paid_at: new Date().toISOString(),
+          }
+        : {}),
     })
     .select()
     .single();
@@ -105,7 +143,10 @@ export async function POST(request: Request) {
   }
 
   if (!isPaid) {
-    return NextResponse.json({ free: true });
+    if (fullyDiscounted && discountCode && admin) {
+      await admin.rpc("coach_redeem_discount", { p_code: discountCode });
+    }
+    return NextResponse.json({ free: true, comped: fullyDiscounted });
   }
 
   // Paid: create the Stripe Checkout session
@@ -127,7 +168,11 @@ export async function POST(request: Request) {
             unit_amount: Math.round(priceGbp * 100),
             product_data: {
               name: event.title,
-              description: `${type.name} · ${new Date(event.starts_at).toLocaleString("en-GB")}`,
+              description:
+                `${type.name} · ${new Date(event.starts_at).toLocaleString("en-GB")}` +
+                (discountCode
+                  ? ` · code ${discountCode} (−£${discountGbp.toFixed(2)})`
+                  : ""),
             },
           },
         },
@@ -136,6 +181,7 @@ export async function POST(request: Request) {
         booking_id: booking.id,
         event_id: event.id,
         user_id: user.id,
+        ...(discountCode ? { discount_code: discountCode } : {}),
       },
       // seat is held while checkout is open; webhook releases it on expiry
       expires_at: Math.floor(Date.now() / 1000) + 30 * 60,

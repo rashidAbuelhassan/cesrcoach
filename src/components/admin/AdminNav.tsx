@@ -7,6 +7,7 @@ const tabs = [
   { href: "/admin", label: "Overview", icon: "📊" },
   { href: "/admin/events", label: "Sessions", icon: "🗓" },
   { href: "/admin/bookings", label: "Bookings", icon: "🎟" },
+  { href: "/admin/discounts", label: "Discounts", icon: "🏷" },
   { href: "/admin/videos", label: "Videos", icon: "🎬" },
   { href: "/admin/documents", label: "Documents", icon: "📄" },
   { href: "/admin/members", label: "Members", icon: "👥" },

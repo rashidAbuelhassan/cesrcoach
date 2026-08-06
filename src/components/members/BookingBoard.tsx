@@ -316,9 +316,11 @@ export default function BookingBoard({
 
 function PaymentChip({ booking }: { booking: Booking }) {
   if (booking.payment_status === "paid") {
+    const paid = Number(booking.amount_paid_gbp ?? 0);
     return (
       <span className="chip border-emerald-400/30 bg-emerald-400/10 text-emerald-200">
-        💳 Paid{booking.amount_paid_gbp ? ` £${Number(booking.amount_paid_gbp)}` : ""}
+        {paid > 0 ? `💳 Paid £${paid}` : "🎁 Comped"}
+        {booking.discount_code ? ` · ${booking.discount_code}` : ""}
       </span>
     );
   }
@@ -365,7 +367,51 @@ function BookingModal({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const price = formatPrice(t?.price_gbp);
+  const [codeInput, setCodeInput] = useState("");
+  const [codeError, setCodeError] = useState<string | null>(null);
+  const [checkingCode, setCheckingCode] = useState(false);
+  const [discount, setDiscount] = useState<{
+    code: string;
+    label: string;
+    discountGbp: number;
+    finalGbp: number;
+  } | null>(null);
+
+  const listPrice = Number(t?.price_gbp ?? 0);
+  const price = formatPrice(listPrice);
+  const payable = discount ? discount.finalGbp : listPrice;
+  const payableLabel = payable > 0 ? formatPrice(payable) : null;
+
+  async function applyCode(e: React.MouseEvent) {
+    e.preventDefault();
+    if (!codeInput.trim()) return;
+    setCheckingCode(true);
+    setCodeError(null);
+    try {
+      const res = await fetch("/api/discount/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: codeInput, event_id: event.id }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setDiscount(null);
+        setCodeError(data.error ?? "That code isn't valid.");
+      } else {
+        setDiscount(data);
+      }
+    } catch {
+      setCodeError("Couldn't check that code — please try again.");
+    } finally {
+      setCheckingCode(false);
+    }
+  }
+
+  function clearCode() {
+    setDiscount(null);
+    setCodeInput("");
+    setCodeError(null);
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -380,6 +426,7 @@ function BookingModal({
           event_id: event.id,
           portfolio_url: needsPortfolio ? portfolioUrl : undefined,
           notes: notes || undefined,
+          discount_code: discount?.code,
         }),
       });
       const data = await res.json();
@@ -482,19 +529,79 @@ function BookingModal({
             />
           </div>
 
-          {price && (
-            <p className="rounded-2xl border border-cyan-300/20 bg-cyan-300/8 px-4 py-3 text-xs leading-relaxed text-cyan-100/90">
-              💳 This session costs <strong>{price}</strong>. You&apos;ll be taken
-              to our secure Stripe checkout — your place is confirmed as soon as
-              payment completes.
-            </p>
+          {listPrice > 0 && (
+            <div className="space-y-3 rounded-2xl border border-white/10 bg-white/4 p-4">
+              <div>
+                <label className="label" htmlFor="discount">
+                  Discount code (optional)
+                </label>
+                {discount ? (
+                  <div className="flex items-center justify-between gap-3 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-2.5">
+                    <span className="text-sm font-semibold text-emerald-200">
+                      ✓ {discount.code} — {discount.label}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={clearCode}
+                      className="text-xs text-mist/60 underline hover:text-mist"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <input
+                      id="discount"
+                      className="field uppercase"
+                      placeholder="e.g. WELCOME10"
+                      value={codeInput}
+                      onChange={(e) => setCodeInput(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      onClick={applyCode}
+                      disabled={checkingCode || !codeInput.trim()}
+                      className="btn-ghost shrink-0 px-5 text-sm"
+                    >
+                      {checkingCode ? "…" : "Apply"}
+                    </button>
+                  </div>
+                )}
+                {codeError && (
+                  <p className="mt-1.5 text-xs text-red-300">{codeError}</p>
+                )}
+              </div>
+
+              <dl className="space-y-1 border-t border-white/10 pt-3 text-sm">
+                <div className="flex justify-between text-mist/60">
+                  <dt>Session</dt>
+                  <dd>{price}</dd>
+                </div>
+                {discount && (
+                  <div className="flex justify-between text-emerald-300">
+                    <dt>Discount</dt>
+                    <dd>−£{discount.discountGbp.toFixed(2)}</dd>
+                  </div>
+                )}
+                <div className="flex justify-between font-bold">
+                  <dt>Total</dt>
+                  <dd>{payableLabel ?? "Free"}</dd>
+                </div>
+              </dl>
+
+              <p className="text-xs leading-relaxed text-cyan-100/70">
+                {payable > 0
+                  ? "💳 You'll be taken to our secure Stripe checkout — your place is confirmed as soon as payment completes."
+                  : "🎉 This code covers the full price — your place is confirmed straight away."}
+              </p>
+            </div>
           )}
 
           <button type="submit" disabled={loading || !agreed} className="btn-liquid w-full py-3 text-sm">
             {loading
               ? "One moment…"
-              : price
-                ? `Pay ${price} & book`
+              : payableLabel
+                ? `Pay ${payableLabel} & book`
                 : "Confirm my booking"}
           </button>
         </form>

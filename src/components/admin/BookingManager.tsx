@@ -136,6 +136,12 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
                   💳 Paid £{Number(b.amount_paid_gbp ?? 0)}
                 </span>
               )}
+              {b.discount_code && (
+                <span className="chip border-cyan-400/30 bg-cyan-400/10 text-cyan-200">
+                  🏷 {b.discount_code}
+                  {b.discount_gbp ? ` (−£${Number(b.discount_gbp).toFixed(2)})` : ""}
+                </span>
+              )}
               {b.payment_status === "unpaid" && b.status !== "cancelled" && (
                 <span className="chip border-amber-400/30 bg-amber-400/10 text-amber-200">
                   💳 Awaiting payment

@@ -100,6 +100,16 @@ manually. Prices are edited in **Admin → Settings → Session pricing**.
 Refunds are issued manually from the Stripe dashboard — the admin bookings
 list flags paid-but-cancelled bookings that need one.
 
+### Discount codes
+
+Admin → Discounts creates percentage or fixed-amount codes, optionally scoped
+to one service, capped by redemption count and/or an expiry date. Codes are
+**never sent to the browser** — the member types one, and the server returns
+only whether it worked and what it's worth. Checkout re-validates the code
+before charging, so the amount shown can't be tampered with, and a code worth
+100% confirms the booking immediately without touching Stripe. Redemptions are
+counted only once payment succeeds, so abandoned checkouts don't burn a code.
+
 Required server env vars (Vercel → Project → Settings → Environment Variables):
 
 | Variable | Where to find it |

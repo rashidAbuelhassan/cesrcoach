@@ -58,6 +58,8 @@ export interface Booking {
   stripe_payment_intent: string | null;
   amount_paid_gbp: number | null;
   paid_at: string | null;
+  discount_code: string | null;
+  discount_gbp: number | null;
   portfolio_url: string | null;
   notes: string | null;
   admin_notes: string | null;
@@ -101,6 +103,21 @@ export interface Consultant {
   photo_url: string | null;
   sort_order: number;
   active: boolean;
+}
+
+export interface DiscountCodeRow {
+  id: string;
+  code: string;
+  description: string | null;
+  discount_type: "percent" | "amount";
+  discount_value: number;
+  event_type_id: string | null;
+  max_redemptions: number | null;
+  times_redeemed: number;
+  valid_from: string | null;
+  valid_until: string | null;
+  active: boolean;
+  created_at: string;
 }
 
 export interface Setting {
