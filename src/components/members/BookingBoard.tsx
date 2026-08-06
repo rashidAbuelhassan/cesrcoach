@@ -97,7 +97,7 @@ export default function BookingBoard({
       <header>
         <h1 className="text-3xl font-bold">📅 Book a session</h1>
         <p className="mt-2 text-mist/60">
-          Choose from our three session formats and reserve your place.
+          Choose the session that fits where you are and reserve your place.
         </p>
       </header>
 
@@ -509,7 +509,7 @@ function BookingModal({
                   I understand my portfolio must be accessible to my reviewer{" "}
                   <strong>at least {t?.portfolio_lead_days ?? 21} days before</strong>{" "}
                   the session, and that incomplete access may limit the value of
-                  my 30-minute clinic.
+                  my session.
                 </span>
               </label>
             </>

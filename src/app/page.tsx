@@ -43,11 +43,11 @@ const faqs = [
   },
   {
     q: "Why must I share my portfolio 3 weeks before a Portfolio Clinic?",
-    a: "Thirty minutes goes fast. Your reviewer studies your portfolio in depth beforehand so the session is spent on targeted feedback and an action plan — not on reading your documents.",
+    a: "Your session goes fast. Your reviewer studies your portfolio in depth beforehand so the time is spent on targeted feedback and an action plan — not on reading your documents.",
   },
   {
     q: "How do I book a session?",
-    a: "Create a free account, head to the member area and pick a date for the session type you need, then pay securely by card. Portfolio Clinics and their follow-ups are one-to-one; preparation sessions and pathway events run as small groups.",
+    a: "Create a free account, head to the member area and pick a date for the session type you need, then pay securely by card. Portfolio Clinics and their follow-ups are one-to-one, preparation sessions suit an individual or a group, and pathway events run as a group.",
   },
   {
     q: "Where do the sessions take place?",
@@ -56,10 +56,6 @@ const faqs = [
   {
     q: "What is the Portfolio Clinic Follow-up for?",
     a: "It's a shorter, lower-cost session for after your main Portfolio Clinic. Your reviewer already knows your portfolio, so you can spend the time reviewing the changes you've made, resolving anything still outstanding and confirming you're ready to submit.",
-  },
-  {
-    q: "How much do sessions cost?",
-    a: "Prices are per person in GBP and shown on each service above: Portfolio Clinic £499, Portfolio Clinic Follow-up £100, Portfolio Preparation Session £250, and Guidance to the Portfolio Pathway £200.",
   },
   {
     q: "Can I access resources between sessions?",
@@ -83,6 +79,25 @@ export default async function Home() {
       .eq("active", true)
       .order("sort_order"),
   ]);
+
+  // Built from the database so prices in the FAQ can never drift out of date.
+  const priced = (eventTypes as EventType[] | null)?.filter(
+    (t) => t.price_gbp != null && Number(t.price_gbp) > 0
+  );
+  const faqList = priced?.length
+    ? [
+        ...faqs,
+        {
+          q: "How much do sessions cost?",
+          a:
+            `Prices are per person in GBP: ` +
+            priced
+              .map((t) => `${t.name} £${Number(t.price_gbp).toFixed(0)}`)
+              .join(", ") +
+            `.${branding.priceNote ? ` ${branding.priceNote}` : ""}`,
+        },
+      ]
+    : faqs;
 
   return (
     <div className="flex flex-1 flex-col">
@@ -181,7 +196,9 @@ export default async function Home() {
                   <span className="chip">
                     {t.format === "one_to_one"
                       ? "👤 One-to-one"
-                      : `👥 Group of ${t.min_group_size}+`}
+                      : t.min_group_size <= 1
+                        ? "👤 Individual or group"
+                        : `👥 Group of ${t.min_group_size}+`}
                   </span>
                   {t.requires_portfolio && (
                     <span className="chip text-amber-200/90">
@@ -286,7 +303,7 @@ export default async function Home() {
             </h2>
           </div>
           <div className="mt-12 space-y-4">
-            {faqs.map((f) => (
+            {faqList.map((f) => (
               <details key={f.q} className="glass group rounded-2xl">
                 <summary className="cursor-pointer list-none px-6 py-5 font-semibold marker:hidden [&::-webkit-details-marker]:hidden">
                   <span className="flex items-center justify-between gap-4">

@@ -283,7 +283,7 @@ export default async function MemberDashboard() {
           If you book a <strong>Portfolio Clinic</strong>, remember to share
           access to your portfolio at least{" "}
           <strong className="text-amber-300">3 weeks before</strong> your
-          session. Your reviewer studies it in advance so your 30 minutes are
+          session. Your reviewer studies it in advance so your time together is
           spent on feedback, not reading.
         </p>
       </section>
