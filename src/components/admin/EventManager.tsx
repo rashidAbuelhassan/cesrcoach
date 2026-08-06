@@ -12,6 +12,9 @@ interface Props {
   bookedCounts: Record<string, number>;
 }
 
+/** Every CESR Coach session is delivered online. */
+const ONLINE_LOCATION = "Online (link shared after booking)";
+
 const emptyForm = {
   event_type_id: "",
   title: "",
@@ -19,7 +22,7 @@ const emptyForm = {
   date: "",
   time: "10:00",
   capacity: 1,
-  location: "Online (link shared after booking)",
+  location: ONLINE_LOCATION,
   meeting_url: "",
 };
 
@@ -30,6 +33,8 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const selectedType = eventTypes.find((t) => t.id === form.event_type_id);
 
   function openCreate() {
     const firstType = eventTypes[0];
@@ -85,7 +90,7 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
       starts_at: starts.toISOString(),
       ends_at: ends.toISOString(),
       capacity: form.capacity,
-      location: form.location,
+      location: ONLINE_LOCATION,
       meeting_url: form.meeting_url || null,
     };
 
@@ -277,30 +282,31 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="label">Capacity</label>
-                <input
-                  type="number"
-                  min={1}
-                  className="field"
-                  required
-                  value={form.capacity}
-                  onChange={(e) =>
-                    setForm({ ...form, capacity: parseInt(e.target.value) || 1 })
-                  }
-                />
-              </div>
-              <div>
-                <label className="label">Location</label>
-                <input
-                  className="field"
-                  required
-                  value={form.location}
-                  onChange={(e) => setForm({ ...form, location: e.target.value })}
-                />
-              </div>
+            <div>
+              <label className="label">
+                Capacity
+                {selectedType?.format === "one_to_one" && (
+                  <span className="ml-1 font-normal text-amber-300/70">
+                    — one-to-one sessions should stay at 1
+                  </span>
+                )}
+              </label>
+              <input
+                type="number"
+                min={1}
+                className="field"
+                required
+                value={form.capacity}
+                onChange={(e) =>
+                  setForm({ ...form, capacity: parseInt(e.target.value) || 1 })
+                }
+              />
             </div>
+            <p className="rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-xs text-mist/55">
+              💻 All sessions are delivered online — members see “Online (link
+              shared after booking)” and get the joining link below once their
+              booking is confirmed.
+            </p>
             <div>
               <label className="label">Meeting link (shown to confirmed members)</label>
               <input

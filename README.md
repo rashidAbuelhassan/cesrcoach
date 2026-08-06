@@ -20,12 +20,18 @@ Home Screen on iOS & Android).
   MP4 links), filterable by category, played in a glass modal.
 - **Document library** — view-only PDFs opened in a protected reader window
   (see *Document protection* below).
-- **Bookings** — members can book the three session formats:
-  1. **Portfolio Clinic** — 30-minute one-to-one; the booking form *requires*
-     a portfolio link and the member must acknowledge the **3-week advance
-     access rule**. Sessions starting within 21 days can't be booked.
-  2. **Portfolio Preparation Session** — group workshops (5+ participants).
-  3. **Guidance to the Portfolio Pathway** — 4-hour orientation event.
+- **Bookings** — every session is delivered **online**. Four formats:
+  1. **Portfolio Clinic** (£499) — 30-minute one-to-one; the booking form
+     *requires* a portfolio link and the member must acknowledge the **3-week
+     advance access rule**. Sessions starting within 21 days can't be booked.
+  2. **Portfolio Clinic Follow-up** (£100) — 30-minute one-to-one follow-up to
+     the main clinic; no new portfolio lead time, since the reviewer already
+     knows the portfolio.
+  3. **Portfolio Preparation Session** (£250) — group workshops (2+
+     participants).
+  4. **Guidance to the Portfolio Pathway** (£200) — 4-hour orientation event.
+
+  Prices are per person in GBP and editable in Admin → Settings.
   Capacity is enforced in the database; members can cancel; confirmed
   bookings reveal the meeting link.
 - **Profile** — name, phone, specialty, GMC number.

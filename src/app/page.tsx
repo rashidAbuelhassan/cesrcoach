@@ -47,7 +47,19 @@ const faqs = [
   },
   {
     q: "How do I book a session?",
-    a: "Create a free account, head to the member area and pick a date for the session type you need. Portfolio Clinics are one-to-one; preparation sessions and pathway events run as groups.",
+    a: "Create a free account, head to the member area and pick a date for the session type you need, then pay securely by card. Portfolio Clinics and their follow-ups are one-to-one; preparation sessions and pathway events run as small groups.",
+  },
+  {
+    q: "Where do the sessions take place?",
+    a: "Everything we run is fully online, so you can join from anywhere in the world. Once your booking is confirmed, the joining link appears against that session in your member area.",
+  },
+  {
+    q: "What is the Portfolio Clinic Follow-up for?",
+    a: "It's a shorter, lower-cost session for after your main Portfolio Clinic. Your reviewer already knows your portfolio, so you can spend the time reviewing the changes you've made, resolving anything still outstanding and confirming you're ready to submit.",
+  },
+  {
+    q: "How much do sessions cost?",
+    a: "Prices are per person in GBP and shown on each service above: Portfolio Clinic £499, Portfolio Clinic Follow-up £100, Portfolio Preparation Session £250, and Guidance to the Portfolio Pathway £200.",
   },
   {
     q: "Can I access resources between sessions?",
@@ -107,7 +119,7 @@ export default async function Home() {
           <div className="mt-16 grid gap-4 sm:grid-cols-3">
             {[
               ["1-to-1", "portfolio clinics with a consultant reviewer"],
-              ["3 formats", "clinics, group workshops & pathway events"],
+              ["100% online", "join from anywhere in the world"],
               ["24/7", "member library of videos & documents"],
             ].map(([stat, label]) => (
               <div key={stat} className="glass glass-hover rounded-3xl p-6">
@@ -124,15 +136,16 @@ export default async function Home() {
         <div className="mx-auto max-w-6xl">
           <div className="text-center">
             <h2 className="text-3xl font-bold sm:text-4xl">
-              Three ways we <span className="text-aurora">coach you</span>
+              Four ways we <span className="text-aurora">coach you</span>
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-mist/60">
-              Book whichever fits where you are on the pathway — all delivered
-              by consultants with real CESR experience.
+              Book whichever fits where you are on the pathway. Every session is
+              delivered online by consultants with real CESR experience, so you
+              can join from anywhere.
             </p>
           </div>
 
-          <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
             {(eventTypes as EventType[] | null)?.map((t, i) => (
               <div
                 key={t.id}
@@ -145,17 +158,26 @@ export default async function Home() {
                     border: `1px solid ${t.color}55`,
                   }}
                 >
-                  {["🔍", "🛠️", "🧭"][i] ?? "✨"}
+                  {["🔍", "🔄", "🛠️", "🧭"][i] ?? "✨"}
                 </div>
                 <h3 className="mt-5 text-xl font-bold">{t.name}</h3>
                 <p className="mt-1 text-sm font-medium" style={{ color: t.color ?? undefined }}>
                   {t.tagline}
                 </p>
+                {t.price_gbp != null && Number(t.price_gbp) > 0 && (
+                  <p className="mt-4 text-3xl font-bold">
+                    £{Number(t.price_gbp).toFixed(0)}
+                    <span className="ml-1.5 text-xs font-normal text-mist/45">
+                      per person
+                    </span>
+                  </p>
+                )}
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-mist/60">
                   {t.description}
                 </p>
                 <div className="mt-6 flex flex-wrap gap-2">
                   <span className="chip">⏱ {formatDuration(t.duration_minutes)}</span>
+                  <span className="chip">💻 Online</span>
                   <span className="chip">
                     {t.format === "one_to_one"
                       ? "👤 One-to-one"
