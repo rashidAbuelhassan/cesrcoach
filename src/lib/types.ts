@@ -7,6 +7,9 @@ export interface Profile {
   phone: string | null;
   specialty: string | null;
   gmc_number: string | null;
+  portfolio_url: string | null;
+  portfolio_note: string | null;
+  target_submission_date: string | null;
   role: Role;
   created_at: string;
   updated_at: string;
@@ -60,6 +63,8 @@ export interface Booking {
   paid_at: string | null;
   discount_code: string | null;
   discount_gbp: number | null;
+  reviewer_feedback: string | null;
+  feedback_updated_at: string | null;
   portfolio_url: string | null;
   notes: string | null;
   admin_notes: string | null;

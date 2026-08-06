@@ -22,6 +22,7 @@ export default async function AdminSettingsPage() {
       siteName={(map.site_name?.text as string) ?? "CESR Coach"}
       logoUrl={(map.logo_url?.url as string) ?? null}
       contactEmail={(map.contact_email?.text as string) ?? ""}
+      priceNote={(map.price_note?.text as string) ?? ""}
       adminEmails={((map.admin_emails?.emails as string[]) ?? []).join(", ")}
       consultants={(consultants as Consultant[]) ?? []}
       eventTypes={(eventTypes as EventType[]) ?? []}

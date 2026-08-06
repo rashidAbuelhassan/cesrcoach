@@ -10,6 +10,9 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
     phone: profile.phone ?? "",
     specialty: profile.specialty ?? "",
     gmc_number: profile.gmc_number ?? "",
+    portfolio_url: profile.portfolio_url ?? "",
+    portfolio_note: profile.portfolio_note ?? "",
+    target_submission_date: profile.target_submission_date ?? "",
   });
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +31,14 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
     const supabase = createClient();
     const { error } = await supabase
       .from("coach_profiles")
-      .update({ ...form, updated_at: new Date().toISOString() })
+      .update({
+        ...form,
+        // a blank date must clear the column, not fail as an empty string
+        target_submission_date: form.target_submission_date || null,
+        portfolio_url: form.portfolio_url.trim() || null,
+        portfolio_note: form.portfolio_note.trim() || null,
+        updated_at: new Date().toISOString(),
+      })
       .eq("id", profile.id);
     setLoading(false);
 
@@ -95,6 +105,72 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
             value={form.gmc_number}
             onChange={(e) => set("gmc_number", e.target.value)}
           />
+        </div>
+      </div>
+
+      <div className="space-y-4 border-t border-white/10 pt-5">
+        <div>
+          <h2 className="font-bold">📁 Your portfolio</h2>
+          <p className="mt-1 text-sm text-mist/55">
+            Share a link to your portfolio so your reviewer can read it before
+            your sessions. Make sure link-sharing is switched on — in Google
+            Drive use <em>Share → Anyone with the link → Viewer</em>.
+          </p>
+        </div>
+
+        <div>
+          <label className="label" htmlFor="portfolio_url">
+            Portfolio link (Google Drive, OneDrive, Dropbox…)
+          </label>
+          <input
+            id="portfolio_url"
+            type="url"
+            className="field"
+            placeholder="https://drive.google.com/…"
+            value={form.portfolio_url}
+            onChange={(e) => set("portfolio_url", e.target.value)}
+          />
+          {profile.portfolio_url && (
+            <a
+              href={profile.portfolio_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1.5 inline-block text-xs font-semibold text-cyan-300 hover:underline"
+            >
+              ↗ Open my saved link — check it opens for someone else too
+            </a>
+          )}
+        </div>
+
+        <div>
+          <label className="label" htmlFor="portfolio_note">
+            Anything your reviewer should know? (optional)
+          </label>
+          <textarea
+            id="portfolio_note"
+            rows={2}
+            className="field resize-none"
+            placeholder="e.g. Domain 3 evidence is still being collected; folder 2 has my logbooks."
+            value={form.portfolio_note}
+            onChange={(e) => set("portfolio_note", e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label className="label" htmlFor="target_submission_date">
+            🎯 Date you plan to submit to the GMC
+          </label>
+          <input
+            id="target_submission_date"
+            type="date"
+            className="field sm:max-w-xs"
+            value={form.target_submission_date}
+            onChange={(e) => set("target_submission_date", e.target.value)}
+          />
+          <p className="mt-1.5 text-xs text-mist/45">
+            Set your own target — it appears on your dashboard and helps your
+            reviewer pace your plan. You can change it any time.
+          </p>
         </div>
       </div>
 

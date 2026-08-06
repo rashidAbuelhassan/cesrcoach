@@ -11,6 +11,7 @@ interface Props {
   siteName: string;
   logoUrl: string | null;
   contactEmail: string;
+  priceNote: string;
   adminEmails: string;
   consultants: Consultant[];
   eventTypes: EventType[];
@@ -21,6 +22,7 @@ export default function SettingsManager(props: Props) {
   const [siteName, setSiteName] = useState(props.siteName);
   const [contactEmail, setContactEmail] = useState(props.contactEmail);
   const [adminEmails, setAdminEmails] = useState(props.adminEmails);
+  const [priceNote, setPriceNote] = useState(props.priceNote);
   const [logoUrl, setLogoUrl] = useState(props.logoUrl);
   const [message, setMessage] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
@@ -41,6 +43,7 @@ export default function SettingsManager(props: Props) {
     try {
       await upsert("site_name", { text: siteName });
       await upsert("contact_email", { text: contactEmail });
+      await upsert("price_note", { text: priceNote });
       await upsert(
         "admin_emails",
         {
@@ -176,6 +179,19 @@ export default function SettingsManager(props: Props) {
             value={contactEmail}
             onChange={(e) => setContactEmail(e.target.value)}
           />
+        </div>
+        <div>
+          <label className="label">Price note (shown under the prices)</label>
+          <input
+            className="field"
+            placeholder="e.g. All prices include VAT at 20%."
+            value={priceNote}
+            onChange={(e) => setPriceNote(e.target.value)}
+          />
+          <p className="mt-1.5 text-xs text-amber-200/70">
+            ⚠️ Only state that VAT is included if you are VAT-registered. Leave
+            this empty (or write “No VAT is charged.”) if you are not.
+          </p>
         </div>
         <div>
           <label className="label">Admin emails (comma-separated)</label>

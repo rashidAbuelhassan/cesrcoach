@@ -199,7 +199,12 @@ export default async function Home() {
             ))}
           </div>
 
-          <p className="mt-6 text-center text-xs text-mist/40">
+          {branding.priceNote && (
+            <p className="mt-8 text-center text-sm font-medium text-mist/55">
+              {branding.priceNote}
+            </p>
+          )}
+          <p className="mt-3 text-center text-xs text-mist/40">
             ⚠️ Portfolio Clinic bookings require you to upload or share access
             to your portfolio at least 3 weeks before your session, so your
             reviewer can assess it properly.

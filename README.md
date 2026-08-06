@@ -34,7 +34,11 @@ Home Screen on iOS & Android).
   Prices are per person in GBP and editable in Admin → Settings.
   Capacity is enforced in the database; members can cancel; confirmed
   bookings reveal the meeting link.
-- **Profile** — name, phone, specialty, GMC number.
+- **Profile** — name, phone, specialty, GMC number, a **portfolio link**
+  (Google Drive/OneDrive/Dropbox) and the **date they plan to submit** to the
+  GMC. Both appear on their dashboard and in the admin candidate view.
+- **Dashboard** — portfolio sharing status, a countdown to their target
+  submission date, upcoming sessions, and their reviewer's written feedback.
 
 ### Admin console (`/admin`) — role-gated
 - **Overview** dashboard with live stats and latest bookings.
@@ -43,7 +47,11 @@ Home Screen on iOS & Android).
   notes, keep private admin notes.
 - **Videos / Documents** — full CRUD with publish toggles; documents upload
   straight to Supabase Storage.
-- **Members** — search members, grant/revoke admin.
+- **Candidates** — search, open a full candidate profile (portfolio link,
+  planned submission date, specialty/GMC, full session history) and leave
+  **feedback the candidate reads on their dashboard**. Grant/revoke admin.
+  Members cannot write their own feedback or the private admin notes — both
+  are enforced by a database trigger, not just the UI.
 - **Settings** — site name, contact email, auto-admin email list, homepage
   consultant cards, and **logo upload** (see below).
 
