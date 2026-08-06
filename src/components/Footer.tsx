@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site } from "@/config/site";
+import { companion, site } from "@/config/site";
 
 export default function Footer({
   siteName = site.name,
@@ -26,6 +26,16 @@ export default function Footer({
               <li><Link className="hover:text-cyan-300" href="/#pathway">The CESR pathway</Link></li>
               <li><Link className="hover:text-cyan-300" href="/#team">Our consultants</Link></li>
               <li><Link className="hover:text-cyan-300" href="/members">Member area</Link></li>
+              <li>
+                <a
+                  className="hover:text-cyan-300"
+                  href={companion.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {companion.name} ↗
+                </a>
+              </li>
             </ul>
           </div>
           <div>

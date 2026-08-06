@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { daysUntil, formatDate, formatDateTime } from "@/lib/utils";
+import { companion } from "@/config/site";
 import type { Booking, Profile } from "@/lib/types";
 
 export default async function MemberDashboard() {
@@ -275,6 +276,30 @@ export default async function MemberDashboard() {
             ))}
           </ul>
         )}
+      </section>
+
+      {/* ---- companion app ---- */}
+      <section className="glass glass-hover relative overflow-hidden rounded-3xl p-6 sm:p-8">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-400/15 blur-[70px]" />
+        <div className="relative flex flex-wrap items-center justify-between gap-5">
+          <div className="min-w-0">
+            <span className="chip border-cyan-300/30 bg-cyan-300/10 text-cyan-200">
+              🧭 Companion app
+            </span>
+            <h2 className="mt-3 text-lg font-bold">{companion.name}</h2>
+            <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-mist/60">
+              {companion.blurb}
+            </p>
+          </div>
+          <a
+            href={companion.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-liquid shrink-0 px-6 py-3 text-sm"
+          >
+            Open {companion.name} ↗
+          </a>
+        </div>
       </section>
 
       <section className="glass rounded-3xl p-6 sm:p-8">

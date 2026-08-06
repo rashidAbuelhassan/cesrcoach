@@ -18,3 +18,11 @@ export const site = {
   logoIcon: "/branding/logo-icon.svg",
   contactEmail: "hello@cesrcoach.com",
 };
+
+/** Our sister app for day-to-day portfolio tracking. */
+export const companion = {
+  name: "CESR Companion",
+  url: "https://cesrcompanion.co.uk",
+  blurb:
+    "Track your evidence, logbook and curriculum checklists day to day, between your coaching sessions.",
+};
