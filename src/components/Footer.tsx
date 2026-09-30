@@ -22,13 +22,13 @@ export default function Footer({
           <div>
             <p className="text-sm font-semibold text-mist/80">Explore</p>
             <ul className="mt-3 space-y-2 text-sm text-mist/60">
-              <li><Link className="hover:text-cyan-300" href="/#services">Our services</Link></li>
-              <li><Link className="hover:text-cyan-300" href="/#pathway">The CESR pathway</Link></li>
-              <li><Link className="hover:text-cyan-300" href="/#team">Our consultants</Link></li>
-              <li><Link className="hover:text-cyan-300" href="/members">Member area</Link></li>
+              <li><Link className="hover:text-white" href="/#services">Our services</Link></li>
+              <li><Link className="hover:text-white" href="/#pathway">The CESR pathway</Link></li>
+              <li><Link className="hover:text-white" href="/#team">Our consultants</Link></li>
+              <li><Link className="hover:text-white" href="/members">Member area</Link></li>
               <li>
                 <a
-                  className="hover:text-cyan-300"
+                  className="hover:text-white"
                   href={companion.url}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -42,7 +42,7 @@ export default function Footer({
             <p className="text-sm font-semibold text-mist/80">Contact</p>
             <ul className="mt-3 space-y-2 text-sm text-mist/60">
               <li>
-                <a className="hover:text-cyan-300" href={`mailto:${contactEmail}`}>
+                <a className="hover:text-white" href={`mailto:${contactEmail}`}>
                   {contactEmail}
                 </a>
               </li>

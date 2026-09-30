@@ -29,7 +29,7 @@ for (const t of targets) {
       width: t.size,
       height: t.size,
       channels: 4,
-      background: { r: 6, g: 10, b: 24, alpha: t.pad ? 1 : 0 },
+      background: { r: 10, g: 10, b: 10, alpha: t.pad ? 1 : 0 },
     },
   })
     .composite([{ input: icon, top: t.pad, left: t.pad }])

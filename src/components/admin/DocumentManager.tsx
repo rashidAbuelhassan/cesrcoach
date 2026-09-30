@@ -132,7 +132,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
       </header>
 
       {error && !open && (
-        <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+        <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
           {error}
         </p>
       )}
@@ -164,7 +164,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
                 onClick={() => togglePublished(d)}
                 className={`chip cursor-pointer ${
                   d.published
-                    ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
+                    ? "border-white/30 bg-white/10 text-white"
                     : "border-white/15 bg-white/5 text-mist/50"
                 }`}
               >
@@ -205,7 +205,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
               </button>
             </div>
             {error && (
-              <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+              <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
                 {error}
               </p>
             )}
@@ -221,21 +221,21 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
             <div>
               <label className="label">
                 Upload PDF {editing?.file_path ? "(replaces the current file)" : ""}
-                <span className="ml-1 font-normal text-cyan-300/70">
+                <span className="ml-1 font-normal text-neutral-300/70">
                   — protected, view-only
                 </span>
               </label>
               <input
                 ref={fileRef}
                 type="file"
-                className="field file:mr-3 file:rounded-full file:border-0 file:bg-cyan-400/20 file:px-4 file:py-1 file:text-xs file:font-semibold file:text-cyan-100"
+                className="field file:mr-3 file:rounded-full file:border-0 file:bg-neutral-400/20 file:px-4 file:py-1 file:text-xs file:font-semibold file:text-neutral-100"
                 onChange={(e) => setFile(e.target.files?.[0] ?? null)}
               />
             </div>
             <div>
               <label className="label">
                 …or link to an external file
-                <span className="ml-1 font-normal text-amber-300/70">
+                <span className="ml-1 font-normal text-neutral-300/70">
                   — opens externally, not protected
                 </span>
               </label>
@@ -269,7 +269,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
                 type="checkbox"
                 checked={form.published}
                 onChange={(e) => setForm({ ...form, published: e.target.checked })}
-                className="accent-cyan-400"
+                className="accent-white"
               />
               Published (visible to members)
             </label>

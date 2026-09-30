@@ -173,7 +173,7 @@ export default function DiscountManager({
       </header>
 
       {error && !open && (
-        <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+        <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
           {error}
         </p>
       )}
@@ -196,7 +196,7 @@ export default function DiscountManager({
               <button
                 onClick={() => copy(c.code)}
                 title="Copy code"
-                className="shrink-0 rounded-xl border border-white/15 bg-white/6 px-4 py-2 font-mono text-sm font-bold tracking-wider transition hover:border-cyan-300/40 hover:bg-cyan-300/10"
+                className="shrink-0 rounded-xl border border-white/15 bg-white/6 px-4 py-2 font-mono text-sm font-bold tracking-wider transition hover:border-neutral-300/40 hover:bg-neutral-300/10"
               >
                 {copied === c.code ? "copied ✓" : c.code}
               </button>
@@ -207,12 +207,12 @@ export default function DiscountManager({
                 </p>
               </div>
               {expired(c) && (
-                <span className="chip border-amber-400/30 bg-amber-400/10 text-amber-200">
+                <span className="chip border-neutral-400/30 bg-neutral-400/10 text-neutral-200">
                   Expired
                 </span>
               )}
               {usedUp(c) && (
-                <span className="chip border-amber-400/30 bg-amber-400/10 text-amber-200">
+                <span className="chip border-neutral-400/30 bg-neutral-400/10 text-neutral-200">
                   Fully redeemed
                 </span>
               )}
@@ -221,7 +221,7 @@ export default function DiscountManager({
                   onClick={() => toggleActive(c)}
                   className={`chip cursor-pointer ${
                     c.active
-                      ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
+                      ? "border-white/30 bg-white/10 text-white"
                       : "border-white/15 bg-white/5 text-mist/50"
                   }`}
                 >
@@ -264,7 +264,7 @@ export default function DiscountManager({
             </div>
 
             {error && (
-              <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+              <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
                 {error}
               </p>
             )}
@@ -378,7 +378,7 @@ export default function DiscountManager({
                 type="checkbox"
                 checked={form.active}
                 onChange={(e) => setForm({ ...form, active: e.target.checked })}
-                className="accent-cyan-400"
+                className="accent-white"
               />
               Active (members can use it right away)
             </label>

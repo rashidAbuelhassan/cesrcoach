@@ -85,11 +85,11 @@ export default async function MemberDashboard() {
                     href={profile.portfolio_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 block truncate text-sm font-semibold text-cyan-300 hover:underline"
+                    className="mt-2 block truncate text-sm font-semibold text-neutral-300 hover:underline"
                   >
                     {profile.portfolio_url}
                   </a>
-                  <p className="mt-1 text-xs text-emerald-300">
+                  <p className="mt-1 text-xs text-white">
                     ✓ Shared with your reviewer
                   </p>
                 </>
@@ -126,7 +126,7 @@ export default async function MemberDashboard() {
                   <p
                     className={`mt-1 text-xs ${
                       daysToSubmission !== null && daysToSubmission < 0
-                        ? "text-amber-300"
+                        ? "text-neutral-300"
                         : "text-mist/55"
                     }`}
                   >
@@ -184,7 +184,7 @@ export default async function MemberDashboard() {
         {upcoming.length === 0 ? (
           <p className="mt-5 rounded-2xl border border-dashed border-white/15 px-6 py-8 text-center text-sm text-mist/50">
             No sessions booked yet. Head to{" "}
-            <Link href="/members/bookings" className="text-cyan-300 hover:underline">
+            <Link href="/members/bookings" className="text-neutral-300 hover:underline">
               Bookings
             </Link>{" "}
             to reserve your place.
@@ -206,8 +206,8 @@ export default async function MemberDashboard() {
                 <span
                   className={`chip ${
                     b.status === "confirmed"
-                      ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
-                      : "border-amber-400/30 bg-amber-400/10 text-amber-200"
+                      ? "border-white/30 bg-white/10 text-white"
+                      : "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
                   }`}
                 >
                   {b.status === "confirmed" ? "✓ Confirmed" : "⏳ Pending"}
@@ -246,8 +246,8 @@ export default async function MemberDashboard() {
                   <span
                     className={`chip ${
                       b.status === "completed"
-                        ? "border-sky-400/30 bg-sky-400/10 text-sky-200"
-                        : "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
+                        ? "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
+                        : "border-white/30 bg-white/10 text-white"
                     }`}
                   >
                     {b.status === "completed" ? "✓ Session completed" : b.status}
@@ -255,8 +255,8 @@ export default async function MemberDashboard() {
                 </div>
 
                 {b.reviewer_feedback ? (
-                  <div className="mt-3 rounded-xl border border-cyan-300/20 bg-cyan-300/8 px-4 py-3">
-                    <p className="text-xs font-semibold text-cyan-200">
+                  <div className="mt-3 rounded-xl border border-neutral-300/20 bg-neutral-300/8 px-4 py-3">
+                    <p className="text-xs font-semibold text-neutral-200">
                       Reviewer&apos;s comments
                       {b.feedback_updated_at
                         ? ` · ${formatDate(b.feedback_updated_at)}`
@@ -280,10 +280,10 @@ export default async function MemberDashboard() {
 
       {/* ---- companion app ---- */}
       <section className="glass glass-hover relative overflow-hidden rounded-3xl p-6 sm:p-8">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-400/15 blur-[70px]" />
+        <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-neutral-400/15 blur-[70px]" />
         <div className="relative flex flex-wrap items-center justify-between gap-5">
           <div className="min-w-0">
-            <span className="chip border-cyan-300/30 bg-cyan-300/10 text-cyan-200">
+            <span className="chip border-neutral-300/30 bg-neutral-300/10 text-neutral-200">
               🧭 Companion app
             </span>
             <h2 className="mt-3 text-lg font-bold">{companion.name}</h2>
@@ -307,7 +307,7 @@ export default async function MemberDashboard() {
         <p className="mt-3 text-sm leading-relaxed text-mist/60">
           If you book a <strong>Portfolio Clinic</strong>, remember to share
           access to your portfolio at least{" "}
-          <strong className="text-amber-300">3 weeks before</strong> your
+          <strong className="text-neutral-300">3 weeks before</strong> your
           session. Your reviewer studies it in advance so your time together is
           spent on feedback, not reading.
         </p>

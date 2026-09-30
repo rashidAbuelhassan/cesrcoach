@@ -43,7 +43,7 @@ export default function MemberNav() {
         target="_blank"
         rel="noopener noreferrer"
         title={`${companion.name} — opens in a new tab`}
-        className="ml-auto flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-cyan-300/80 transition hover:bg-cyan-300/10 hover:text-cyan-200"
+        className="ml-auto flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-neutral-300/80 transition hover:bg-neutral-300/10 hover:text-white"
       >
         <span aria-hidden>🧭</span>
         {companion.name}

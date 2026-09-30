@@ -36,7 +36,7 @@ function LoginForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       {error && (
-        <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+        <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
           {error}
         </p>
       )}
@@ -71,7 +71,7 @@ function LoginForm() {
       </button>
       <p className="text-center text-sm text-mist/50">
         New here?{" "}
-        <Link href="/register" className="font-semibold text-cyan-300 hover:underline">
+        <Link href="/register" className="font-semibold text-neutral-300 hover:underline">
           Create a free account
         </Link>
       </p>

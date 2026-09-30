@@ -105,8 +105,8 @@ export default function BookingBoard({
         <p
           className={`rounded-xl border px-4 py-3 text-sm ${
             message.kind === "ok"
-              ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
-              : "border-red-400/30 bg-red-400/10 text-red-200"
+              ? "border-white/30 bg-white/10 text-white"
+              : "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
           }`}
         >
           {message.text}
@@ -138,7 +138,7 @@ export default function BookingBoard({
                       {formatDateTime(ev.starts_at)} · {ev.location}
                     </p>
                     {b.portfolio_url && (
-                      <p className="mt-1 truncate text-xs text-cyan-300/80">
+                      <p className="mt-1 truncate text-xs text-neutral-300/80">
                         📁 Portfolio: {b.portfolio_url}
                       </p>
                     )}
@@ -147,7 +147,7 @@ export default function BookingBoard({
                         href={ev.meeting_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-1 inline-block text-xs font-semibold text-emerald-300 hover:underline"
+                        className="mt-1 inline-block text-xs font-semibold text-white hover:underline"
                       >
                         🔗 Join meeting link
                       </a>
@@ -182,7 +182,7 @@ export default function BookingBoard({
               onClick={() => setFilter("all")}
               className={`chip cursor-pointer ${
                 filter === "all"
-                  ? "border-cyan-300/40 bg-cyan-300/15 text-cyan-100"
+                  ? "border-neutral-300/40 bg-neutral-300/15 text-neutral-100"
                   : "hover:bg-white/12"
               }`}
             >
@@ -194,7 +194,7 @@ export default function BookingBoard({
                 onClick={() => setFilter(t.id)}
                 className={`chip cursor-pointer ${
                   filter === t.id
-                    ? "border-cyan-300/40 bg-cyan-300/15 text-cyan-100"
+                    ? "border-neutral-300/40 bg-neutral-300/15 text-neutral-100"
                     : "hover:bg-white/12"
                 }`}
               >
@@ -207,7 +207,7 @@ export default function BookingBoard({
         {visibleEvents.length === 0 ? (
           <p className="glass mt-5 rounded-3xl px-6 py-12 text-center text-sm text-mist/50">
             No upcoming sessions in this category yet — check back soon or{" "}
-            <a href="mailto:hello@cesrcoach.com" className="text-cyan-300 hover:underline">
+            <a href="mailto:hello@cesrcoach.com" className="text-neutral-300 hover:underline">
               ask us to schedule one
             </a>
             .
@@ -226,20 +226,15 @@ export default function BookingBoard({
                 <div key={ev.id} className="glass glass-hover flex flex-col rounded-3xl p-6">
                   <div className="flex items-start justify-between gap-3">
                     <span
-                      className="chip"
-                      style={{
-                        borderColor: `${t?.color}55`,
-                        background: `${t?.color}18`,
-                        color: t?.color ?? undefined,
-                      }}
+                      className="chip border-white/20 bg-white/8 text-mist"
                     >
                       {t?.name}
                     </span>
                     <span
                       className={`chip ${
                         left === 0
-                          ? "border-red-400/30 bg-red-400/10 text-red-200"
-                          : "border-emerald-400/25 bg-emerald-400/10 text-emerald-200"
+                          ? "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
+                          : "border-white/25 bg-white/10 text-white"
                       }`}
                     >
                       {left === 0
@@ -262,8 +257,8 @@ export default function BookingBoard({
                     <p
                       className={`mt-3 rounded-xl border px-3 py-2 text-xs ${
                         lead
-                          ? "border-amber-400/25 bg-amber-400/8 text-amber-200/90"
-                          : "border-red-400/30 bg-red-400/10 text-red-200"
+                          ? "border-neutral-400/25 bg-neutral-400/8 text-neutral-200/90"
+                          : "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
                       }`}
                     >
                       {lead
@@ -273,7 +268,7 @@ export default function BookingBoard({
                   )}
                   <div className="mt-5 flex-1" />
                   {mine ? (
-                    <p className="rounded-2xl border border-emerald-400/25 bg-emerald-400/8 px-4 py-2.5 text-center text-sm font-semibold text-emerald-200">
+                    <p className="rounded-2xl border border-white/25 bg-white/8 px-4 py-2.5 text-center text-sm font-semibold text-white">
                       ✓ You&apos;re booked ({mine.status})
                     </p>
                   ) : (
@@ -318,7 +313,7 @@ function PaymentChip({ booking }: { booking: Booking }) {
   if (booking.payment_status === "paid") {
     const paid = Number(booking.amount_paid_gbp ?? 0);
     return (
-      <span className="chip border-emerald-400/30 bg-emerald-400/10 text-emerald-200">
+      <span className="chip border-white/30 bg-white/10 text-white">
         {paid > 0 ? `💳 Paid £${paid}` : "🎁 Comped"}
         {booking.discount_code ? ` · ${booking.discount_code}` : ""}
       </span>
@@ -326,7 +321,7 @@ function PaymentChip({ booking }: { booking: Booking }) {
   }
   if (booking.payment_status === "refunded") {
     return (
-      <span className="chip border-sky-400/30 bg-sky-400/10 text-sky-200">
+      <span className="chip border-neutral-400/30 bg-neutral-400/10 text-neutral-200">
         💳 Refunded
       </span>
     );
@@ -336,10 +331,10 @@ function PaymentChip({ booking }: { booking: Booking }) {
 
 function StatusChip({ status }: { status: Booking["status"] }) {
   const styles: Record<Booking["status"], string> = {
-    pending: "border-amber-400/30 bg-amber-400/10 text-amber-200",
-    confirmed: "border-emerald-400/30 bg-emerald-400/10 text-emerald-200",
+    pending: "border-neutral-400/30 bg-neutral-400/10 text-neutral-200",
+    confirmed: "border-white/30 bg-white/10 text-white",
     cancelled: "border-white/15 bg-white/5 text-mist/50",
-    completed: "border-sky-400/30 bg-sky-400/10 text-sky-200",
+    completed: "border-neutral-400/30 bg-neutral-400/10 text-neutral-200",
   };
   const labels: Record<Booking["status"], string> = {
     pending: "⏳ Pending",
@@ -472,7 +467,7 @@ function BookingModal({
 
         <form onSubmit={submit} className="mt-6 space-y-4">
           {error && (
-            <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+            <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
               {error}
             </p>
           )}
@@ -497,13 +492,13 @@ function BookingModal({
                   sure link-sharing is enabled for your reviewer.
                 </p>
               </div>
-              <label className="flex items-start gap-3 rounded-2xl border border-amber-400/25 bg-amber-400/8 px-4 py-3 text-xs leading-relaxed text-amber-100/90">
+              <label className="flex items-start gap-3 rounded-2xl border border-neutral-400/25 bg-neutral-400/8 px-4 py-3 text-xs leading-relaxed text-neutral-100/90">
                 <input
                   type="checkbox"
                   required
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-0.5 accent-amber-400"
+                  className="mt-0.5 accent-neutral-400"
                 />
                 <span>
                   I understand my portfolio must be accessible to my reviewer{" "}
@@ -536,8 +531,8 @@ function BookingModal({
                   Discount code (optional)
                 </label>
                 {discount ? (
-                  <div className="flex items-center justify-between gap-3 rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-2.5">
-                    <span className="text-sm font-semibold text-emerald-200">
+                  <div className="flex items-center justify-between gap-3 rounded-xl border border-white/30 bg-white/10 px-4 py-2.5">
+                    <span className="text-sm font-semibold text-white">
                       ✓ {discount.code} — {discount.label}
                     </span>
                     <button
@@ -568,7 +563,7 @@ function BookingModal({
                   </div>
                 )}
                 {codeError && (
-                  <p className="mt-1.5 text-xs text-red-300">{codeError}</p>
+                  <p className="mt-1.5 text-xs text-neutral-300">{codeError}</p>
                 )}
               </div>
 
@@ -578,7 +573,7 @@ function BookingModal({
                   <dd>{price}</dd>
                 </div>
                 {discount && (
-                  <div className="flex justify-between text-emerald-300">
+                  <div className="flex justify-between text-white">
                     <dt>Discount</dt>
                     <dd>−£{discount.discountGbp.toFixed(2)}</dd>
                   </div>
@@ -589,7 +584,7 @@ function BookingModal({
                 </div>
               </dl>
 
-              <p className="text-xs leading-relaxed text-cyan-100/70">
+              <p className="text-xs leading-relaxed text-neutral-100/70">
                 {payable > 0
                   ? "💳 You'll be taken to our secure Stripe checkout — your place is confirmed as soon as payment completes."
                   : "🎉 This code covers the full price — your place is confirmed straight away."}

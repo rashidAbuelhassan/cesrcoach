@@ -1,0 +1,174 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { createCrowd, drawCrowd, paintStreetLayer } from "./crowd";
+import { createPapers, drawPapers, paintDeskLayer } from "./desk";
+import { clamp, makeLayer, smoothstep, type Viewport } from "./util";
+
+/**
+ * Site-wide background, driven entirely by the scrollbar:
+ *   top of the page   — a figure stands still while a crowd streams past
+ *   bottom of the page — papers fly in and settle into an open folder
+ *
+ * Nothing moves unless the page scrolls. Scrolling back up plays it in
+ * reverse. With prefers-reduced-motion it shows one still frame per scene.
+ */
+
+/** Pages shorter than this still get a gentle, partial play-through. */
+const MIN_STORY_PX = 2200;
+/** Where in the scroll the street hands over to the desk. */
+const HANDOVER: [number, number] = [0.44, 0.58];
+
+export default function ScrollScene() {
+  const pathname = usePathname();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  // the document reader wants a plain, distraction-free backdrop
+  const hidden = pathname?.startsWith("/reader") ?? false;
+
+  useEffect(() => {
+    if (hidden) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const crowd = createCrowd();
+    const papers = createPapers();
+
+    let vp: Viewport = { w: 0, h: 0 };
+    let dpr = 1;
+    let street: HTMLCanvasElement | null = null;
+    let desk: HTMLCanvasElement | null = null;
+    // each scene renders opaque into its own buffer during the handover,
+    // so layered details (rim light, shadows) never show through a fade
+    let bufA: ReturnType<typeof makeLayer> | null = null;
+    let bufB: ReturnType<typeof makeLayer> | null = null;
+
+    let current = -1; // smoothed progress
+    let trail = 0; // smoothed scroll speed
+    let frame = 0;
+    let last = 0;
+
+    const target = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return 0;
+      return clamp(window.scrollY / Math.max(scrollable, MIN_STORY_PX));
+    };
+
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      vp = { w: window.innerWidth, h: window.innerHeight };
+      canvas.width = Math.round(vp.w * dpr);
+      canvas.height = Math.round(vp.h * dpr);
+      street = paintStreetLayer(vp, dpr);
+      desk = paintDeskLayer(vp, dpr);
+      bufA = bufB = null; // re-made at the new size on demand
+    };
+
+    const drawStreet = (c: CanvasRenderingContext2D, p: number) => {
+      c.drawImage(street!, 0, 0, vp.w, vp.h);
+      drawCrowd(c, vp, crowd, p, trail);
+    };
+
+    const drawDesk = (c: CanvasRenderingContext2D, p: number) => {
+      c.drawImage(desk!, 0, 0, vp.w, vp.h);
+      drawPapers(c, vp, papers, clamp((p - 0.5) / 0.48));
+    };
+
+    const paint = (p: number) => {
+      if (!street || !desk) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.globalAlpha = 1;
+      const toDesk = smoothstep(HANDOVER[0], HANDOVER[1], p);
+
+      if (toDesk <= 0.001) return drawStreet(ctx, p);
+      if (toDesk >= 0.999) return drawDesk(ctx, p);
+
+      bufA ??= makeLayer(vp, dpr);
+      bufB ??= makeLayer(vp, dpr);
+      drawStreet(bufA.ctx, p);
+      drawDesk(bufB.ctx, p);
+      ctx.drawImage(bufA.canvas, 0, 0, vp.w, vp.h);
+      ctx.globalAlpha = toDesk;
+      ctx.drawImage(bufB.canvas, 0, 0, vp.w, vp.h);
+      ctx.globalAlpha = 1;
+    };
+
+    const tick = (now: number) => {
+      frame = 0;
+      const goal = target();
+
+      if (reduce.matches) {
+        // one composed still per scene, no in-between motion
+        trail = 0;
+        paint(goal < 0.5 ? 0.12 : 1);
+        return;
+      }
+
+      const dt = last ? Math.min(64, now - last) : 16.7;
+      last = now;
+      const prev = current < 0 ? goal : current;
+      // frame-rate independent easing toward the scroll position
+      current = prev + (goal - prev) * (1 - Math.pow(1 - 0.14, dt / 16.7));
+      const speed = Math.abs(current - prev) / (dt / 16.7);
+      trail += (Math.min(1, speed * 260) - trail) * 0.2;
+
+      paint(current);
+
+      if (Math.abs(goal - current) > 0.00005 || trail > 0.01) {
+        frame = requestAnimationFrame(tick);
+      } else {
+        last = 0;
+      }
+    };
+
+    const wake = () => {
+      if (!frame) frame = requestAnimationFrame(tick);
+    };
+
+    const onResize = () => {
+      resize();
+      wake();
+    };
+
+    resize();
+    current = target(); // start where the page already is, no fly-in
+    wake();
+
+    window.addEventListener("scroll", wake, { passive: true });
+    window.addEventListener("resize", onResize);
+    reduce.addEventListener("change", wake);
+    // content height changes (images, data loading) shift the progress
+    const ro = new ResizeObserver(wake);
+    ro.observe(document.body);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", wake);
+      window.removeEventListener("resize", onResize);
+      reduce.removeEventListener("change", wake);
+      ro.disconnect();
+    };
+  }, [hidden, pathname]);
+
+  if (hidden) {
+    return <div aria-hidden className="fixed inset-0 -z-10 bg-ink" />;
+  }
+
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-ink">
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      {/* vignette keeps the edges dark and the foreground text legible */}
+      <div className="absolute inset-0 bg-[radial-gradient(120%_85%_at_50%_45%,transparent_40%,rgba(0,0,0,0.6)_100%)]" />
+      {/* film grain */}
+      <div
+        className="absolute inset-0 opacity-[0.06] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        }}
+      />
+    </div>
+  );
+}

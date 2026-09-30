@@ -48,7 +48,7 @@ export default function DocumentList({ docs }: { docs: Doc[] }) {
               onClick={() => setCategory(c)}
               className={`chip cursor-pointer transition ${
                 category === c
-                  ? "border-cyan-300/40 bg-cyan-300/15 text-cyan-100"
+                  ? "border-neutral-300/40 bg-neutral-300/15 text-neutral-100"
                   : "hover:bg-white/12"
               }`}
             >
@@ -59,7 +59,7 @@ export default function DocumentList({ docs }: { docs: Doc[] }) {
       )}
 
       {error && (
-        <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+        <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
           {error}
         </p>
       )}
@@ -70,14 +70,14 @@ export default function DocumentList({ docs }: { docs: Doc[] }) {
             key={d.id}
             className="glass glass-hover flex flex-wrap items-center gap-4 rounded-2xl px-5 py-4"
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400/20 to-violet-400/20 text-lg ring-1 ring-white/10">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-neutral-400/20 to-neutral-400/20 text-lg ring-1 ring-white/10">
               📄
             </span>
             <div className="min-w-0 flex-1">
               <p className="font-semibold">
                 {d.title}
                 {d.file_path && (
-                  <span className="ml-2 align-middle text-[10px] font-semibold text-cyan-300/70">
+                  <span className="ml-2 align-middle text-[10px] font-semibold text-neutral-300/70">
                     🔒 VIEW ONLY
                   </span>
                 )}

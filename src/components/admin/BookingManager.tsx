@@ -73,7 +73,7 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
             onClick={() => setFilter(s)}
             className={`chip cursor-pointer capitalize ${
               filter === s
-                ? "border-cyan-300/40 bg-cyan-300/15 text-cyan-100"
+                ? "border-neutral-300/40 bg-neutral-300/15 text-neutral-100"
                 : "hover:bg-white/12"
             }`}
           >
@@ -84,7 +84,7 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
       </div>
 
       {error && (
-        <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+        <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
           {error}
         </p>
       )}
@@ -121,39 +121,39 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
               <span
                 className={`chip capitalize ${
                   b.status === "pending"
-                    ? "border-amber-400/30 bg-amber-400/10 text-amber-200"
+                    ? "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
                     : b.status === "confirmed"
-                      ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
+                      ? "border-white/30 bg-white/10 text-white"
                       : b.status === "completed"
-                        ? "border-sky-400/30 bg-sky-400/10 text-sky-200"
+                        ? "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
                         : "border-white/15 bg-white/5 text-mist/50"
                 }`}
               >
                 {b.status}
               </span>
               {b.payment_status === "paid" && (
-                <span className="chip border-emerald-400/30 bg-emerald-400/10 text-emerald-200">
+                <span className="chip border-white/30 bg-white/10 text-white">
                   💳 Paid £{Number(b.amount_paid_gbp ?? 0)}
                 </span>
               )}
               {b.discount_code && (
-                <span className="chip border-cyan-400/30 bg-cyan-400/10 text-cyan-200">
+                <span className="chip border-neutral-400/30 bg-neutral-400/10 text-neutral-200">
                   🏷 {b.discount_code}
                   {b.discount_gbp ? ` (−£${Number(b.discount_gbp).toFixed(2)})` : ""}
                 </span>
               )}
               {b.payment_status === "unpaid" && b.status !== "cancelled" && (
-                <span className="chip border-amber-400/30 bg-amber-400/10 text-amber-200">
+                <span className="chip border-neutral-400/30 bg-neutral-400/10 text-neutral-200">
                   💳 Awaiting payment
                 </span>
               )}
               {b.payment_status === "refunded" && (
-                <span className="chip border-sky-400/30 bg-sky-400/10 text-sky-200">
+                <span className="chip border-neutral-400/30 bg-neutral-400/10 text-neutral-200">
                   💳 Refunded
                 </span>
               )}
               {b.payment_status === "paid" && b.status === "cancelled" && (
-                <span className="chip border-red-400/30 bg-red-400/10 text-red-200">
+                <span className="chip border-neutral-400/30 bg-neutral-400/10 text-neutral-200">
                   ⚠ Refund due — issue it in the Stripe dashboard
                 </span>
               )}
@@ -206,7 +206,7 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
                       href={b.portfolio_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="break-all text-cyan-300 hover:underline"
+                      className="break-all text-neutral-300 hover:underline"
                     >
                       {b.portfolio_url}
                     </a>
@@ -219,7 +219,7 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
                   </p>
                 )}
                 {b.admin_notes && (
-                  <p className="text-violet-200/80">
+                  <p className="text-neutral-200/80">
                     <span className="text-mist/45">🛡 Admin note: </span>
                     {b.admin_notes}
                   </p>

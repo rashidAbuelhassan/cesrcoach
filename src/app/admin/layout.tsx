@@ -31,7 +31,7 @@ export default async function AdminLayout({
       <Navbar />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 pt-28 sm:pt-32">
         <div className="mb-6 flex items-center gap-3">
-          <span className="chip border-violet-400/30 bg-violet-400/10 text-violet-200">
+          <span className="chip border-neutral-400/30 bg-neutral-400/10 text-neutral-200">
             🛡 Admin console
           </span>
         </div>

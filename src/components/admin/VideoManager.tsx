@@ -107,7 +107,7 @@ export default function VideoManager({ videos }: { videos: Video[] }) {
       </header>
 
       {error && (
-        <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+        <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
           {error}
         </p>
       )}
@@ -139,7 +139,7 @@ export default function VideoManager({ videos }: { videos: Video[] }) {
                 onClick={() => togglePublished(v)}
                 className={`chip cursor-pointer ${
                   v.published
-                    ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
+                    ? "border-white/30 bg-white/10 text-white"
                     : "border-white/15 bg-white/5 text-mist/50"
                 }`}
               >
@@ -240,7 +240,7 @@ export default function VideoManager({ videos }: { videos: Video[] }) {
                 type="checkbox"
                 checked={form.published}
                 onChange={(e) => setForm({ ...form, published: e.target.checked })}
-                className="accent-cyan-400"
+                className="accent-white"
               />
               Published (visible to members)
             </label>

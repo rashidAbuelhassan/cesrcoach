@@ -79,7 +79,7 @@ export default function MemberManager({
       />
 
       {error && (
-        <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+        <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
           {error}
         </p>
       )}
@@ -92,14 +92,14 @@ export default function MemberManager({
           ).length;
           return (
             <div key={p.id} className="glass flex flex-wrap items-center gap-4 rounded-2xl px-5 py-4">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400/25 to-violet-400/25 text-sm font-bold ring-1 ring-white/15">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-neutral-400/25 to-neutral-400/25 text-sm font-bold ring-1 ring-white/15">
                 {(p.full_name || p.email).slice(0, 1).toUpperCase()}
               </span>
               <div className="min-w-0 flex-1">
                 <p className="font-semibold">
                   {p.full_name || "—"}
                   {p.id === currentUserId && (
-                    <span className="ml-2 text-xs font-normal text-cyan-300">(you)</span>
+                    <span className="ml-2 text-xs font-normal text-neutral-300">(you)</span>
                   )}
                 </p>
                 <p className="truncate text-xs text-mist/50">
@@ -113,7 +113,7 @@ export default function MemberManager({
               </div>
 
               {p.portfolio_url && (
-                <span className="chip border-cyan-400/25 bg-cyan-400/10 text-cyan-200">
+                <span className="chip border-neutral-400/25 bg-neutral-400/10 text-neutral-200">
                   📁 Portfolio
                 </span>
               )}
@@ -123,7 +123,7 @@ export default function MemberManager({
               <span
                 className={`chip ${
                   p.role === "admin"
-                    ? "border-violet-400/30 bg-violet-400/10 text-violet-200"
+                    ? "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
                     : "border-white/15 bg-white/5 text-mist/55"
                 }`}
               >
@@ -239,7 +239,7 @@ function CandidateModal({
         </div>
 
         {error && (
-          <p className="mt-4 rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+          <p className="mt-4 rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
             {error}
           </p>
         )}
@@ -260,7 +260,7 @@ function CandidateModal({
               href={profile.portfolio_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 block break-all text-sm font-semibold text-cyan-300 hover:underline"
+              className="mt-2 block break-all text-sm font-semibold text-neutral-300 hover:underline"
             >
               {profile.portfolio_url} ↗
             </a>
@@ -335,7 +335,7 @@ function CandidateModal({
                         href={b.portfolio_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-cyan-300 hover:underline"
+                        className="text-neutral-300 hover:underline"
                       >
                         {b.portfolio_url}
                       </a>
@@ -367,7 +367,7 @@ function CandidateModal({
                       {saving === b.id ? "Saving…" : "Save feedback"}
                     </button>
                     {saved === b.id && (
-                      <span className="text-xs text-emerald-300">
+                      <span className="text-xs text-white">
                         ✓ Saved — the candidate can see this now
                       </span>
                     )}

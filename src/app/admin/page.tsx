@@ -80,9 +80,9 @@ export default async function AdminOverview() {
                 <span
                   className={`chip ${
                     b.status === "pending"
-                      ? "border-amber-400/30 bg-amber-400/10 text-amber-200"
+                      ? "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
                       : b.status === "confirmed"
-                        ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
+                        ? "border-white/30 bg-white/10 text-white"
                         : "border-white/15 bg-white/5 text-mist/50"
                   }`}
                 >

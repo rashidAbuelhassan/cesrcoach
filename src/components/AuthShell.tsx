@@ -22,7 +22,7 @@ export default function AuthShell({
           <div className="mt-6">{children}</div>
         </div>
         <p className="mt-6 text-center text-xs text-mist/40">
-          <Link href="/" className="hover:text-cyan-300">← Back to the homepage</Link>
+          <Link href="/" className="hover:text-white">← Back to the homepage</Link>
         </p>
       </div>
     </main>

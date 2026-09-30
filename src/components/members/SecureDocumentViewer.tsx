@@ -228,7 +228,7 @@ export default function SecureDocumentViewer({
         )}
         {status === "error" && (
           <div className="glass mx-auto max-w-sm rounded-2xl px-6 py-10 text-center">
-            <p className="text-sm text-red-200">{errorText}</p>
+            <p className="text-sm text-neutral-200">{errorText}</p>
             <button
               onClick={() => window.location.reload()}
               className="btn-ghost mt-4 px-5 py-2 text-xs"
@@ -270,7 +270,7 @@ export default function SecureDocumentViewer({
 
       {notice && (
         <div className="fixed inset-x-0 bottom-6 z-40 flex justify-center px-4 print:hidden">
-          <p className="glass-deep rounded-2xl px-5 py-3 text-center text-sm text-amber-100">
+          <p className="glass-deep rounded-2xl px-5 py-3 text-center text-sm text-neutral-100">
             {notice}
           </p>
         </div>
@@ -296,7 +296,7 @@ function stampWatermark(
 
   ctx.save();
   ctx.globalAlpha = 0.1;
-  ctx.fillStyle = "#0f172a";
+  ctx.fillStyle = "#111111";
   ctx.font = `600 ${fontSize}px system-ui, sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";

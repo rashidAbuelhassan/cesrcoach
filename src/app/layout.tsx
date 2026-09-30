@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { site } from "@/config/site";
-import AuroraBackground from "@/components/AuroraBackground";
+import ScrollScene from "@/components/scroll-scene/ScrollScene";
 import PwaProvider from "@/components/PwaProvider";
 
 const geistSans = Geist({
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05070f",
+  themeColor: "#0a0a0a",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -62,7 +62,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <AuroraBackground />
+        <ScrollScene />
         {children}
         <PwaProvider />
       </body>

@@ -1,22 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #05070f;
-  --color-mist: #e6ecff;
-  --color-accent: #22d3ee;
-  --color-accent-2: #a78bfa;
-  --color-accent-3: #34d399;
+  --color-ink: #0a0a0a;
+  --color-mist: #f2f2f2;
+  --color-accent: #ffffff;
+  --color-accent-2: #bdbdbd;
+  --color-accent-3: #8a8a8a;
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --animate-float-slow: float 18s ease-in-out infinite;
-  --animate-float-slower: float 26s ease-in-out infinite reverse;
   --animate-shimmer: shimmer 8s linear infinite;
 
-  @keyframes float {
-    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-    33% { transform: translate3d(4%, -6%, 0) scale(1.08); }
-    66% { transform: translate3d(-5%, 4%, 0) scale(0.95); }
-  }
   @keyframes shimmer {
     0% { background-position: 0% 50%; }
     100% { background-position: 200% 50%; }
@@ -35,7 +28,7 @@ body {
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.35);
+  background: rgba(255, 255, 255, 0.28);
 }
 
 @layer components {
@@ -76,8 +69,8 @@ body {
   .glass-deep {
     background: linear-gradient(
       150deg,
-      rgba(13, 20, 40, 0.72) 0%,
-      rgba(9, 13, 28, 0.62) 100%
+      rgba(20, 20, 20, 0.74) 0%,
+      rgba(12, 12, 12, 0.64) 100%
     );
     -webkit-backdrop-filter: blur(28px) saturate(150%);
     backdrop-filter: blur(28px) saturate(150%);
@@ -93,10 +86,10 @@ body {
   }
   .glass-hover:hover {
     transform: translateY(-4px);
-    border-color: rgba(103, 232, 249, 0.35);
+    border-color: rgba(255, 255, 255, 0.32);
     box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
-      0 24px 60px -18px rgba(34, 211, 238, 0.25);
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+      0 24px 60px -18px rgba(255, 255, 255, 0.12);
   }
 
   /* ---------- Text + button treatments ---------- */
@@ -104,10 +97,10 @@ body {
   .text-aurora {
     background: linear-gradient(
       90deg,
-      #67e8f9 0%,
-      #a78bfa 35%,
-      #34d399 70%,
-      #67e8f9 100%
+      #ffffff 0%,
+      #a3a3a3 35%,
+      #e5e5e5 70%,
+      #ffffff 100%
     );
     background-size: 200% auto;
     -webkit-background-clip: text;
@@ -124,20 +117,20 @@ body {
     gap: 0.5rem;
     border-radius: 9999px;
     font-weight: 600;
-    color: #04121a;
-    background: linear-gradient(120deg, #67e8f9, #22d3ee 45%, #38bdf8);
+    color: #0a0a0a;
+    background: linear-gradient(120deg, #ffffff, #e8e8e8 45%, #cfcfcf);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.55),
-      inset 0 -2px 6px rgba(2, 60, 80, 0.35),
-      0 12px 32px -10px rgba(34, 211, 238, 0.55);
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -2px 6px rgba(0, 0, 0, 0.18),
+      0 12px 32px -12px rgba(255, 255, 255, 0.3);
     transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
   }
   .btn-liquid:hover {
     transform: translateY(-2px);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.6),
-      inset 0 -2px 6px rgba(2, 60, 80, 0.35),
-      0 18px 40px -10px rgba(34, 211, 238, 0.65);
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -2px 6px rgba(0, 0, 0, 0.18),
+      0 18px 40px -12px rgba(255, 255, 255, 0.4);
   }
   .btn-liquid:active {
     transform: translateY(0);
@@ -178,13 +171,15 @@ body {
     justify-content: center;
     border-radius: 9999px;
     font-weight: 600;
-    color: #fecaca;
-    background: rgba(239, 68, 68, 0.12);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    transition: background 0.25s ease;
+    color: #e5e5e5;
+    background: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.35);
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
   }
   .btn-danger:hover {
-    background: rgba(239, 68, 68, 0.22);
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.6);
   }
 
   /* ---------- Form fields ---------- */
@@ -201,16 +196,16 @@ body {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
   .field::placeholder {
-    color: rgba(230, 236, 255, 0.35);
+    color: rgba(242, 242, 242, 0.35);
   }
   .field:focus {
-    border-color: rgba(103, 232, 249, 0.55);
+    border-color: rgba(255, 255, 255, 0.55);
     box-shadow:
       inset 0 1px 2px rgba(0, 0, 0, 0.25),
-      0 0 0 3px rgba(34, 211, 238, 0.15);
+      0 0 0 3px rgba(255, 255, 255, 0.12);
   }
   select.field option {
-    background: #0b1226;
+    background: #161616;
     color: var(--color-mist);
   }
 
@@ -219,7 +214,7 @@ body {
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    color: rgba(230, 236, 255, 0.7);
+    color: rgba(242, 242, 242, 0.7);
     margin-bottom: 0.35rem;
   }
 

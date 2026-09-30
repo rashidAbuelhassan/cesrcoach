@@ -112,8 +112,8 @@ export default function SettingsManager(props: Props) {
         <p
           className={`rounded-xl border px-4 py-3 text-sm ${
             message.kind === "ok"
-              ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
-              : "border-red-400/30 bg-red-400/10 text-red-200"
+              ? "border-white/30 bg-white/10 text-white"
+              : "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
           }`}
         >
           {message.text}
@@ -188,7 +188,7 @@ export default function SettingsManager(props: Props) {
             value={priceNote}
             onChange={(e) => setPriceNote(e.target.value)}
           />
-          <p className="mt-1.5 text-xs text-amber-200/70">
+          <p className="mt-1.5 text-xs text-neutral-200/70">
             ⚠️ Only state that VAT is included if you are VAT-registered. Leave
             this empty (or write “No VAT is charged.”) if you are not.
           </p>
@@ -270,8 +270,8 @@ function PricingEditor({ eventTypes }: { eventTypes: EventType[] }) {
         <p
           className={`rounded-xl border px-4 py-3 text-sm ${
             message.kind === "ok"
-              ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"
-              : "border-red-400/30 bg-red-400/10 text-red-200"
+              ? "border-white/30 bg-white/10 text-white"
+              : "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
           }`}
         >
           {message.text}
@@ -281,12 +281,7 @@ function PricingEditor({ eventTypes }: { eventTypes: EventType[] }) {
         {eventTypes.map((t) => (
           <div key={t.id} className="flex items-center gap-4">
             <span
-              className="chip shrink-0"
-              style={{
-                borderColor: `${t.color}55`,
-                background: `${t.color}18`,
-                color: t.color ?? undefined,
-              }}
+              className="chip shrink-0 border-white/20 bg-white/8 text-mist"
             >
               {t.name}
             </span>
@@ -437,7 +432,7 @@ function ConsultantEditor({ consultants }: { consultants: Consultant[] }) {
               </button>
             </div>
             {error && (
-              <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+              <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
                 {error}
               </p>
             )}

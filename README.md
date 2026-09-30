@@ -75,6 +75,29 @@ Two ways — pick whichever you prefer:
 Site name, tagline and contact email live in `src/config/site.ts` (and can
 also be overridden from Admin → Settings).
 
+## Design & scroll animation
+
+The site is strictly monochrome: black, greys and white. Tokens live in
+`src/app/globals.css` (`--color-ink`, `--color-mist`, …); success states use
+white, everything else a grey of matching lightness, and destructive buttons
+are dashed outlines rather than red.
+
+The background (`src/components/scroll-scene/`) is a canvas scene driven
+entirely by the scrollbar — nothing moves unless the page scrolls, and
+scrolling up plays it in reverse:
+
+- **Top of the page** (`crowd.ts`) — a figure stands still in the middle of a
+  street, back to the viewer, while a crowd streams past on both sides.
+  Scrolling faster adds motion blur.
+- **Bottom of the page** (`desk.ts`) — papers fly in, tumble and settle one by
+  one into an open *CESR Portfolio* folder on a desk under a lamp.
+
+Static scenery is painted once per resize into offscreen layers; only the
+people and papers are redrawn per frame, and only while scrolling. During the
+hand-over each scene renders into its own buffer before cross-fading. Visitors
+with *reduce motion* enabled get one still frame per scene, and the document
+reader (`/reader`) shows a plain black backdrop.
+
 ## Document protection
 
 Uploaded documents open in `/reader/[id]` — a standalone window that renders

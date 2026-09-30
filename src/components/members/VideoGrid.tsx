@@ -35,7 +35,7 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
               onClick={() => setCategory(c)}
               className={`chip cursor-pointer transition ${
                 category === c
-                  ? "border-cyan-300/40 bg-cyan-300/15 text-cyan-100"
+                  ? "border-neutral-300/40 bg-neutral-300/15 text-neutral-100"
                   : "hover:bg-white/12"
               }`}
             >
@@ -52,7 +52,7 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
             onClick={() => setPlaying(v)}
             className="glass glass-hover group overflow-hidden rounded-3xl text-left"
           >
-            <div className="relative aspect-video w-full overflow-hidden bg-gradient-to-br from-cyan-500/15 to-violet-500/15">
+            <div className="relative aspect-video w-full overflow-hidden bg-gradient-to-br from-neutral-500/15 to-neutral-500/15">
               {v.thumbnail_url ? (
                 <img
                   src={v.thumbnail_url}
@@ -65,7 +65,7 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
                 </div>
               )}
               <span className="absolute inset-0 flex items-center justify-center">
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/15 text-xl backdrop-blur-md ring-1 ring-white/30 transition group-hover:scale-110 group-hover:bg-cyan-300/30">
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/15 text-xl backdrop-blur-md ring-1 ring-white/30 transition group-hover:scale-110 group-hover:bg-neutral-300/30">
                   ▶
                 </span>
               </span>

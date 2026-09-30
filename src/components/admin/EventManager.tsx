@@ -144,7 +144,7 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
       </header>
 
       {error && (
-        <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+        <p className="rounded-xl border border-neutral-400/30 bg-neutral-400/10 px-4 py-3 text-sm text-neutral-200">
           {error}
         </p>
       )}
@@ -167,12 +167,7 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
               }`}
             >
               <span
-                className="chip shrink-0"
-                style={{
-                  borderColor: `${t?.color}55`,
-                  background: `${t?.color}18`,
-                  color: t?.color ?? undefined,
-                }}
+                className="chip shrink-0 border-white/20 bg-white/8 text-mist"
               >
                 {t?.name}
               </span>
@@ -286,7 +281,7 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
               <label className="label">
                 Capacity
                 {selectedType?.format === "one_to_one" && (
-                  <span className="ml-1 font-normal text-amber-300/70">
+                  <span className="ml-1 font-normal text-neutral-300/70">
                     — one-to-one sessions should stay at 1
                   </span>
                 )}

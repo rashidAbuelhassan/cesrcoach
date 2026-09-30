@@ -106,14 +106,15 @@ export default async function Home() {
       {/* ---------- HERO ---------- */}
       <section className="relative px-4 pt-40 pb-24 sm:pt-48">
         <div className="mx-auto max-w-4xl text-center">
-          <span className="chip mx-auto text-cyan-200/90">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          <span className="chip mx-auto text-neutral-200/90">
+            <span className="h-1.5 w-1.5 rounded-full bg-white" />
             Consultant-led CESR &amp; Portfolio Pathway coaching
           </span>
           <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
             Your route to the{" "}
-            <span className="text-aurora">Specialist Register</span>,
-            <br className="hidden sm:block" /> guided by those who&apos;ve walked it.
+            <span className="text-aurora">Specialist Register</span>,{" "}
+            <br className="hidden sm:block" />
+            guided by those who&apos;ve walked it.
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base text-mist/65 sm:text-lg">
             {branding.siteName} is a group of experienced NHS consultants ready
@@ -167,16 +168,12 @@ export default async function Home() {
                 className="glass glass-hover flex flex-col rounded-3xl p-8"
               >
                 <div
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl text-xl"
-                  style={{
-                    background: `${t.color}22`,
-                    border: `1px solid ${t.color}55`,
-                  }}
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/8 text-xl"
                 >
                   {["🔍", "🔄", "🛠️", "🧭"][i] ?? "✨"}
                 </div>
                 <h3 className="mt-5 text-xl font-bold">{t.name}</h3>
-                <p className="mt-1 text-sm font-medium" style={{ color: t.color ?? undefined }}>
+                <p className="mt-1 text-sm font-medium text-mist/70">
                   {t.tagline}
                 </p>
                 {t.price_gbp != null && Number(t.price_gbp) > 0 && (
@@ -201,7 +198,7 @@ export default async function Home() {
                         : `👥 Group of ${t.min_group_size}+`}
                   </span>
                   {t.requires_portfolio && (
-                    <span className="chip text-amber-200/90">
+                    <span className="chip text-neutral-200/90">
                       📁 Portfolio {t.portfolio_lead_days} days ahead
                     </span>
                   )}
@@ -245,7 +242,7 @@ export default async function Home() {
           <ol className="relative mt-14 space-y-6">
             {pathwaySteps.map((s, i) => (
               <li key={s.title} className="glass glass-hover flex gap-5 rounded-3xl p-6 sm:p-8">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400/30 to-violet-400/30 font-bold text-cyan-200 ring-1 ring-white/15">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-neutral-400/30 to-neutral-400/30 font-bold text-neutral-200 ring-1 ring-white/15">
                   {i + 1}
                 </div>
                 <div>
@@ -281,12 +278,12 @@ export default async function Home() {
                     className="mx-auto h-24 w-24 rounded-full border border-white/15 object-cover"
                   />
                 ) : (
-                  <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400/25 to-violet-400/25 text-3xl ring-1 ring-white/15">
+                  <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-neutral-400/25 to-neutral-400/25 text-3xl ring-1 ring-white/15">
                     🩺
                   </div>
                 )}
                 <h3 className="mt-4 font-bold">{c.name}</h3>
-                <p className="text-sm text-cyan-300/80">{c.title}</p>
+                <p className="text-sm text-neutral-300/80">{c.title}</p>
                 <p className="mt-3 text-sm leading-relaxed text-mist/55">{c.bio}</p>
               </div>
             ))}
@@ -308,7 +305,7 @@ export default async function Home() {
                 <summary className="cursor-pointer list-none px-6 py-5 font-semibold marker:hidden [&::-webkit-details-marker]:hidden">
                   <span className="flex items-center justify-between gap-4">
                     {f.q}
-                    <span className="text-cyan-300 transition-transform group-open:rotate-45">＋</span>
+                    <span className="text-neutral-300 transition-transform group-open:rotate-45">＋</span>
                   </span>
                 </summary>
                 <p className="px-6 pb-5 text-sm leading-relaxed text-mist/60">{f.a}</p>
@@ -321,7 +318,7 @@ export default async function Home() {
       {/* ---------- CTA ---------- */}
       <section className="px-4 py-20">
         <div className="glass mx-auto max-w-4xl overflow-hidden rounded-[2.5rem] p-10 text-center sm:p-16">
-          <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-[120%] -translate-x-1/2 rounded-full bg-cyan-400/15 blur-[90px]" />
+          <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-[120%] -translate-x-1/2 rounded-full bg-neutral-400/15 blur-[90px]" />
           <h2 className="text-3xl font-bold sm:text-4xl">
             Ready to reach the <span className="text-aurora">Specialist Register</span>?
           </h2>
