@@ -203,7 +203,7 @@ interface Look {
   coat?: boolean;
   longHair?: boolean;
   bag?: 0 | 1 | 2;
-  /** the still figure: broader, with ears */
+  /** the still figure: slim, arms close to the body, with ears */
   hero?: boolean;
 }
 
@@ -222,7 +222,7 @@ function addPerson(
   look: Look
 ) {
   const k = heightM / 1.75;
-  const b = build * (look.hero ? 1.1 : 1);
+  const b = build;
   const X = (u: number) => cx + (u + pose.sway) * s;
   const Y = (v: number) => footY - (v * k + pose.bob) * s;
 
@@ -273,8 +273,8 @@ function addPerson(
   for (const side of [-1, 1]) {
     const swing = side < 0 ? pose.armL : pose.armR;
     const sh = side * 0.205 * b;
-    const el = side * (look.hero ? 0.25 : 0.238) * b;
-    const wr = side * ((look.hero ? 0.262 : 0.243) * b + swing * 0.012);
+    const el = side * (look.hero ? 0.232 : 0.238) * b;
+    const wr = side * ((look.hero ? 0.234 : 0.243) * b + swing * 0.012);
     const wristV = 0.87 + Math.abs(swing) * 0.05;
     // rounded cap tucks under the shoulder curve; the outer edge is fuller
     const rw = side > 0 ? 1 : 0.8;
@@ -411,7 +411,7 @@ export function drawCrowd(
       ctx.restore();
 
       const path = new Path2D();
-      addPerson(path, p.x, p.y, p.s, 1.82, 1.0, STILL, { hero: true });
+      addPerson(path, p.x, p.y, p.s, 1.84, 0.84, STILL, { hero: true });
 
       // rim light: a lighter copy peeking out around the edge
       ctx.fillStyle = grey(150, 0.36);
