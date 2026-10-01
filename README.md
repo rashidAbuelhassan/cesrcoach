@@ -155,6 +155,17 @@ Required server env vars (Vercel → Project → Settings → Environment Variab
 The webhook endpoint is `https://<your-domain>/api/stripe/webhook` and must
 subscribe to `checkout.session.completed` and `checkout.session.expired`.
 
+## Deployment note (Hostinger)
+
+Production builds use **Webpack** (`next build --webpack`); local `next dev`
+still uses Turbopack. Turbopack runs PostCSS (Tailwind) in a separate `node`
+process that it launches from `PATH`. On Hostinger that helper exits
+immediately ("node process exited before we could connect to it with exit
+status: 0" while processing `globals.css`), so the build fails. Webpack
+processes CSS inside the build process itself and avoids the problem. The
+build-time packages (Tailwind, TypeScript, `@types/*`) are regular
+dependencies because Hostinger installs without devDependencies.
+
 ## Getting started
 
 ```bash
