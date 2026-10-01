@@ -1,3 +1,4 @@
+import { addPerson, STILL, walkPose, type Look } from "./figure";
 import { clamp, grey, lerp, makeLayer, mulberry32, smoothstep, type Viewport } from "./util";
 
 /*
@@ -25,9 +26,7 @@ interface Walker {
   speed: number;
   height: number;
   build: number;
-  coat: boolean;
-  longHair: boolean;
-  bag: 0 | 1 | 2;
+  look: Look;
   phase0: number;
 }
 
@@ -36,17 +35,32 @@ export function createCrowd(seed = 11): Walker[] {
   const crowd: Walker[] = [];
   for (let i = 0; i < 30; i++) {
     const side = i % 2 === 0 ? -1 : 1;
-    const bagRoll = r();
+    const female = r() < 0.46;
+    const o = r();
+    const h = r();
+    const g = r();
+    const look: Look = female
+      ? {
+          female,
+          outfit: o < 0.33 ? "skirt" : o < 0.58 ? "coat" : "trousers",
+          hair: h < 0.45 ? "long" : h < 0.65 ? "bun" : h < 0.85 ? "pony" : "short",
+          bag: g < 0.12 ? 1 : g < 0.42 ? 2 : 0,
+          hem: 0.46 + r() * 0.16,
+        }
+      : {
+          outfit: o < 0.3 ? "coat" : "suit",
+          hair: "short",
+          bag: g < 0.24 ? 1 : g < 0.34 ? 2 : 0,
+          hem: 0.5 + r() * 0.08,
+        };
     crowd.push({
       x: side * (0.8 + r() * 2.7),
       z0: r() * SPAN,
       dir: r() < 0.55 ? -1 : 1,
       speed: 0.75 + r() * 0.6,
-      height: 1.6 + r() * 0.3,
-      build: 0.85 + r() * 0.3,
-      coat: r() < 0.35,
-      longHair: r() < 0.3,
-      bag: bagRoll < 0.22 ? 1 : bagRoll < 0.4 ? 2 : 0,
+      height: female ? 1.58 + r() * 0.18 : 1.7 + r() * 0.22,
+      build: 0.9 + r() * 0.22,
+      look,
       phase0: r() * Math.PI * 2,
     });
   }
@@ -174,166 +188,6 @@ export function paintStreetLayer(vp: Viewport, dpr: number) {
 }
 
 /* ------------------------------------------------------------------ */
-/* figures                                                             */
-/* ------------------------------------------------------------------ */
-
-interface Pose {
-  bob: number;
-  sway: number;
-  liftL: number;
-  liftR: number;
-  armL: number;
-  armR: number;
-}
-
-const STILL: Pose = { bob: 0, sway: 0, liftL: 0, liftR: 0, armL: 0, armR: 0 };
-
-function walkPose(phase: number): Pose {
-  const s = Math.sin(phase);
-  return {
-    bob: 0.018 * Math.cos(phase * 2),
-    sway: 0.016 * s,
-    liftL: Math.max(0, s) * 0.09,
-    liftR: Math.max(0, -s) * 0.09,
-    armL: -s,
-    armR: s,
-  };
-}
-
-interface Look {
-  coat?: boolean;
-  longHair?: boolean;
-  bag?: 0 | 1 | 2;
-  /** the still figure: slim, arms close to the body, with ears */
-  hero?: boolean;
-}
-
-/**
- * Adds a front/back-view person to `path`. Every sub-path winds clockwise,
- * so one nonzero fill paints the union without darkening where limbs overlap.
- */
-function addPerson(
-  path: Path2D,
-  cx: number,
-  footY: number,
-  s: number,
-  heightM: number,
-  build: number,
-  pose: Pose,
-  look: Look
-) {
-  const k = heightM / 1.75;
-  const b = build;
-  const X = (u: number) => cx + (u + pose.sway) * s;
-  const Y = (v: number) => footY - (v * k + pose.bob) * s;
-
-  const M = (u: number, v: number) => path.moveTo(X(u), Y(v));
-  const L = (u: number, v: number) => path.lineTo(X(u), Y(v));
-  const Q = (cu: number, cv: number, u: number, v: number) =>
-    path.quadraticCurveTo(X(cu), Y(cv), X(u), Y(v));
-  const ell = (u: number, v: number, ru: number, rv: number) => {
-    // start the ellipse as its own closed sub-path (no stray joining edge)
-    path.moveTo(X(u) + ru * s, Y(v));
-    path.ellipse(X(u), Y(v), ru * s, rv * s * k, 0, 0, Math.PI * 2);
-    path.closePath();
-  };
-
-  // legs: tapered thigh → knee → calf → ankle
-  for (const side of [-1, 1]) {
-    const lift = side < 0 ? pose.liftL : pose.liftR;
-    const c = side * 0.085 * b;
-    const ankle = 0.075 + lift;
-    M(c - 0.078 * b, 0.98);
-    L(c + 0.078 * b, 0.98);
-    Q(c + 0.07 * b, 0.64, c + 0.05, 0.5);
-    Q(c + 0.06, 0.32, c + 0.034, ankle);
-    L(c - 0.034, ankle);
-    Q(c - 0.06, 0.32, c - 0.05, 0.5);
-    Q(c - 0.07 * b, 0.64, c - 0.078 * b, 0.98);
-    path.closePath();
-    ell(c, ankle - 0.012, 0.046, 0.026); // shoe
-  }
-
-  // torso: sloping trapezius, rounded shoulders, waist, hips — a coat
-  // continues to the knee with a slight A-line
-  const hemV = look.coat ? 0.52 : 0.9;
-  const hemW = (look.coat ? 0.2 : 0.168) * b;
-  M(0.05, 1.5);
-  Q(0.14 * b, 1.49, 0.2 * b, 1.44);
-  Q(0.238 * b, 1.415, 0.226 * b, 1.3);
-  Q(0.208 * b, 1.17, 0.162 * b, 1.06);
-  Q(0.168 * b, look.coat ? 0.84 : 0.99, hemW, hemV);
-  L(-hemW, hemV);
-  Q(-0.168 * b, look.coat ? 0.84 : 0.99, -0.162 * b, 1.06);
-  Q(-0.208 * b, 1.17, -0.226 * b, 1.3);
-  Q(-0.238 * b, 1.415, -0.2 * b, 1.44);
-  Q(-0.14 * b, 1.49, -0.05, 1.5);
-  path.closePath();
-
-  // arms: shoulder → slight elbow → wrist; a swinging arm reads as the hand rising
-  for (const side of [-1, 1]) {
-    const swing = side < 0 ? pose.armL : pose.armR;
-    const sh = side * 0.205 * b;
-    const el = side * (look.hero ? 0.232 : 0.238) * b;
-    const wr = side * ((look.hero ? 0.234 : 0.243) * b + swing * 0.012);
-    const wristV = 0.87 + Math.abs(swing) * 0.05;
-    // rounded cap tucks under the shoulder curve; the outer edge is fuller
-    const rw = side > 0 ? 1 : 0.8;
-    const lw = side > 0 ? 0.8 : 1;
-    M(sh - 0.045 * lw, 1.4);
-    Q(sh, 1.455, sh + 0.045 * rw, 1.4);
-    Q(el + 0.046 * rw, 1.22, el + 0.031 * rw, 1.12);
-    Q(wr + 0.03, 1.0, wr + 0.022, wristV);
-    L(wr - 0.022, wristV);
-    Q(wr - 0.03, 1.0, el - 0.031 * lw, 1.12);
-    Q(el - 0.046 * lw, 1.22, sh - 0.045 * lw, 1.4);
-    path.closePath();
-    ell(wr, wristV - 0.045, 0.027, 0.055); // hand
-
-    if (look.bag === 1 && side > 0) {
-      // briefcase seen edge-on, hanging from the hand
-      path.rect(X(wr - 0.04), Y(wristV - 0.07), 0.08 * s, 0.28 * k * s);
-    }
-  }
-
-  if (look.bag === 2) {
-    // shoulder bag on the hip, with its strap
-    M(-0.29 * b, 1.08);
-    L(-0.14 * b, 1.08);
-    Q(-0.12 * b, 0.9, -0.14 * b, 0.84);
-    L(-0.29 * b, 0.84);
-    Q(-0.31 * b, 0.9, -0.29 * b, 1.08);
-    path.closePath();
-    M(0.12 * b, 1.47);
-    L(0.15 * b, 1.46);
-    L(-0.2 * b, 1.07);
-    L(-0.23 * b, 1.08);
-    path.closePath();
-  }
-
-  // neck, head (a touch of hair volume at the crown) and, for the hero, ears
-  M(-0.043, 1.585);
-  L(0.043, 1.585);
-  L(0.052, 1.47);
-  L(-0.052, 1.47);
-  path.closePath();
-  ell(0, 1.645, 0.078, 0.1);
-  ell(0, 1.69, 0.08, 0.07);
-  if (look.hero) {
-    ell(-0.078, 1.635, 0.017, 0.032);
-    ell(0.078, 1.635, 0.017, 0.032);
-  }
-  if (look.longHair) {
-    M(-0.085, 1.67);
-    L(0.085, 1.67);
-    Q(0.125, 1.5, 0.1, 1.37);
-    Q(0, 1.33, -0.1, 1.37);
-    Q(-0.125, 1.5, -0.085, 1.67);
-    path.closePath();
-  }
-}
-
-/* ------------------------------------------------------------------ */
 /* per-frame                                                           */
 /* ------------------------------------------------------------------ */
 
@@ -380,11 +234,7 @@ export function drawCrowd(
           const alpha = g === 0 ? 1 : [0, 0.22, 0.11, 0.05][g] * (0.5 + trail);
           const p = project(cam, X, 0, zg);
           const path = new Path2D();
-          addPerson(path, p.x, p.y, p.s, w.height, w.build, walkPose(w.phase0 + (d / STRIDE) * Math.PI * 2), {
-            coat: w.coat,
-            longHair: w.longHair,
-            bag: w.bag,
-          });
+          addPerson(path, p.x, p.y, p.s, w.height, w.build, walkPose(w.phase0 + (d / STRIDE) * Math.PI * 2), w.look);
           ctx.fillStyle = grey(tone, clamp(alpha * visibility));
           ctx.fill(path, "nonzero");
         }
@@ -414,7 +264,8 @@ export function drawCrowd(
       ctx.restore();
 
       const path = new Path2D();
-      addPerson(path, p.x, p.y, p.s, 1.84, 0.84, STILL, { hero: true });
+      // slim, in a suit, ears just catching the glow
+      addPerson(path, p.x, p.y, p.s, 1.84, 0.92, STILL, { outfit: "suit", hair: "short", ears: true });
 
       // rim light: a lighter copy peeking out around the edge
       ctx.fillStyle = grey(150, 0.36);

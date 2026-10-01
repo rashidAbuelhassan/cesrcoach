@@ -87,7 +87,7 @@ the scrollbar. The crowd keeps walking on its own while the street is on
 screen and speeds up as you scroll; the papers move only with the scroll,
 and scrolling up plays them in reverse:
 
-- **Top of the page** (`crowd.ts`) — a figure stands still in the middle of a
+- **Top of the page** (`crowd.ts`, people in `figure.ts`) — a figure stands still in the middle of a
   street, back to the viewer, while a crowd streams past on both sides.
   Scrolling faster adds motion blur.
 - **Bottom of the page** (`desk.ts`) — papers fly in, tumble and settle one by
