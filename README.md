@@ -82,9 +82,10 @@ The site is strictly monochrome: black, greys and white. Tokens live in
 white, everything else a grey of matching lightness, and destructive buttons
 are dashed outlines rather than red.
 
-The background (`src/components/scroll-scene/`) is a canvas scene driven
-entirely by the scrollbar — nothing moves unless the page scrolls, and
-scrolling up plays it in reverse:
+The background (`src/components/scroll-scene/`) is a canvas scene tied to
+the scrollbar. The crowd keeps walking on its own while the street is on
+screen and speeds up as you scroll; the papers move only with the scroll,
+and scrolling up plays them in reverse:
 
 - **Top of the page** (`crowd.ts`) — a figure stands still in the middle of a
   street, back to the viewer, while a crowd streams past on both sides.
@@ -93,7 +94,8 @@ scrolling up plays it in reverse:
   one into an open *CESR Portfolio* folder on a desk under a lamp.
 
 Static scenery is painted once per resize into offscreen layers; only the
-people and papers are redrawn per frame, and only while scrolling. During the
+people and papers are redrawn per frame — at ~30fps while the crowd strolls,
+every frame while scrolling, and not at all once the desk scene has settled. During the
 hand-over each scene renders into its own buffer before cross-fading. Visitors
 with *reduce motion* enabled get one still frame per scene, and the document
 reader (`/reader`) shows a plain black backdrop.

@@ -7,18 +7,24 @@ import { createPapers, drawPapers, paintDeskLayer } from "./desk";
 import { clamp, makeLayer, smoothstep, type Viewport } from "./util";
 
 /**
- * Site-wide background, driven entirely by the scrollbar:
+ * Site-wide background tied to the scrollbar:
  *   top of the page   — a figure stands still while a crowd streams past
  *   bottom of the page — papers fly in and settle into an open folder
  *
- * Nothing moves unless the page scrolls. Scrolling back up plays it in
- * reverse. With prefers-reduced-motion it shows one still frame per scene.
+ * The crowd keeps walking on its own while the street is on screen, and
+ * scrolling pushes it along faster; the papers move only with the scroll,
+ * and scrolling back up plays them in reverse. With prefers-reduced-motion
+ * it shows one still frame per scene.
  */
 
 /** Pages shorter than this still get a gentle, partial play-through. */
 const MIN_STORY_PX = 2200;
 /** Where in the scroll the street hands over to the desk. */
 const HANDOVER: [number, number] = [0.44, 0.58];
+/** Walking pace of the crowd when nobody is scrolling, in metres/second. */
+const STROLL_SPEED = 1.15;
+/** Idle walking only needs ~30fps; scrolling still renders every frame. */
+const IDLE_FRAME_MS = 32;
 
 export default function ScrollScene() {
   const pathname = usePathname();
@@ -49,6 +55,8 @@ export default function ScrollScene() {
     let trail = 0; // smoothed scroll speed
     let frame = 0;
     let last = 0;
+    let strolled = 0; // metres the crowd has walked on its own
+    let lastPaint = 0;
 
     const target = () => {
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
@@ -68,7 +76,7 @@ export default function ScrollScene() {
 
     const drawStreet = (c: CanvasRenderingContext2D, p: number) => {
       c.drawImage(street!, 0, 0, vp.w, vp.h);
-      drawCrowd(c, vp, crowd, p, trail);
+      drawCrowd(c, vp, crowd, p, strolled, trail);
     };
 
     const drawDesk = (c: CanvasRenderingContext2D, p: number) => {
@@ -114,9 +122,16 @@ export default function ScrollScene() {
       const speed = Math.abs(current - prev) / (dt / 16.7);
       trail += (Math.min(1, speed * 260) - trail) * 0.2;
 
-      paint(current);
+      const scrolling = Math.abs(goal - current) > 0.00005 || trail > 0.01;
+      const streetOnScreen = smoothstep(HANDOVER[0], HANDOVER[1], current) < 0.999;
+      if (streetOnScreen) strolled += (STROLL_SPEED * dt) / 1000;
 
-      if (Math.abs(goal - current) > 0.00005 || trail > 0.01) {
+      if (scrolling || now - lastPaint >= IDLE_FRAME_MS) {
+        paint(current);
+        lastPaint = now;
+      }
+
+      if (scrolling || streetOnScreen) {
         frame = requestAnimationFrame(tick);
       } else {
         last = 0;

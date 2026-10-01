@@ -14,7 +14,7 @@ const Z_NEAR = 1.5;
 const Z_FAR = 34;
 const SPAN = Z_FAR - Z_NEAR;
 const HERO_Z = 5.2;
-/** metres the crowd walks over a full page scroll */
+/** extra metres the crowd covers over a full page scroll */
 const WALK_DISTANCE = 70;
 const STRIDE = 1.45;
 
@@ -81,8 +81,9 @@ export function paintStreetLayer(vp: Viewport, dpr: number) {
   sky.addColorStop(0, grey(8));
   sky.addColorStop(0.3, grey(17));
   sky.addColorStop(0.47, grey(50));
-  sky.addColorStop(0.56, grey(30));
-  sky.addColorStop(1, grey(9));
+  sky.addColorStop(0.56, grey(36));
+  sky.addColorStop(0.78, grey(24));
+  sky.addColorStop(1, grey(15));
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, w, h);
 
@@ -337,7 +338,8 @@ function addPerson(
 /* ------------------------------------------------------------------ */
 
 /**
- * @param progress 0..1 page scroll progress (drives the crowd)
+ * @param progress 0..1 page scroll progress (scrolling pushes the crowd on)
+ * @param strolled metres walked on their own, so the street is never frozen
  * @param trail    0..1 how fast the page is scrolling (drives motion blur)
  */
 export function drawCrowd(
@@ -345,10 +347,11 @@ export function drawCrowd(
   vp: Viewport,
   crowd: Walker[],
   progress: number,
+  strolled: number,
   trail: number
 ) {
   const cam = camera(vp);
-  const travelled = progress * WALK_DISTANCE;
+  const travelled = progress * WALK_DISTANCE + strolled;
 
   type Item = { z: number; draw: () => void };
   const items: Item[] = [];
@@ -363,7 +366,7 @@ export function drawCrowd(
     if (visibility <= 0.01) continue;
 
     // far figures melt into the haze, near ones are near-black
-    const tone = lerp(6, 36, Math.pow(clamp((z - 2) / 30), 0.8));
+    const tone = lerp(2, 30, Math.pow(clamp((z - 2) / 30), 0.8));
 
     items.push({
       z,
