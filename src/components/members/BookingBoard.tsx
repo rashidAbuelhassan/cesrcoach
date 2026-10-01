@@ -261,9 +261,11 @@ export default function BookingBoard({
                           : "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
                       }`}
                     >
-                      {lead
-                        ? `📁 Portfolio access must be provided at booking — your reviewer needs it ${t.portfolio_lead_days} days (3 weeks) before the session.`
-                        : `⚠️ This session starts in under ${t.portfolio_lead_days} days — too late for a full portfolio review. Please pick a later date.`}
+                      {!lead
+                        ? `⚠️ This session starts in under ${t.portfolio_lead_days} days — too late for a full portfolio review. Please pick a later date.`
+                        : t.portfolio_lead_days > 0
+                          ? `📁 Portfolio access must be provided at booking — your reviewer needs it ${t.portfolio_lead_days} days${t.portfolio_lead_days % 7 === 0 ? ` (${t.portfolio_lead_days / 7} weeks)` : ""} before the session.`
+                          : "📁 A link to your portfolio is required when you book."}
                     </p>
                   )}
                   <div className="mt-5 flex-1" />

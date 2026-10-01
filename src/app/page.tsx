@@ -199,7 +199,9 @@ export default async function Home() {
                   </span>
                   {t.requires_portfolio && (
                     <span className="chip text-neutral-200/90">
-                      📁 Portfolio {t.portfolio_lead_days} days ahead
+                      {t.portfolio_lead_days > 0
+                        ? `📁 Portfolio ${t.portfolio_lead_days} days ahead`
+                        : "📁 Portfolio link required"}
                     </span>
                   )}
                 </div>
