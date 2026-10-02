@@ -19,6 +19,8 @@ const targets = [
   { file: "apple-touch-icon.png", size: 180, pad: 0 },
   // maskable: icon shrunk into the middle 80% "safe zone" on a solid backdrop
   { file: "icon-maskable-512.png", size: 512, pad: 64 },
+  // browser-tab icon, served by Next.js from src/app/icon.png
+  { file: "../../src/app/icon.png", size: 64, pad: 0 },
 ];
 
 for (const t of targets) {

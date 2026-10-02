@@ -1,28 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 140" role="img" aria-label="CESR Coach">
   <defs>
-    <linearGradient id="arc" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="#6b6b6b"/>
-      <stop offset="0.5" stop-color="#b5b5b5"/>
-      <stop offset="1" stop-color="#ffffff"/>
-    </linearGradient>
-    <linearGradient id="steps" x1="0" y1="1" x2="0" y2="0">
-      <stop offset="0" stop-color="#9e9e9e"/>
-      <stop offset="1" stop-color="#ffffff"/>
-    </linearGradient>
     <linearGradient id="word" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#ffffff"/>
       <stop offset="1" stop-color="#c4c4c4"/>
     </linearGradient>
   </defs>
-  <!-- mark -->
-  <g transform="translate(10,10) scale(0.2344)">
-    <path d="M 361 137 A 150 150 0 1 0 361 375" fill="none"
-          stroke="url(#arc)" stroke-width="44" stroke-linecap="round"/>
-    <rect x="216" y="296" width="52" height="52" rx="12" fill="url(#steps)" opacity="0.55"/>
-    <rect x="252" y="232" width="52" height="52" rx="12" fill="url(#steps)" opacity="0.8"/>
-    <rect x="288" y="168" width="52" height="52" rx="12" fill="url(#steps)"/>
-    <path d="M 384 118 l 10.5 21.5 23.5 3.5 -17 16.5 4 23.5 -21 -11 -21 11 4 -23.5 -17 -16.5 23.5 -3.5 z"
-          fill="#ffffff"/>
+  <!-- mark: the open C, open toward the goal, with the route running to it -->
+  <g transform="translate(10 10) scale(1.875)">
+    <path d="M49.4 45 A22 22 0 1 1 49.4 19" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+    <line x1="21" y1="32" x2="41" y2="32" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="0.1 5"/>
+    <circle cx="50.5" cy="32" r="5" fill="#ffffff"/>
   </g>
   <!-- wordmark -->
   <text x="150" y="78" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
