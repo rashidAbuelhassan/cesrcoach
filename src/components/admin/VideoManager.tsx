@@ -96,7 +96,7 @@ export default function VideoManager({ videos }: { videos: Video[] }) {
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">🎬 Videos</h1>
-          <p className="mt-2 text-mist/60">
+          <p className="mt-2 text-mist/77">
             Add pre-recorded presentations (YouTube, Vimeo, Loom or direct MP4
             links). Only published videos appear to members.
           </p>
@@ -114,7 +114,7 @@ export default function VideoManager({ videos }: { videos: Video[] }) {
 
       <div className="space-y-3">
         {videos.length === 0 && (
-          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/50">
+          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/70">
             No videos yet — add your first presentation.
           </p>
         )}
@@ -128,7 +128,7 @@ export default function VideoManager({ videos }: { videos: Video[] }) {
             <span className="text-2xl">🎬</span>
             <div className="min-w-0 flex-1">
               <p className="font-semibold">{v.title}</p>
-              <p className="truncate text-xs text-mist/50">
+              <p className="truncate text-xs text-mist/70">
                 {v.category}
                 {v.duration_minutes ? ` · ${v.duration_minutes} min` : ""} ·{" "}
                 {v.video_url}
@@ -140,7 +140,7 @@ export default function VideoManager({ videos }: { videos: Video[] }) {
                 className={`chip cursor-pointer ${
                   v.published
                     ? "border-white/30 bg-white/10 text-white"
-                    : "border-white/15 bg-white/5 text-mist/50"
+                    : "border-white/15 bg-white/5 text-mist/70"
                 }`}
               >
                 {v.published ? "Published" : "Draft"}
@@ -235,7 +235,7 @@ export default function VideoManager({ videos }: { videos: Video[] }) {
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
               />
             </div>
-            <label className="flex items-center gap-2 text-sm text-mist/70">
+            <label className="flex items-center gap-2 text-sm text-mist/84">
               <input
                 type="checkbox"
                 checked={form.published}

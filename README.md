@@ -12,6 +12,10 @@ Home Screen on iOS & Android).
 ### Public site
 - Animated liquid-glass landing page: hero, the three services, pathway
   steps, consultant team, FAQ, contact CTA.
+- **Talk to us first** (`/contact`) — a form collecting the visitor's name,
+  email, optional phone/specialty/stage and their question. Stored in
+  `coach_enquiries` (anon insert-only), with a honeypot, a minimum fill time,
+  server-side validation and a per-email flood limit in the database.
 - Services and team content are pulled live from the database, so admins can
   edit them without deployments.
 
@@ -53,6 +57,14 @@ Home Screen on iOS & Android).
   **feedback the candidate reads on their dashboard**. Grant/revoke admin.
   Members cannot write their own feedback or the private admin notes — both
   are enforced by a database trigger, not just the UI.
+- **Enquiries** — questions from the contact form: filter New / Replied /
+  Archived, reply by email in one click, mark handled, archive or delete. A
+  badge on the tab shows unanswered ones.
+- **Visitors** (on the Overview) — total visitors, today / 7 / 30 days, a
+  30-day chart and the most viewed pages. Counting is cookie-free: a one-way
+  hash of IP + browser with a salt that is replaced every day (so nobody is
+  tracked across days), skipping admins, bots and visitors sending Do Not
+  Track / Global Privacy Control. Counts start from the day it was deployed.
 - **Settings** — site name, contact email, auto-admin email list, homepage
   consultant cards, and **logo upload** (see below).
 
@@ -77,7 +89,8 @@ also be overridden from Admin → Settings).
 
 ## Design & scroll animation
 
-The site is strictly monochrome: black, greys and white. Tokens live in
+The site is a graphite-and-silver theme: light, silvery backdrop scenes,
+dark glass panels for reading, silver buttons. Tokens live in
 `src/app/globals.css` (`--color-ink`, `--color-mist`, …); success states use
 white, everything else a grey of matching lightness, and destructive buttons
 are dashed outlines rather than red.
@@ -87,8 +100,10 @@ the scrollbar. The crowd keeps walking on its own while the street is on
 screen and speeds up as you scroll; the papers move only with the scroll,
 and scrolling up plays them in reverse:
 
-- **Top of the page** (`crowd.ts`, people in `figure.ts`) — a figure stands still in the middle of a
-  street, back to the viewer, while a crowd streams past on both sides.
+- **Top of the page** (`crowd.ts`, people in `figure.ts`) — a figure wearing a
+  backpack stands still in the street, back to the viewer, while a crowd
+  streams past on both sides. On wide screens the scene sits right of centre
+  so the page text can sit on the left.
   Scrolling faster adds motion blur.
 - **Bottom of the page** (`desk.ts`) — papers fly in, tumble and settle one by
   one into an open *CESR Portfolio* folder on a desk under a lamp.
@@ -96,7 +111,8 @@ and scrolling up plays them in reverse:
 Static scenery is painted once per resize into offscreen layers; only the
 people and papers are redrawn per frame — at ~30fps while the crowd strolls,
 every frame while scrolling, and not at all once the desk scene has settled. During the
-hand-over each scene renders into its own buffer before cross-fading. Visitors
+hand-over (it lands on the empty spacer marked `data-scene-handover` in
+`src/app/page.tsx`, so it never fights with text) each scene renders into its own buffer before cross-fading. Visitors
 with *reduce motion* enabled get one still frame per scene, and the document
 reader (`/reader`) shows a plain black backdrop.
 

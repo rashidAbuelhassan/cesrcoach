@@ -6,10 +6,11 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 const publicLinks = [
-  { href: "/#services", label: "Services" },
   { href: "/#pathway", label: "The Pathway" },
   { href: "/#team", label: "Our Consultants" },
+  { href: "/#services", label: "Services" },
   { href: "/#faq", label: "FAQ" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function NavMenu({
@@ -62,7 +63,7 @@ export default function NavMenu({
           <Link
             key={l.href}
             href={l.href}
-            className="rounded-full px-3 py-2 text-sm text-mist/70 transition hover:bg-white/8 hover:text-mist"
+            className="rounded-full px-3 py-2 text-sm text-mist/84 transition hover:bg-white/8 hover:text-mist"
           >
             {l.label}
           </Link>
@@ -95,7 +96,7 @@ export default function NavMenu({
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="rounded-xl px-4 py-3 text-sm text-mist/80 transition hover:bg-white/8"
+                className="rounded-xl px-4 py-3 text-sm text-mist/90 transition hover:bg-white/8"
               >
                 {l.label}
               </Link>

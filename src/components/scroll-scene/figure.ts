@@ -10,6 +10,8 @@
  * Units are metres for a 1.75 m person: u lateral (right is +), v up.
  */
 
+import { grey } from "./util";
+
 type Pt = [number, number];
 
 export type Outfit = "suit" | "trousers" | "coat" | "skirt";
@@ -25,6 +27,8 @@ export interface Look {
   hem?: number;
   /** the still figure: ears just visible against the glow */
   ears?: boolean;
+  /** a rucksack on the back (the outline only; see drawBackpack for the detail) */
+  pack?: boolean;
 }
 
 export interface Pose {
@@ -233,6 +237,21 @@ export function addPerson(
     smoothClosed(path, toScreen([[0, 1.66], [0.03, 1.6], [0.022, 1.5], [0, 1.47], [-0.022, 1.5], [-0.03, 1.6]]));
   }
 
+  if (look.pack) {
+    const hw = (look.female ? 0.14 : 0.158) * build;
+    const top = 1.405;
+    const bot = 0.93;
+    const c = 0.045;
+    // the pack itself, with softened corners
+    polygon([
+      [-hw + c, top], [hw - c, top], [hw, top - c], [hw * 0.96, bot + 0.05],
+      [hw * 0.96 - 0.04, bot], [-hw * 0.96 + 0.04, bot], [-hw * 0.96, bot + 0.05], [-hw, top - c],
+    ]);
+    // and the two shoulder straps that climb over the shoulders
+    polygon([[0.066 * build, 1.497], [0.126 * build, 1.476], [0.122 * build, top], [0.07 * build, top]]);
+    polygon([[-0.126 * build, 1.476], [-0.066 * build, 1.497], [-0.07 * build, top], [-0.122 * build, top]]);
+  }
+
   if (look.bag === 1) {
     // briefcase hanging from the right hand, seen edge-on
     const hu = (look.female ? 0.188 : 0.222) * build + 0.004 - 0.022 + 0.03;
@@ -245,4 +264,120 @@ export function addPerson(
     polygon([[0.11, 1.47], [0.14, 1.462], [-hip + 0.02, 1.06], [-hip - 0.005, 1.07]]);
     smoothClosed(path, toScreen([[-hip - 0.085, 1.07], [-hip + 0.02, 1.07], [-hip + 0.03, 0.84], [-hip - 0.095, 0.84]]));
   }
+}
+
+/**
+ * The standing man's rucksack, seen from behind, drawn over his silhouette:
+ * shoulder straps, top handle, a flap, compression strap, front zip pocket
+ * and a water bottle in the side pocket.
+ */
+export function drawBackpack(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  footY: number,
+  s: number,
+  heightM: number,
+  build: number,
+  pose: Pose
+) {
+  const k = heightM / 1.75;
+  const X = (u: number) => cx + (u + pose.sway) * s;
+  const Y = (v: number) => footY - (v * k + pose.bob) * s;
+  const b = build;
+  const hw = 0.158 * b;
+  const top = 1.405;
+  const bot = 0.93;
+  const edge = Math.max(1, 0.0055 * s);
+
+  const poly = (pts: Pt[]) => {
+    ctx.beginPath();
+    pts.forEach(([u, v], i) => (i ? ctx.lineTo(X(u), Y(v)) : ctx.moveTo(X(u), Y(v))));
+    ctx.closePath();
+  };
+  // rounded rectangle from (u0, v0 top) to (u1, v1 bottom)
+  const rr = (u0: number, v0: number, u1: number, v1: number, r: number) => {
+    const x0 = X(u0), x1 = X(u1), y0 = Y(v0), y1 = Y(v1), rad = r * s;
+    ctx.beginPath();
+    ctx.moveTo(x0 + rad, y0);
+    ctx.arcTo(x1, y0, x1, y1, rad);
+    ctx.arcTo(x1, y1, x0, y1, rad);
+    ctx.arcTo(x0, y1, x0, y0, rad);
+    ctx.arcTo(x0, y0, x1, y0, rad);
+    ctx.closePath();
+  };
+  const rim = (alpha: number) => {
+    ctx.strokeStyle = grey(205, alpha);
+    ctx.lineWidth = edge;
+    ctx.stroke();
+  };
+
+  // shoulder straps, rising from the top of the pack to the shoulders
+  for (const sd of [-1, 1]) {
+    poly([
+      [sd * 0.066 * b, 1.497], [sd * 0.126 * b, 1.476], [sd * 0.122 * b, top + 0.01], [sd * 0.07 * b, top + 0.01],
+    ]);
+    ctx.fillStyle = grey(50);
+    ctx.fill();
+    rim(0.4);
+  }
+
+  // water bottle in the side pocket, on his left
+  rr(-hw - 0.04, bot + 0.27, -hw + 0.03, bot + 0.02, 0.026);
+  ctx.fillStyle = grey(44);
+  ctx.fill();
+  rim(0.45);
+  rr(-hw - 0.026, bot + 0.335, -hw + 0.01, bot + 0.265, 0.012);
+  ctx.fillStyle = grey(78);
+  ctx.fill();
+  rim(0.5);
+
+  // main body, a little lighter at the top where the lamp catches it
+  const body = ctx.createLinearGradient(0, Y(top), 0, Y(bot));
+  body.addColorStop(0, grey(66));
+  body.addColorStop(1, grey(38));
+  rr(-hw, top, hw, bot, 0.055);
+  ctx.fillStyle = body;
+  ctx.fill();
+  rim(0.55);
+
+  // top flap with its lower edge
+  rr(-hw, top, hw, top - 0.16, 0.05);
+  ctx.fillStyle = grey(74);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(X(-hw + 0.02), Y(top - 0.16));
+  ctx.lineTo(X(hw - 0.02), Y(top - 0.16));
+  ctx.strokeStyle = grey(14, 0.8);
+  ctx.lineWidth = edge * 1.4;
+  ctx.stroke();
+
+  // compression strap with a buckle
+  ctx.fillStyle = grey(30);
+  ctx.fillRect(X(-hw), Y(1.13) - edge, 2 * hw * s, edge * 2.2);
+  rr(-0.05, 1.155, -0.012, 1.105, 0.008);
+  ctx.fillStyle = grey(120);
+  ctx.fill();
+
+  // front pocket and its zip
+  rr(-hw * 0.78, bot + 0.2, hw * 0.78, bot + 0.04, 0.03);
+  ctx.strokeStyle = grey(190, 0.5);
+  ctx.lineWidth = edge;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(X(-hw * 0.7), Y(bot + 0.185));
+  ctx.lineTo(X(hw * 0.7), Y(bot + 0.185));
+  ctx.strokeStyle = grey(210, 0.6);
+  ctx.setLineDash([edge * 1.2, edge * 1.2]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // grab handle
+  ctx.beginPath();
+  ctx.moveTo(X(-0.034), Y(top + 0.002));
+  ctx.quadraticCurveTo(X(0), Y(top + 0.062), X(0.034), Y(top + 0.002));
+  ctx.strokeStyle = grey(170, 0.75);
+  ctx.lineWidth = edge * 1.8;
+  ctx.lineCap = "round";
+  ctx.stroke();
+  ctx.lineCap = "butt";
 }

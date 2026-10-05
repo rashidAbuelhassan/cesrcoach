@@ -29,7 +29,7 @@ export default function MemberNav() {
             className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition ${
               active
                 ? "bg-white/12 text-mist shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]"
-                : "text-mist/55 hover:bg-white/6 hover:text-mist"
+                : "text-mist/73 hover:bg-white/6 hover:text-mist"
             }`}
           >
             <span aria-hidden>{t.icon}</span>
@@ -43,7 +43,7 @@ export default function MemberNav() {
         target="_blank"
         rel="noopener noreferrer"
         title={`${companion.name} — opens in a new tab`}
-        className="ml-auto flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-neutral-300/80 transition hover:bg-neutral-300/10 hover:text-white"
+        className="ml-auto flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-neutral-300/90 transition hover:bg-neutral-300/10 hover:text-white"
       >
         <span aria-hidden>🧭</span>
         {companion.name}

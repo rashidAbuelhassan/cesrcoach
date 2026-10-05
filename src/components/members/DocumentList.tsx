@@ -31,7 +31,7 @@ export default function DocumentList({ docs }: { docs: Doc[] }) {
 
   if (docs.length === 0) {
     return (
-      <p className="glass rounded-3xl px-6 py-14 text-center text-sm text-mist/50">
+      <p className="glass rounded-3xl px-6 py-14 text-center text-sm text-mist/70">
         No documents published yet — templates and guides will appear here
         soon. 📂
       </p>
@@ -77,12 +77,12 @@ export default function DocumentList({ docs }: { docs: Doc[] }) {
               <p className="font-semibold">
                 {d.title}
                 {d.file_path && (
-                  <span className="ml-2 align-middle text-[10px] font-semibold text-neutral-300/70">
+                  <span className="ml-2 align-middle text-[10px] font-semibold text-neutral-300/85">
                     🔒 VIEW ONLY
                   </span>
                 )}
               </p>
-              <p className="truncate text-xs text-mist/50">
+              <p className="truncate text-xs text-mist/70">
                 {d.category}
                 {d.file_size_kb
                   ? ` · ${

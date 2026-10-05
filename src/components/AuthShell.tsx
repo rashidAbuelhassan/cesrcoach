@@ -18,10 +18,10 @@ export default function AuthShell({
         </div>
         <div className="glass rounded-3xl p-8">
           <h1 className="text-2xl font-bold">{title}</h1>
-          <p className="mt-1.5 text-sm text-mist/60">{subtitle}</p>
+          <p className="mt-1.5 text-sm text-mist/77">{subtitle}</p>
           <div className="mt-6">{children}</div>
         </div>
-        <p className="mt-6 text-center text-xs text-mist/40">
+        <p className="mt-6 text-center text-xs text-mist/64">
           <Link href="/" className="hover:text-white">← Back to the homepage</Link>
         </p>
       </div>

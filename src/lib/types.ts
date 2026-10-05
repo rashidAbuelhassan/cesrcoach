@@ -130,3 +130,29 @@ export interface Setting {
   value: Record<string, unknown>;
   is_public: boolean;
 }
+
+export type EnquiryStatus = "new" | "replied" | "archived";
+
+export interface Enquiry {
+  id: string;
+  created_at: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  specialty: string | null;
+  stage: string | null;
+  question: string;
+  status: EnquiryStatus;
+  handled_at: string | null;
+}
+
+export interface VisitSummary {
+  total_visitors: number;
+  total_views: number;
+  today: number;
+  last_7: number;
+  last_30: number;
+  since: string | null;
+  daily: { day: string; visitors: number; views: number }[];
+  top_pages: { path: string; views: number; visitors: number }[];
+}

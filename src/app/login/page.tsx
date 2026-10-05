@@ -69,7 +69,7 @@ function LoginForm() {
       <button type="submit" disabled={loading} className="btn-liquid w-full py-3 text-sm">
         {loading ? "Signing in…" : "Sign in"}
       </button>
-      <p className="text-center text-sm text-mist/50">
+      <p className="text-center text-sm text-mist/70">
         New here?{" "}
         <Link href="/register" className="font-semibold text-neutral-300 hover:underline">
           Create a free account

@@ -17,7 +17,7 @@ export default async function DocumentsPage() {
     <div className="space-y-6 pb-8">
       <header>
         <h1 className="text-3xl font-bold">📄 Document library</h1>
-        <p className="mt-2 text-mist/60">
+        <p className="mt-2 text-mist/77">
           Templates, checklists and guides. Documents open in our secure
           reader — they&apos;re for your personal study and can&apos;t be
           downloaded or printed.

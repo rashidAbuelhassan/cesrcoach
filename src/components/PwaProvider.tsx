@@ -71,11 +71,11 @@ export default function PwaProvider() {
       <div className="min-w-0 flex-1 text-sm">
         <p className="font-semibold">Add CESR Coach to your home screen</p>
         {showIosHint ? (
-          <p className="mt-0.5 text-xs text-mist/60">
+          <p className="mt-0.5 text-xs text-mist/77">
             Tap the Share button, then “Add to Home Screen”.
           </p>
         ) : (
-          <p className="mt-0.5 text-xs text-mist/60">
+          <p className="mt-0.5 text-xs text-mist/77">
             Quick access to your videos, documents and bookings.
           </p>
         )}
@@ -88,7 +88,7 @@ export default function PwaProvider() {
       <button
         onClick={dismiss}
         aria-label="Dismiss"
-        className="text-mist/50 transition hover:text-mist"
+        className="text-mist/70 transition hover:text-mist"
       >
         ✕
       </button>

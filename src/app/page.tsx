@@ -10,26 +10,11 @@ import type { Consultant, EventType } from "@/lib/types";
 export const revalidate = 300;
 
 const pathwaySteps = [
-  {
-    title: "Understand the route",
-    body: "Learn what the Portfolio Pathway (formerly CESR) involves: eligibility, curriculum mapping and what the GMC evaluators actually look for.",
-  },
-  {
-    title: "Plan your evidence",
-    body: "Build a personal roadmap across every domain of the curriculum — logbooks, audits, teaching, leadership, reflections and more.",
-  },
-  {
-    title: "Build your portfolio",
-    body: "Compile, anonymise and structure your evidence so it tells a clear, verifiable story of equivalence to CCT-level training.",
-  },
-  {
-    title: "Review & refine",
-    body: "Have a consultant who has been there scrutinise your portfolio one-to-one and close the gaps before the GMC does.",
-  },
-  {
-    title: "Submit with confidence",
-    body: "Approach your application knowing your evidence has been stress-tested by specialists who know the standard.",
-  },
+  { title: "Understand the route", body: "Eligibility, curriculum mapping and what the GMC looks for." },
+  { title: "Plan your evidence", body: "A roadmap across every domain of the curriculum." },
+  { title: "Build your portfolio", body: "Evidence structured to tell one clear, verifiable story." },
+  { title: "Review & refine", body: "A consultant who's been there closes the gaps before the GMC does." },
+  { title: "Submit with confidence", body: "Evidence stress-tested by specialists who know the standard." },
 ];
 
 const faqs = [
@@ -104,92 +89,141 @@ export default async function Home() {
       <Navbar />
 
       {/* ---------- HERO ---------- */}
-      <section className="relative px-4 pt-40 pb-24 sm:pt-48">
-        <div className="mx-auto max-w-4xl text-center">
-          <span className="chip mx-auto text-neutral-200/90">
-            <span className="h-1.5 w-1.5 rounded-full bg-white" />
-            Consultant-led CESR &amp; Portfolio Pathway coaching
-          </span>
-          <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
-            Your route to the{" "}
-            <span className="text-aurora">Specialist Register</span>,{" "}
-            <br className="hidden sm:block" />
-            guided by those who&apos;ve walked it.
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base text-mist/65 sm:text-lg">
-            {branding.siteName} is a group of experienced NHS consultants ready
-            to share their expertise with any doctor seeking entry to the
-            specialist register through the CESR (Portfolio Pathway) route —
-            from first questions to final submission.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Link href="/register" className="btn-liquid px-8 py-3.5 text-sm">
-              Start your journey
-            </Link>
-            <Link href="/#services" className="btn-ghost px-8 py-3.5 text-sm">
-              Explore our services
-            </Link>
+      {/* Text sits to one side (and high up on phones) so the scene behind stays in view. */}
+      <section className="relative flex min-h-[100svh] items-start px-4 pt-32 pb-16 sm:pt-40 lg:items-center lg:pt-28">
+        <div className="mx-auto w-full max-w-6xl">
+          <div className="mx-auto max-w-xl text-center lg:mx-0 lg:text-left">
+            <span className="chip">
+              <span className="h-1.5 w-1.5 rounded-full bg-white" />
+              Consultant-led CESR &amp; Portfolio Pathway coaching
+            </span>
+            <h1 className="on-scene mt-6 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+              Your route to the <span className="text-aurora">Specialist Register</span>, guided by those
+              who&apos;ve walked it.
+            </h1>
+            <p className="on-scene mx-auto mt-5 max-w-md text-base text-mist/90 sm:text-lg lg:mx-0">
+              Experienced NHS consultants coaching doctors through the CESR
+              (Portfolio Pathway) route, from first question to final submission.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+              <Link href="/register" className="btn-liquid px-8 py-3.5 text-sm">
+                Start your journey
+              </Link>
+              <Link href="/#services" className="btn-ghost px-8 py-3.5 text-sm">
+                Explore our services
+              </Link>
+            </div>
+            <ul className="mt-8 flex flex-wrap justify-center gap-2 lg:justify-start">
+              {["1-to-1 portfolio clinics", "100% online", "24/7 member library"].map((t) => (
+                <li key={t} className="chip">
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- PATHWAY ---------- */}
+      <section id="pathway" className="scroll-mt-28 px-4 py-16">
+        <div className="mx-auto max-w-6xl">
+          <div className="max-w-md">
+            <h2 className="on-scene text-3xl font-bold sm:text-4xl">
+              The pathway, <span className="text-aurora">step by step</span>
+            </h2>
+            <ol className="glass mt-6 divide-y divide-white/15 rounded-3xl">
+              {pathwaySteps.map((s, i) => (
+                <li key={s.title} className="flex gap-4 px-5 py-4">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/35 bg-white/10 text-sm font-bold">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <h3 className="font-semibold leading-snug">{s.title}</h3>
+                    <p className="mt-0.5 text-sm leading-snug text-mist/77">{s.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      {/* breathing space: the scene plays on its own */}
+      <div aria-hidden className="h-[38svh]" />
+
+      {/* ---------- TEAM ---------- */}
+      <section id="team" className="scroll-mt-28 px-4 py-16">
+        <div className="mx-auto max-w-6xl">
+          <div className="max-w-xl">
+            <h2 className="on-scene text-3xl font-bold sm:text-4xl">
+              Meet your <span className="text-aurora">consultants</span>
+            </h2>
+            <p className="on-scene mt-3 text-mist/90">
+              Practising NHS consultants, many of whom earned their own
+              specialist registration through this route.
+            </p>
           </div>
 
-          {/* floating stat cards */}
-          <div className="mt-16 grid gap-4 sm:grid-cols-3">
-            {[
-              ["1-to-1", "portfolio clinics with a consultant reviewer"],
-              ["100% online", "join from anywhere in the world"],
-              ["24/7", "member library of videos & documents"],
-            ].map(([stat, label]) => (
-              <div key={stat} className="glass glass-hover rounded-3xl p-6">
-                <p className="text-3xl font-bold text-aurora">{stat}</p>
-                <p className="mt-2 text-sm text-mist/60">{label}</p>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {(consultants as Consultant[] | null)?.map((c) => (
+              <div key={c.id} className="glass flex items-start gap-4 rounded-3xl p-5">
+                {c.photo_url ? (
+                  <img
+                    src={c.photo_url}
+                    alt={c.name}
+                    className="h-16 w-16 shrink-0 rounded-full border border-white/30 object-cover"
+                  />
+                ) : (
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-2xl">
+                    🩺
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <h3 className="font-bold leading-snug">{c.name}</h3>
+                  <p className="text-sm text-mist/84">{c.title}</p>
+                  {c.bio && (
+                    <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-mist/77">{c.bio}</p>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* breathing space: street hands over to the desk here */}
+      <div aria-hidden data-scene-handover className="h-[52svh]" />
+
       {/* ---------- SERVICES ---------- */}
-      <section id="services" className="scroll-mt-28 px-4 py-20">
+      <section id="services" className="scroll-mt-28 px-4 py-16">
         <div className="mx-auto max-w-6xl">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold sm:text-4xl">
+          <div className="max-w-xl">
+            <h2 className="on-scene text-3xl font-bold sm:text-4xl">
               Four ways we <span className="text-aurora">coach you</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-mist/60">
-              Book whichever fits where you are on the pathway. Every session is
-              delivered online by consultants with real CESR experience, so you
-              can join from anywhere.
+            <p className="on-scene mt-3 text-mist/90">
+              Every session is online. Choose where you are on the pathway.
             </p>
           </div>
 
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {(eventTypes as EventType[] | null)?.map((t, i) => (
-              <div
-                key={t.id}
-                className="glass glass-hover flex flex-col rounded-3xl p-8"
-              >
-                <div
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/8 text-xl"
-                >
-                  {["🔍", "🔄", "🛠️", "🧭"][i] ?? "✨"}
+              <div key={t.id} className="glass flex flex-col rounded-3xl p-6">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/30 bg-white/10 text-lg">
+                    {["🔍", "🔄", "🛠️", "🧭"][i] ?? "✨"}
+                  </span>
+                  <h3 className="text-lg font-bold leading-snug">{t.name}</h3>
                 </div>
-                <h3 className="mt-5 text-xl font-bold">{t.name}</h3>
-                <p className="mt-1 text-sm font-medium text-mist/70">
-                  {t.tagline}
-                </p>
+                <p className="mt-3 text-sm text-mist/84">{t.tagline}</p>
                 {t.price_gbp != null && Number(t.price_gbp) > 0 && (
                   <p className="mt-4 text-3xl font-bold">
                     £{Number(t.price_gbp).toFixed(0)}
-                    <span className="ml-1.5 text-xs font-normal text-mist/45">
-                      per person
-                    </span>
+                    <span className="ml-1.5 text-xs font-normal text-mist/70">per person</span>
                   </p>
                 )}
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-mist/60">
-                  {t.description}
-                </p>
-                <div className="mt-6 flex flex-wrap gap-2">
+                <div className="mt-4 flex flex-wrap gap-2">
                   <span className="chip">⏱ {formatDuration(t.duration_minutes)}</span>
-                  <span className="chip">💻 Online</span>
                   <span className="chip">
                     {t.format === "one_to_one"
                       ? "👤 One-to-one"
@@ -198,119 +232,54 @@ export default async function Home() {
                         : `👥 Group of ${t.min_group_size}+`}
                   </span>
                   {t.requires_portfolio && (
-                    <span className="chip text-neutral-200/90">
+                    <span className="chip">
                       {t.portfolio_lead_days > 0
                         ? `📁 Portfolio ${t.portfolio_lead_days} days ahead`
                         : "📁 Portfolio link required"}
                     </span>
                   )}
                 </div>
-                <Link
-                  href="/members/bookings"
-                  className="btn-ghost mt-6 w-full py-2.5 text-sm"
-                >
+                <details className="group mt-4 flex-1 text-sm">
+                  <summary className="cursor-pointer list-none text-mist/84 marker:hidden [&::-webkit-details-marker]:hidden">
+                    <span className="underline decoration-white/40 underline-offset-4 group-open:no-underline">
+                      What&apos;s included
+                    </span>
+                  </summary>
+                  <p className="mt-2 leading-relaxed text-mist/84">{t.description}</p>
+                </details>
+                <Link href="/members/bookings" className="btn-ghost mt-5 w-full py-2.5 text-sm">
                   Book a session →
                 </Link>
               </div>
             ))}
           </div>
 
-          {branding.priceNote && (
-            <p className="mt-8 text-center text-sm font-medium text-mist/55">
-              {branding.priceNote}
-            </p>
-          )}
-          <p className="mt-3 text-center text-xs text-mist/40">
-            ⚠️ Portfolio Clinic bookings require you to upload or share access
-            to your portfolio at least 3 weeks before your session, so your
-            reviewer can assess it properly.
-          </p>
-        </div>
-      </section>
-
-      {/* ---------- PATHWAY ---------- */}
-      <section id="pathway" className="scroll-mt-28 px-4 py-20">
-        <div className="mx-auto max-w-5xl">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              The pathway, <span className="text-aurora">step by step</span>
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-mist/60">
-              The Portfolio Pathway is a marathon with paperwork. We break it
-              into a route you can actually run.
-            </p>
-          </div>
-
-          <ol className="relative mt-14 space-y-6">
-            {pathwaySteps.map((s, i) => (
-              <li key={s.title} className="glass glass-hover flex gap-5 rounded-3xl p-6 sm:p-8">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-neutral-400/30 to-neutral-400/30 font-bold text-neutral-200 ring-1 ring-white/15">
-                  {i + 1}
-                </div>
-                <div>
-                  <h3 className="font-bold">{s.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-mist/60">{s.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* ---------- TEAM ---------- */}
-      <section id="team" className="scroll-mt-28 px-4 py-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              Meet your <span className="text-aurora">consultants</span>
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-mist/60">
-              Practising NHS consultants across specialties — many of whom
-              earned their own specialist registration through this route.
-            </p>
-          </div>
-
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {(consultants as Consultant[] | null)?.map((c) => (
-              <div key={c.id} className="glass glass-hover rounded-3xl p-7 text-center">
-                {c.photo_url ? (
-                  <img
-                    src={c.photo_url}
-                    alt={c.name}
-                    className="mx-auto h-24 w-24 rounded-full border border-white/15 object-cover"
-                  />
-                ) : (
-                  <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-neutral-400/25 to-neutral-400/25 text-3xl ring-1 ring-white/15">
-                    🩺
-                  </div>
-                )}
-                <h3 className="mt-4 font-bold">{c.name}</h3>
-                <p className="text-sm text-neutral-300/80">{c.title}</p>
-                <p className="mt-3 text-sm leading-relaxed text-mist/55">{c.bio}</p>
-              </div>
-            ))}
+          <div className="on-scene mt-6 space-y-1 text-sm text-mist/90">
+            {branding.priceNote && <p className="font-medium">{branding.priceNote}</p>}
+            <p>Portfolio Clinic: share your portfolio at least 3 weeks before the session.</p>
           </div>
         </div>
       </section>
+
+      {/* breathing space: the papers settle */}
+      <div aria-hidden className="h-[38svh]" />
 
       {/* ---------- FAQ ---------- */}
-      <section id="faq" className="scroll-mt-28 px-4 py-20">
-        <div className="mx-auto max-w-3xl">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              Questions, <span className="text-aurora">answered</span>
-            </h2>
-          </div>
-          <div className="mt-12 space-y-4">
+      <section id="faq" className="scroll-mt-28 px-4 py-16">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="on-scene text-3xl font-bold sm:text-4xl">
+            Questions, <span className="text-aurora">answered</span>
+          </h2>
+          <div className="mt-8 grid items-start gap-3 lg:grid-cols-2">
             {faqList.map((f) => (
               <details key={f.q} className="glass group rounded-2xl">
-                <summary className="cursor-pointer list-none px-6 py-5 font-semibold marker:hidden [&::-webkit-details-marker]:hidden">
+                <summary className="cursor-pointer list-none px-5 py-4 font-semibold marker:hidden [&::-webkit-details-marker]:hidden">
                   <span className="flex items-center justify-between gap-4">
                     {f.q}
-                    <span className="text-neutral-300 transition-transform group-open:rotate-45">＋</span>
+                    <span className="shrink-0 text-mist/84 transition-transform group-open:rotate-45">＋</span>
                   </span>
                 </summary>
-                <p className="px-6 pb-5 text-sm leading-relaxed text-mist/60">{f.a}</p>
+                <p className="px-5 pb-4 text-sm leading-relaxed text-mist/84">{f.a}</p>
               </details>
             ))}
           </div>
@@ -318,27 +287,22 @@ export default async function Home() {
       </section>
 
       {/* ---------- CTA ---------- */}
-      <section className="px-4 py-20">
-        <div className="glass mx-auto max-w-4xl overflow-hidden rounded-[2.5rem] p-10 text-center sm:p-16">
-          <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-[120%] -translate-x-1/2 rounded-full bg-neutral-400/15 blur-[90px]" />
-          <h2 className="text-3xl font-bold sm:text-4xl">
+      <section className="px-4 py-16">
+        <div className="glass mx-auto max-w-3xl rounded-[2rem] p-8 text-center sm:p-10">
+          <h2 className="text-2xl font-bold sm:text-3xl">
             Ready to reach the <span className="text-aurora">Specialist Register</span>?
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-mist/60">
-            Join {branding.siteName} today — free to register. Book your first
-            session, watch the video library and download the templates that
-            successful candidates use.
+          <p className="mx-auto mt-3 max-w-md text-mist/84">
+            Free to register. Book a session, watch the video library and use
+            the templates successful candidates use.
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link href="/register" className="btn-liquid px-8 py-3.5 text-sm">
               Create your free account
             </Link>
-            <a
-              href={`mailto:${branding.contactEmail}`}
-              className="btn-ghost px-8 py-3.5 text-sm"
-            >
+            <Link href="/contact" className="btn-ghost px-8 py-3.5 text-sm">
               Talk to us first
-            </a>
+            </Link>
           </div>
         </div>
       </section>

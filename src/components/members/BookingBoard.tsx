@@ -96,7 +96,7 @@ export default function BookingBoard({
     <div className="space-y-10 pb-8">
       <header>
         <h1 className="text-3xl font-bold">📅 Book a session</h1>
-        <p className="mt-2 text-mist/60">
+        <p className="mt-2 text-mist/77">
           Choose the session that fits where you are and reserve your place.
         </p>
       </header>
@@ -117,7 +117,7 @@ export default function BookingBoard({
       <section className="glass rounded-3xl p-6 sm:p-8">
         <h2 className="text-lg font-bold">Your bookings</h2>
         {myBookings.length === 0 ? (
-          <p className="mt-4 rounded-2xl border border-dashed border-white/15 px-6 py-6 text-center text-sm text-mist/50">
+          <p className="mt-4 rounded-2xl border border-dashed border-white/15 px-6 py-6 text-center text-sm text-mist/70">
             You haven&apos;t booked anything yet — pick a session below. 👇
           </p>
         ) : (
@@ -134,11 +134,11 @@ export default function BookingBoard({
                 >
                   <div className="min-w-0">
                     <p className="font-semibold">{ev.title}</p>
-                    <p className="text-sm text-mist/55">
+                    <p className="text-sm text-mist/73">
                       {formatDateTime(ev.starts_at)} · {ev.location}
                     </p>
                     {b.portfolio_url && (
-                      <p className="mt-1 truncate text-xs text-neutral-300/80">
+                      <p className="mt-1 truncate text-xs text-neutral-300/90">
                         📁 Portfolio: {b.portfolio_url}
                       </p>
                     )}
@@ -205,7 +205,7 @@ export default function BookingBoard({
         </div>
 
         {visibleEvents.length === 0 ? (
-          <p className="glass mt-5 rounded-3xl px-6 py-12 text-center text-sm text-mist/50">
+          <p className="glass mt-5 rounded-3xl px-6 py-12 text-center text-sm text-mist/70">
             No upcoming sessions in this category yet — check back soon or{" "}
             <a href="mailto:hello@cesrcoach.com" className="text-neutral-300 hover:underline">
               ask us to schedule one
@@ -245,13 +245,13 @@ export default function BookingBoard({
                     </span>
                   </div>
                   <h3 className="mt-4 font-bold leading-snug">{ev.title}</h3>
-                  <p className="mt-1 text-sm text-mist/55">
+                  <p className="mt-1 text-sm text-mist/73">
                     🕐 {formatDateTime(ev.starts_at)}
                     {t ? ` · ${formatDuration(t.duration_minutes)}` : ""}
                   </p>
-                  <p className="text-sm text-mist/55">📍 {ev.location}</p>
+                  <p className="text-sm text-mist/73">📍 {ev.location}</p>
                   {ev.description && (
-                    <p className="mt-2 text-sm text-mist/50">{ev.description}</p>
+                    <p className="mt-2 text-sm text-mist/70">{ev.description}</p>
                   )}
                   {t?.requires_portfolio && (
                     <p
@@ -335,7 +335,7 @@ function StatusChip({ status }: { status: Booking["status"] }) {
   const styles: Record<Booking["status"], string> = {
     pending: "border-neutral-400/30 bg-neutral-400/10 text-neutral-200",
     confirmed: "border-white/30 bg-white/10 text-white",
-    cancelled: "border-white/15 bg-white/5 text-mist/50",
+    cancelled: "border-white/15 bg-white/5 text-mist/70",
     completed: "border-neutral-400/30 bg-neutral-400/10 text-neutral-200",
   };
   const labels: Record<Booking["status"], string> = {
@@ -458,7 +458,7 @@ function BookingModal({
         <div className="flex items-start justify-between gap-4">
           <div>
             <h3 className="text-lg font-bold">{event.title}</h3>
-            <p className="mt-1 text-sm text-mist/55">
+            <p className="mt-1 text-sm text-mist/73">
               {formatDateTime(event.starts_at)} · {event.location}
             </p>
           </div>
@@ -489,7 +489,7 @@ function BookingModal({
                   value={portfolioUrl}
                   onChange={(e) => setPortfolioUrl(e.target.value)}
                 />
-                <p className="mt-1.5 text-xs text-mist/45">
+                <p className="mt-1.5 text-xs text-mist/66">
                   Share a viewable link (Google Drive, OneDrive, Dropbox…). Make
                   sure link-sharing is enabled for your reviewer.
                 </p>
@@ -540,7 +540,7 @@ function BookingModal({
                     <button
                       type="button"
                       onClick={clearCode}
-                      className="text-xs text-mist/60 underline hover:text-mist"
+                      className="text-xs text-mist/77 underline hover:text-mist"
                     >
                       Remove
                     </button>
@@ -570,7 +570,7 @@ function BookingModal({
               </div>
 
               <dl className="space-y-1 border-t border-white/10 pt-3 text-sm">
-                <div className="flex justify-between text-mist/60">
+                <div className="flex justify-between text-mist/77">
                   <dt>Session</dt>
                   <dd>{price}</dd>
                 </div>
@@ -586,7 +586,7 @@ function BookingModal({
                 </div>
               </dl>
 
-              <p className="text-xs leading-relaxed text-neutral-100/70">
+              <p className="text-xs leading-relaxed text-neutral-100/85">
                 {payable > 0
                   ? "💳 You'll be taken to our secure Stripe checkout — your place is confirmed as soon as payment completes."
                   : "🎉 This code covers the full price — your place is confirmed straight away."}

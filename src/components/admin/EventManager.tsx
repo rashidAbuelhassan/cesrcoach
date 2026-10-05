@@ -134,7 +134,7 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">🗓 Sessions</h1>
-          <p className="mt-2 text-mist/60">
+          <p className="mt-2 text-mist/77">
             Schedule and manage the sessions members can book.
           </p>
         </div>
@@ -151,7 +151,7 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
 
       <div className="space-y-3">
         {events.length === 0 && (
-          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/50">
+          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/70">
             No sessions yet — schedule your first one.
           </p>
         )}
@@ -173,7 +173,7 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
               </span>
               <div className="min-w-0 flex-1">
                 <p className="font-semibold">{ev.title}</p>
-                <p className="text-xs text-mist/50">
+                <p className="text-xs text-mist/70">
                   {formatDateTime(ev.starts_at)} · {ev.location} ·{" "}
                   <strong>{booked}/{ev.capacity}</strong> booked
                   {ev.status !== "scheduled" && ` · ${ev.status.toUpperCase()}`}
@@ -281,7 +281,7 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
               <label className="label">
                 Capacity
                 {selectedType?.format === "one_to_one" && (
-                  <span className="ml-1 font-normal text-neutral-300/70">
+                  <span className="ml-1 font-normal text-neutral-300/85">
                     — one-to-one sessions should stay at 1
                   </span>
                 )}
@@ -297,7 +297,7 @@ export default function EventManager({ eventTypes, events, bookedCounts }: Props
                 }
               />
             </div>
-            <p className="rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-xs text-mist/55">
+            <p className="rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-xs text-mist/73">
               💻 All sessions are delivered online — members see “Online (link
               shared after booking)” and get the joining link below once their
               booking is confirmed.

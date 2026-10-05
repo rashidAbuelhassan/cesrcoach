@@ -17,7 +17,7 @@ export default async function VideosPage() {
     <div className="space-y-6 pb-8">
       <header>
         <h1 className="text-3xl font-bold">🎬 Video library</h1>
-        <p className="mt-2 text-mist/60">
+        <p className="mt-2 text-mist/77">
           Pre-recorded presentations from our consultants — watch any time, as
           often as you need.
         </p>

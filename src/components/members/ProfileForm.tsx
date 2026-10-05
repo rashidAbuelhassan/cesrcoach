@@ -111,7 +111,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
       <div className="space-y-4 border-t border-white/10 pt-5">
         <div>
           <h2 className="font-bold">📁 Your portfolio</h2>
-          <p className="mt-1 text-sm text-mist/55">
+          <p className="mt-1 text-sm text-mist/73">
             Share a link to your portfolio so your reviewer can read it before
             your sessions. Make sure link-sharing is switched on — in Google
             Drive use <em>Share → Anyone with the link → Viewer</em>.
@@ -167,7 +167,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
             value={form.target_submission_date}
             onChange={(e) => set("target_submission_date", e.target.value)}
           />
-          <p className="mt-1.5 text-xs text-mist/45">
+          <p className="mt-1.5 text-xs text-mist/66">
             Set your own target — it appears on your dashboard and helps your
             reviewer pace your plan. You can change it any time.
           </p>

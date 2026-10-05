@@ -64,7 +64,7 @@ export default function MemberManager({
     <div className="space-y-6 pb-8">
       <header>
         <h1 className="text-3xl font-bold">👥 Candidates</h1>
-        <p className="mt-2 text-mist/60">
+        <p className="mt-2 text-mist/77">
           {profiles.length} registered candidate{profiles.length === 1 ? "" : "s"}.
           Open a candidate to see their portfolio link, target submission date
           and session history — and to leave feedback they can read.
@@ -102,7 +102,7 @@ export default function MemberManager({
                     <span className="ml-2 text-xs font-normal text-neutral-300">(you)</span>
                   )}
                 </p>
-                <p className="truncate text-xs text-mist/50">
+                <p className="truncate text-xs text-mist/70">
                   {p.email}
                   {p.specialty ? ` · ${p.specialty}` : ""}
                   {theirBookings.length
@@ -124,7 +124,7 @@ export default function MemberManager({
                 className={`chip ${
                   p.role === "admin"
                     ? "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
-                    : "border-white/15 bg-white/5 text-mist/55"
+                    : "border-white/15 bg-white/5 text-mist/73"
                 }`}
               >
                 {p.role === "admin" ? "🛡 Admin" : "Member"}
@@ -157,7 +157,7 @@ export default function MemberManager({
           );
         })}
         {visible.length === 0 && (
-          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/50">
+          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/70">
             No candidates match your search.
           </p>
         )}
@@ -231,7 +231,7 @@ function CandidateModal({
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h3 className="text-xl font-bold">{profile.full_name || "—"}</h3>
-            <p className="truncate text-sm text-mist/55">{profile.email}</p>
+            <p className="truncate text-sm text-mist/73">{profile.email}</p>
           </div>
           <button onClick={onClose} aria-label="Close" className="btn-ghost h-9 w-9 shrink-0 text-sm">
             ✕
@@ -265,12 +265,12 @@ function CandidateModal({
               {profile.portfolio_url} ↗
             </a>
           ) : (
-            <p className="mt-2 text-sm text-mist/50">
+            <p className="mt-2 text-sm text-mist/70">
               This candidate hasn&apos;t shared a portfolio link yet.
             </p>
           )}
           {profile.portfolio_note && (
-            <p className="mt-2 border-t border-white/10 pt-2 text-xs text-mist/60">
+            <p className="mt-2 border-t border-white/10 pt-2 text-xs text-mist/77">
               📝 {profile.portfolio_note}
             </p>
           )}
@@ -282,7 +282,7 @@ function CandidateModal({
           {profile.target_submission_date ? (
             <p className="mt-2 text-sm">
               <strong>{formatDate(profile.target_submission_date)}</strong>
-              <span className="ml-2 text-mist/55">
+              <span className="ml-2 text-mist/73">
                 {target === null
                   ? ""
                   : target > 0
@@ -293,7 +293,7 @@ function CandidateModal({
               </span>
             </p>
           ) : (
-            <p className="mt-2 text-sm text-mist/50">
+            <p className="mt-2 text-sm text-mist/70">
               No target date set by the candidate.
             </p>
           )}
@@ -303,13 +303,13 @@ function CandidateModal({
         <section className="mt-6">
           <p className="text-sm font-semibold">
             🩺 Sessions &amp; feedback
-            <span className="ml-2 font-normal text-xs text-mist/45">
+            <span className="ml-2 font-normal text-xs text-mist/66">
               comments here are visible to the candidate
             </span>
           </p>
 
           {bookings.length === 0 ? (
-            <p className="mt-3 rounded-2xl border border-dashed border-white/15 px-6 py-6 text-center text-sm text-mist/50">
+            <p className="mt-3 rounded-2xl border border-dashed border-white/15 px-6 py-6 text-center text-sm text-mist/70">
               No bookings yet.
             </p>
           ) : (
@@ -321,7 +321,7 @@ function CandidateModal({
                       <p className="text-sm font-semibold">
                         {b.coach_events?.title ?? "Session"}
                       </p>
-                      <p className="text-xs text-mist/50">
+                      <p className="text-xs text-mist/70">
                         {b.coach_events ? formatDateTime(b.coach_events.starts_at) : ""}
                       </p>
                     </div>
@@ -330,7 +330,7 @@ function CandidateModal({
 
                   {b.portfolio_url && (
                     <p className="mt-2 truncate text-xs">
-                      <span className="text-mist/45">Portfolio for this session: </span>
+                      <span className="text-mist/66">Portfolio for this session: </span>
                       <a
                         href={b.portfolio_url}
                         target="_blank"
@@ -342,8 +342,8 @@ function CandidateModal({
                     </p>
                   )}
                   {b.notes && (
-                    <p className="mt-1 text-xs text-mist/60">
-                      <span className="text-mist/45">Their note: </span>
+                    <p className="mt-1 text-xs text-mist/77">
+                      <span className="text-mist/66">Their note: </span>
                       {b.notes}
                     </p>
                   )}
@@ -372,7 +372,7 @@ function CandidateModal({
                       </span>
                     )}
                     {b.feedback_updated_at && saved !== b.id && (
-                      <span className="text-xs text-mist/45">
+                      <span className="text-xs text-mist/66">
                         Last updated {formatDate(b.feedback_updated_at)}
                       </span>
                     )}
@@ -390,7 +390,7 @@ function CandidateModal({
 function Detail({ label, value }: { label: string; value: string | null }) {
   return (
     <div className="rounded-xl border border-white/10 bg-white/4 px-4 py-3">
-      <dt className="text-xs text-mist/45">{label}</dt>
+      <dt className="text-xs text-mist/66">{label}</dt>
       <dd className="mt-0.5 text-sm font-medium">{value || "—"}</dd>
     </div>
   );

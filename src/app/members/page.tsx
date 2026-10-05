@@ -66,7 +66,7 @@ export default async function MemberDashboard() {
         <h1 className="text-3xl font-bold">
           Welcome back, <span className="text-aurora">{firstName}</span> 👋
         </h1>
-        <p className="mt-2 text-mist/60">
+        <p className="mt-2 text-mist/77">
           Your coaching hub — track your portfolio, your target date and your
           reviewer&apos;s feedback in one place.
         </p>
@@ -78,7 +78,7 @@ export default async function MemberDashboard() {
         <section className="glass rounded-3xl p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-mist/70">📁 Your portfolio</p>
+              <p className="text-sm font-semibold text-mist/84">📁 Your portfolio</p>
               {profile?.portfolio_url ? (
                 <>
                   <a
@@ -94,7 +94,7 @@ export default async function MemberDashboard() {
                   </p>
                 </>
               ) : (
-                <p className="mt-2 text-sm text-mist/55">
+                <p className="mt-2 text-sm text-mist/73">
                   Not shared yet. Add a Google Drive (or OneDrive/Dropbox) link
                   so your reviewer can read your portfolio before your session.
                 </p>
@@ -105,7 +105,7 @@ export default async function MemberDashboard() {
             </Link>
           </div>
           {profile?.portfolio_note && (
-            <p className="mt-3 border-t border-white/10 pt-3 text-xs text-mist/55">
+            <p className="mt-3 border-t border-white/10 pt-3 text-xs text-mist/73">
               📝 {profile.portfolio_note}
             </p>
           )}
@@ -115,7 +115,7 @@ export default async function MemberDashboard() {
         <section className="glass rounded-3xl p-6">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold text-mist/70">
+              <p className="text-sm font-semibold text-mist/84">
                 🎯 Planned GMC submission
               </p>
               {profile?.target_submission_date ? (
@@ -127,7 +127,7 @@ export default async function MemberDashboard() {
                     className={`mt-1 text-xs ${
                       daysToSubmission !== null && daysToSubmission < 0
                         ? "text-neutral-300"
-                        : "text-mist/55"
+                        : "text-mist/73"
                     }`}
                   >
                     {daysToSubmission === null
@@ -140,7 +140,7 @@ export default async function MemberDashboard() {
                   </p>
                 </>
               ) : (
-                <p className="mt-2 text-sm text-mist/55">
+                <p className="mt-2 text-sm text-mist/73">
                   No target date set. Choosing one helps you and your reviewer
                   pace the work.
                 </p>
@@ -158,17 +158,17 @@ export default async function MemberDashboard() {
         <Link href="/members/videos" className="glass glass-hover rounded-3xl p-6">
           <span className="text-3xl">🎬</span>
           <p className="mt-3 text-2xl font-bold">{videosCount.count ?? 0}</p>
-          <p className="text-sm text-mist/60">video presentations</p>
+          <p className="text-sm text-mist/77">video presentations</p>
         </Link>
         <Link href="/members/documents" className="glass glass-hover rounded-3xl p-6">
           <span className="text-3xl">📄</span>
           <p className="mt-3 text-2xl font-bold">{docsCount.count ?? 0}</p>
-          <p className="text-sm text-mist/60">documents to read</p>
+          <p className="text-sm text-mist/77">documents to read</p>
         </Link>
         <Link href="/members/bookings" className="glass glass-hover rounded-3xl p-6">
           <span className="text-3xl">📅</span>
           <p className="mt-3 text-2xl font-bold">{upcoming.length}</p>
-          <p className="text-sm text-mist/60">upcoming sessions</p>
+          <p className="text-sm text-mist/77">upcoming sessions</p>
         </Link>
       </div>
 
@@ -182,7 +182,7 @@ export default async function MemberDashboard() {
         </div>
 
         {upcoming.length === 0 ? (
-          <p className="mt-5 rounded-2xl border border-dashed border-white/15 px-6 py-8 text-center text-sm text-mist/50">
+          <p className="mt-5 rounded-2xl border border-dashed border-white/15 px-6 py-8 text-center text-sm text-mist/70">
             No sessions booked yet. Head to{" "}
             <Link href="/members/bookings" className="text-neutral-300 hover:underline">
               Bookings
@@ -198,7 +198,7 @@ export default async function MemberDashboard() {
               >
                 <div>
                   <p className="font-semibold">{b.coach_events!.title}</p>
-                  <p className="text-sm text-mist/55">
+                  <p className="text-sm text-mist/73">
                     {formatDateTime(b.coach_events!.starts_at)} ·{" "}
                     {b.coach_events!.location}
                   </p>
@@ -222,7 +222,7 @@ export default async function MemberDashboard() {
       <section className="glass rounded-3xl p-6 sm:p-8">
         <h2 className="text-lg font-bold">🩺 Your clinic feedback</h2>
         {reviewed.length === 0 ? (
-          <p className="mt-4 rounded-2xl border border-dashed border-white/15 px-6 py-8 text-center text-sm text-mist/50">
+          <p className="mt-4 rounded-2xl border border-dashed border-white/15 px-6 py-8 text-center text-sm text-mist/70">
             Feedback from your reviewer will appear here after your sessions.
           </p>
         ) : (
@@ -237,7 +237,7 @@ export default async function MemberDashboard() {
                     <p className="font-semibold">
                       {b.coach_events?.title ?? "Session"}
                     </p>
-                    <p className="text-xs text-mist/50">
+                    <p className="text-xs text-mist/70">
                       {b.coach_events
                         ? formatDateTime(b.coach_events.starts_at)
                         : ""}
@@ -262,12 +262,12 @@ export default async function MemberDashboard() {
                         ? ` · ${formatDate(b.feedback_updated_at)}`
                         : ""}
                     </p>
-                    <p className="mt-1.5 whitespace-pre-wrap text-sm leading-relaxed text-mist/80">
+                    <p className="mt-1.5 whitespace-pre-wrap text-sm leading-relaxed text-mist/90">
                       {b.reviewer_feedback}
                     </p>
                   </div>
                 ) : (
-                  <p className="mt-3 text-xs text-mist/45">
+                  <p className="mt-3 text-xs text-mist/66">
                     Your reviewer hasn&apos;t added written comments for this
                     session yet.
                   </p>
@@ -287,7 +287,7 @@ export default async function MemberDashboard() {
               🧭 Companion app
             </span>
             <h2 className="mt-3 text-lg font-bold">{companion.name}</h2>
-            <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-mist/60">
+            <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-mist/77">
               {companion.blurb}
             </p>
           </div>
@@ -304,7 +304,7 @@ export default async function MemberDashboard() {
 
       <section className="glass rounded-3xl p-6 sm:p-8">
         <h2 className="text-lg font-bold">📁 Portfolio Clinic reminder</h2>
-        <p className="mt-3 text-sm leading-relaxed text-mist/60">
+        <p className="mt-3 text-sm leading-relaxed text-mist/77">
           If you book a <strong>Portfolio Clinic</strong>, remember to share
           access to your portfolio at least{" "}
           <strong className="text-neutral-300">3 weeks before</strong> your

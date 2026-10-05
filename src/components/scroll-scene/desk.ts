@@ -1,4 +1,4 @@
-import { clamp, grey, lerp, makeLayer, mulberry32, type Viewport } from "./util";
+import { clamp, focusX, grey, isPortrait, lerp, makeLayer, mulberry32, type Viewport } from "./util";
 
 /*
  * Scene 2 — loose papers blow in and settle, one by one, into an open
@@ -20,7 +20,7 @@ function camera(vp: Viewport) {
   const U = Math.min(vp.h, vp.w * 1.15);
   const A = 0.98 * U; // CAM_H × focal length
   const f = A / CAM_H;
-  return { f, y0: vp.h * 0.6 - A / TARGET.d, cx: vp.w * 0.5 };
+  return { f, y0: vp.h * (isPortrait(vp) ? 0.7 : 0.6) - A / TARGET.d, cx: focusX(vp) };
 }
 
 type Cam = ReturnType<typeof camera>;
@@ -52,23 +52,23 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
 
   // wall
   const wall = ctx.createLinearGradient(0, 0, 0, farY);
-  wall.addColorStop(0, grey(9));
-  wall.addColorStop(1, grey(20));
+  wall.addColorStop(0, grey(90));
+  wall.addColorStop(1, grey(124));
   ctx.fillStyle = wall;
   ctx.fillRect(0, 0, w, farY + 1);
 
   // a framed certificate on the wall — the destination
   const f1 = P(0.42, 0.44, farD);
   const f2 = P(0.84, 0.24, farD);
-  ctx.fillStyle = grey(17);
+  ctx.fillStyle = grey(62);
   ctx.fillRect(f1.x, f1.y, f2.x - f1.x, f2.y - f1.y);
   const inset = (f2.x - f1.x) * 0.07;
-  ctx.fillStyle = grey(27);
+  ctx.fillStyle = grey(176);
   ctx.fillRect(f1.x + inset, f1.y + inset, f2.x - f1.x - inset * 2, f2.y - f1.y - inset * 2);
-  ctx.strokeStyle = grey(255, 0.06);
+  ctx.strokeStyle = grey(255, 0.22);
   ctx.lineWidth = 1;
   ctx.strokeRect(f1.x, f1.y, f2.x - f1.x, f2.y - f1.y);
-  ctx.fillStyle = grey(255, 0.07);
+  ctx.fillStyle = grey(50, 0.4);
   const lineW = f2.x - f1.x - inset * 4;
   for (let i = 0; i < 4; i++) {
     const yy = f1.y + inset * 2.2 + i * (f2.y - f1.y) * 0.15;
@@ -77,8 +77,8 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
 
   // desk top
   const desk = ctx.createLinearGradient(0, farY, 0, h);
-  desk.addColorStop(0, grey(24));
-  desk.addColorStop(1, grey(12));
+  desk.addColorStop(0, grey(122));
+  desk.addColorStop(1, grey(74));
   ctx.fillStyle = desk;
   quad(ctx, [P(-3, 0, farD), P(3, 0, farD), P(3, 0, 0.35), P(-3, 0, 0.35)]);
   ctx.fill();
@@ -90,7 +90,7 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
     const D = lerp(0.45, farD, Math.pow(r(), 0.8));
     const amp = 0.004 + r() * 0.01;
     const freq = 2 + r() * 5;
-    ctx.strokeStyle = grey(255, 0.012 + r() * 0.02);
+    ctx.strokeStyle = grey(255, 0.05 + r() * 0.07);
     ctx.beginPath();
     for (let X = -3; X <= 3; X += 0.05) {
       const p = P(X, 0, D + Math.sin(X * freq + i) * amp);
@@ -101,7 +101,7 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
   }
 
   // far edge highlight
-  ctx.strokeStyle = grey(255, 0.08);
+  ctx.strokeStyle = grey(255, 0.3);
   ctx.beginPath();
   ctx.moveTo(0, farY);
   ctx.lineTo(w, farY);
@@ -110,32 +110,32 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
   // pool of lamplight on the folder
   const c = P(TARGET.x - 0.05, 0, TARGET.d);
   const pool = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, Math.max(w, h) * 0.5);
-  pool.addColorStop(0, grey(255, 0.1));
-  pool.addColorStop(0.4, grey(255, 0.035));
+  pool.addColorStop(0, grey(255, 0.3));
+  pool.addColorStop(0.4, grey(255, 0.1));
   pool.addColorStop(1, grey(255, 0));
   ctx.fillStyle = pool;
   ctx.fillRect(0, farY, w, h - farY);
 
   // open folder: soft shadow, board thickness, then the two inner panels
   const { spine, d1, d2, half } = FOLDER;
-  ctx.fillStyle = grey(0, 0.35);
+  ctx.fillStyle = grey(0, 0.4);
   quad(ctx, [P(-half + 0.01, 0, d2 + 0.012), P(spine + half + 0.02, 0, d2 + 0.012), P(spine + half + 0.03, 0, d1 - 0.018), P(-half + 0.015, 0, d1 - 0.018)]);
   ctx.fill();
-  ctx.fillStyle = grey(44);
+  ctx.fillStyle = grey(118);
   quad(ctx, [P(-half, 0.004, d2), P(spine + half, 0.004, d2), P(spine + half, 0, d1), P(-half, 0, d1)]);
   ctx.fill();
   // left panel (inside of the front cover)
-  ctx.fillStyle = grey(66);
+  ctx.fillStyle = grey(178);
   quad(ctx, [P(-half, 0.004, d2), P(spine, 0.004, d2), P(spine, 0.004, d1), P(-half, 0.004, d1)]);
   ctx.fill();
   // right panel (inside of the back cover) with its index tab
-  ctx.fillStyle = grey(72);
+  ctx.fillStyle = grey(194);
   quad(ctx, [P(spine, 0.004, d2), P(spine + half, 0.004, d2), P(spine + half, 0.004, d1), P(spine, 0.004, d1)]);
   ctx.fill();
   quad(ctx, [P(0.12, 0.004, d2 + 0.035), P(spine + half - 0.012, 0.004, d2 + 0.035), P(spine + half - 0.012, 0.004, d2), P(0.12, 0.004, d2)]);
   ctx.fill();
   // crease
-  ctx.strokeStyle = grey(0, 0.4);
+  ctx.strokeStyle = grey(0, 0.32);
   ctx.lineWidth = 1.2;
   ctx.beginPath();
   const s1 = P(spine, 0.004, d1);
@@ -147,7 +147,7 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
   // label on the inside cover, foreshortened with the desk
   const lab = P(-half / 2 + spine / 2, 0.004, 1.44);
   const labW = 0.19 * lab.s;
-  ctx.fillStyle = grey(84);
+  ctx.fillStyle = grey(238);
   ctx.save();
   ctx.translate(lab.x, lab.y);
   ctx.scale(1, CAM_H / 1.44);
@@ -163,18 +163,18 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
   const pa = P(0.31, 0.006, 1.24);
   const pb = P(0.5, 0.006, 1.33);
   ctx.lineCap = "round";
-  ctx.strokeStyle = grey(0, 0.45);
+  ctx.strokeStyle = grey(0, 0.3);
   ctx.lineWidth = 0.011 * pa.s;
   ctx.beginPath();
   ctx.moveTo(pa.x + 3, pa.y + 3);
   ctx.lineTo(pb.x + 3, pb.y + 3);
   ctx.stroke();
-  ctx.strokeStyle = grey(30);
+  ctx.strokeStyle = grey(26);
   ctx.beginPath();
   ctx.moveTo(pa.x, pa.y);
   ctx.lineTo(pb.x, pb.y);
   ctx.stroke();
-  ctx.strokeStyle = grey(255, 0.12);
+  ctx.strokeStyle = grey(255, 0.4);
   ctx.lineWidth = Math.max(0.6, 0.002 * pa.s);
   ctx.beginPath();
   ctx.moveTo(pa.x, pa.y - 0.003 * pa.s);
@@ -188,11 +188,11 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
   const rx = mug.r * top.s;
   const ryTop = rx * ((CAM_H - mug.h) / mug.d);
   const ryBot = rx * (CAM_H / mug.d);
-  ctx.fillStyle = grey(0, 0.35);
+  ctx.fillStyle = grey(0, 0.3);
   ctx.beginPath();
   ctx.ellipse(bot.x + rx * 0.35, bot.y + ryBot * 0.3, rx * 1.2, ryBot * 1.1, 0, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = grey(26);
+  ctx.fillStyle = grey(222);
   ctx.beginPath();
   ctx.moveTo(top.x - rx, top.y);
   ctx.lineTo(bot.x - rx, bot.y);
@@ -200,16 +200,16 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
   ctx.lineTo(top.x + rx, top.y);
   ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle = grey(26);
+  ctx.strokeStyle = grey(212);
   ctx.lineWidth = 0.011 * top.s;
   ctx.beginPath();
   ctx.ellipse(top.x + rx * 1.15, (top.y + bot.y) / 2, rx * 0.42, (bot.y - top.y) * 0.3, 0, -Math.PI / 2, Math.PI / 2);
   ctx.stroke();
-  ctx.fillStyle = grey(12);
+  ctx.fillStyle = grey(54);
   ctx.beginPath();
   ctx.ellipse(top.x, top.y, rx, ryTop, 0, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = grey(255, 0.14);
+  ctx.strokeStyle = grey(255, 0.7);
   ctx.lineWidth = 1;
   ctx.stroke();
 
@@ -218,18 +218,18 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
   const elbow = P(-0.66, 0.3, 1.72);
   const head = P(-0.38, 0.4, 1.5);
   const aim = P(TARGET.x - 0.05, 0, TARGET.d);
-  ctx.fillStyle = grey(15);
+  ctx.fillStyle = grey(34);
   ctx.beginPath();
   ctx.ellipse(base.x, base.y, 0.085 * base.s, 0.085 * base.s * (CAM_H / 1.85), 0, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = grey(17);
+  ctx.strokeStyle = grey(38);
   ctx.lineWidth = 0.016 * elbow.s;
   ctx.beginPath();
   ctx.moveTo(base.x, base.y - 0.02 * base.s);
   ctx.lineTo(elbow.x, elbow.y);
   ctx.lineTo(head.x, head.y);
   ctx.stroke();
-  ctx.strokeStyle = grey(255, 0.07);
+  ctx.strokeStyle = grey(255, 0.28);
   ctx.lineWidth = 1;
   ctx.stroke();
 
@@ -247,7 +247,7 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
   const narrow = 0.03 * head.s;
 
   const beam = ctx.createLinearGradient(mouth.x, mouth.y, aim.x, aim.y);
-  beam.addColorStop(0, grey(255, 0.045));
+  beam.addColorStop(0, grey(255, 0.15));
   beam.addColorStop(1, grey(255, 0));
   ctx.fillStyle = beam;
   ctx.beginPath();
@@ -258,7 +258,7 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
   ctx.closePath();
   ctx.fill();
 
-  ctx.fillStyle = grey(20);
+  ctx.fillStyle = grey(48);
   ctx.beginPath();
   ctx.moveTo(head.x + nx * narrow, head.y + ny * narrow);
   ctx.lineTo(mouth.x + nx * wide, mouth.y + ny * wide);
@@ -266,7 +266,7 @@ export function paintDeskLayer(vp: Viewport, dpr: number) {
   ctx.lineTo(head.x - nx * narrow, head.y - ny * narrow);
   ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle = grey(255, 0.1);
+  ctx.strokeStyle = grey(255, 0.38);
   ctx.stroke();
 
   const bulb = ctx.createRadialGradient(mouth.x, mouth.y, 0, mouth.x, mouth.y, wide * 1.6);
@@ -423,7 +423,7 @@ export function drawPapers(
     // flat-shaded: brightness follows how squarely the sheet faces the lamp
     const n = rotate([0, 1, 0], yaw, pitch, roll);
     const lit = Math.abs(n[0] * LIGHT[0] + n[1] * LIGHT[1] + n[2] * LIGHT[2]);
-    const tone = lerp(70, 158, lit) + paper.shade;
+    const tone = lerp(168, 252, lit) + paper.shade;
     ctx.fillStyle = grey(tone);
     quad(ctx, pts);
     ctx.fill();

@@ -187,7 +187,7 @@ export default function SecureDocumentViewer({
       <header className="glass-deep sticky top-0 z-20 flex flex-wrap items-center gap-3 px-4 py-3 print:hidden">
         <div className="min-w-0 flex-1">
           <p className="truncate font-semibold">{title}</p>
-          <p className="truncate text-xs text-mist/50">
+          <p className="truncate text-xs text-mist/70">
             {category}
             {pageCount ? ` · ${pageCount} page${pageCount > 1 ? "s" : ""}` : ""} ·
             view-only
@@ -202,7 +202,7 @@ export default function SecureDocumentViewer({
           >
             −
           </button>
-          <span className="w-14 text-center text-xs text-mist/60">
+          <span className="w-14 text-center text-xs text-mist/77">
             {Math.round(zoom * 100)}%
           </span>
           <button
@@ -222,7 +222,7 @@ export default function SecureDocumentViewer({
       {/* document surface */}
       <main className="relative flex-1 overflow-auto px-4 py-6">
         {status === "loading" && (
-          <p className="glass mx-auto max-w-sm rounded-2xl px-6 py-10 text-center text-sm text-mist/60">
+          <p className="glass mx-auto max-w-sm rounded-2xl px-6 py-10 text-center text-sm text-mist/77">
             Opening secure reader…
           </p>
         )}
@@ -261,7 +261,7 @@ export default function SecureDocumentViewer({
 
         {obscured && status === "ready" && (
           <div className="pointer-events-none fixed inset-0 z-30 flex items-center justify-center">
-            <p className="glass-deep rounded-2xl px-6 py-4 text-sm text-mist/80">
+            <p className="glass-deep rounded-2xl px-6 py-4 text-sm text-mist/90">
               🔒 Content hidden while this window is inactive
             </p>
           </div>
@@ -276,7 +276,7 @@ export default function SecureDocumentViewer({
         </div>
       )}
 
-      <footer className="px-4 pb-4 text-center text-[11px] text-mist/35 print:hidden">
+      <footer className="px-4 pb-4 text-center text-[11px] text-mist/62 print:hidden">
         Licensed to {viewerLabel} ({viewerEmail}) for personal study only.
         Redistribution is prohibited and every page carries your identity.
       </footer>

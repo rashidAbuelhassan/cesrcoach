@@ -103,7 +103,7 @@ export default function SettingsManager(props: Props) {
     <div className="space-y-8 pb-8">
       <header>
         <h1 className="text-3xl font-bold">⚙️ Site settings</h1>
-        <p className="mt-2 text-mist/60">
+        <p className="mt-2 text-mist/77">
           Branding, contact details and the team shown on the homepage.
         </p>
       </header>
@@ -123,7 +123,7 @@ export default function SettingsManager(props: Props) {
       {/* ---- logo ---- */}
       <section className="glass max-w-2xl rounded-3xl p-6 sm:p-8">
         <h2 className="text-lg font-bold">🎨 Logo</h2>
-        <p className="mt-1 text-sm text-mist/55">
+        <p className="mt-1 text-sm text-mist/73">
           Upload a new logo (SVG or PNG recommended) — it replaces the default
           everywhere instantly. Don&apos;t like it? Reset any time.
         </p>
@@ -153,7 +153,7 @@ export default function SettingsManager(props: Props) {
             )}
           </div>
         </div>
-        <p className="mt-4 text-xs text-mist/40">
+        <p className="mt-4 text-xs text-mist/64">
           Developers: the default logo lives at{" "}
           <code className="rounded bg-white/8 px-1.5 py-0.5">public/branding/logo.svg</code>{" "}
           — replacing that file also changes it site-wide.
@@ -188,7 +188,7 @@ export default function SettingsManager(props: Props) {
             value={priceNote}
             onChange={(e) => setPriceNote(e.target.value)}
           />
-          <p className="mt-1.5 text-xs text-neutral-200/70">
+          <p className="mt-1.5 text-xs text-neutral-200/85">
             ⚠️ Only state that VAT is included if you are VAT-registered. Leave
             this empty (or write “No VAT is charged.”) if you are not.
           </p>
@@ -201,7 +201,7 @@ export default function SettingsManager(props: Props) {
             value={adminEmails}
             onChange={(e) => setAdminEmails(e.target.value)}
           />
-          <p className="mt-1.5 text-xs text-mist/45">
+          <p className="mt-1.5 text-xs text-mist/66">
             Anyone registering with one of these emails automatically becomes an
             admin.
           </p>
@@ -262,7 +262,7 @@ function PricingEditor({ eventTypes }: { eventTypes: EventType[] }) {
   return (
     <form onSubmit={save} className="glass max-w-2xl space-y-4 rounded-3xl p-6 sm:p-8">
       <h2 className="text-lg font-bold">💳 Session pricing</h2>
-      <p className="text-sm text-mist/55">
+      <p className="text-sm text-mist/73">
         Price in GBP per participant. Leave empty (or 0) to make a session type
         free — free sessions skip Stripe checkout and are confirmed manually.
       </p>
@@ -286,7 +286,7 @@ function PricingEditor({ eventTypes }: { eventTypes: EventType[] }) {
               {t.name}
             </span>
             <div className="ml-auto flex items-center gap-2">
-              <span className="text-mist/50">£</span>
+              <span className="text-mist/70">£</span>
               <input
                 type="number"
                 min={0}
@@ -394,7 +394,7 @@ function ConsultantEditor({ consultants }: { consultants: Consultant[] }) {
           >
             <div className="min-w-0">
               <p className="text-sm font-semibold">{c.name}</p>
-              <p className="truncate text-xs text-mist/50">{c.title}</p>
+              <p className="truncate text-xs text-mist/70">{c.title}</p>
             </div>
             <div className="flex gap-2">
               <button onClick={() => openEdit(c)} className="btn-ghost px-3 py-1 text-xs">

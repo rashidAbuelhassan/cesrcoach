@@ -49,7 +49,7 @@ export default function RegisterPage() {
   if (needsConfirm) {
     return (
       <AuthShell title="Check your inbox 📬" subtitle="One more step.">
-        <p className="text-sm leading-relaxed text-mist/70">
+        <p className="text-sm leading-relaxed text-mist/84">
           We&apos;ve sent a confirmation link to <strong>{email}</strong>.
           Click it to activate your account, then sign in.
         </p>
@@ -113,7 +113,7 @@ export default function RegisterPage() {
         <button type="submit" disabled={loading} className="btn-liquid w-full py-3 text-sm">
           {loading ? "Creating account…" : "Create my account"}
         </button>
-        <p className="text-center text-sm text-mist/50">
+        <p className="text-center text-sm text-mist/70">
           Already a member?{" "}
           <Link href="/login" className="font-semibold text-neutral-300 hover:underline">
             Sign in

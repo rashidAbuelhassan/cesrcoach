@@ -20,7 +20,7 @@ export default async function ProfilePage() {
     <div className="space-y-6 pb-8">
       <header>
         <h1 className="text-3xl font-bold">👤 Your profile</h1>
-        <p className="mt-2 text-mist/60">
+        <p className="mt-2 text-mist/77">
           Keep your details current — they help us tailor your sessions.
         </p>
       </header>

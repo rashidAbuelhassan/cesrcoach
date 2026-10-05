@@ -60,7 +60,7 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
     <div className="space-y-6 pb-8">
       <header>
         <h1 className="text-3xl font-bold">🎟 Bookings</h1>
-        <p className="mt-2 text-mist/60">
+        <p className="mt-2 text-mist/77">
           Confirm, complete or cancel member bookings. Portfolio links appear
           here for clinic reviews.
         </p>
@@ -91,7 +91,7 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
 
       <div className="space-y-3">
         {visible.length === 0 && (
-          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/50">
+          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/70">
             No bookings here.
           </p>
         )}
@@ -101,16 +101,16 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
               <div className="min-w-0 flex-1">
                 <p className="font-semibold">
                   {b.coach_profiles?.full_name || "—"}{" "}
-                  <span className="text-xs font-normal text-mist/50">
+                  <span className="text-xs font-normal text-mist/70">
                     {b.coach_profiles?.email}
                   </span>
                 </p>
-                <p className="text-xs text-mist/55">
+                <p className="text-xs text-mist/73">
                   {b.coach_events?.title} ·{" "}
                   {b.coach_events ? formatDateTime(b.coach_events.starts_at) : ""}
                 </p>
                 {b.coach_profiles?.specialty && (
-                  <p className="text-xs text-mist/45">
+                  <p className="text-xs text-mist/66">
                     Specialty: {b.coach_profiles.specialty}
                     {b.coach_profiles.gmc_number
                       ? ` · GMC ${b.coach_profiles.gmc_number}`
@@ -126,7 +126,7 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
                       ? "border-white/30 bg-white/10 text-white"
                       : b.status === "completed"
                         ? "border-neutral-400/30 bg-neutral-400/10 text-neutral-200"
-                        : "border-white/15 bg-white/5 text-mist/50"
+                        : "border-white/15 bg-white/5 text-mist/70"
                 }`}
               >
                 {b.status}
@@ -201,7 +201,7 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
               <div className="mt-3 space-y-1.5 border-t border-white/8 pt-3 text-xs">
                 {b.portfolio_url && (
                   <p>
-                    <span className="text-mist/45">📁 Portfolio: </span>
+                    <span className="text-mist/66">📁 Portfolio: </span>
                     <a
                       href={b.portfolio_url}
                       target="_blank"
@@ -213,14 +213,14 @@ export default function BookingManager({ bookings }: { bookings: Booking[] }) {
                   </p>
                 )}
                 {b.notes && (
-                  <p className="text-mist/60">
-                    <span className="text-mist/45">💬 Member note: </span>
+                  <p className="text-mist/77">
+                    <span className="text-mist/66">💬 Member note: </span>
                     {b.notes}
                   </p>
                 )}
                 {b.admin_notes && (
-                  <p className="text-neutral-200/80">
-                    <span className="text-mist/45">🛡 Admin note: </span>
+                  <p className="text-neutral-200/90">
+                    <span className="text-mist/66">🛡 Admin note: </span>
                     {b.admin_notes}
                   </p>
                 )}

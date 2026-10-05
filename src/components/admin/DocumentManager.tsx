@@ -119,7 +119,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">📄 Documents</h1>
-          <p className="mt-2 text-mist/60">
+          <p className="mt-2 text-mist/77">
             Upload PDFs for members to read. Uploaded files open in the secure
             view-only reader — no downloading or printing, and every page is
             watermarked with the reader&apos;s name and email. External links
@@ -139,7 +139,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
 
       <div className="space-y-3">
         {docs.length === 0 && (
-          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/50">
+          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/70">
             No documents yet — upload your first one.
           </p>
         )}
@@ -153,7 +153,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
             <span className="text-2xl">📄</span>
             <div className="min-w-0 flex-1">
               <p className="font-semibold">{d.title}</p>
-              <p className="truncate text-xs text-mist/50">
+              <p className="truncate text-xs text-mist/70">
                 {d.category}
                 {d.file_size_kb ? ` · ${d.file_size_kb} KB` : ""}
                 {d.file_path ? ` · uploaded file` : d.external_url ? " · external link" : ""}
@@ -165,7 +165,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
                 className={`chip cursor-pointer ${
                   d.published
                     ? "border-white/30 bg-white/10 text-white"
-                    : "border-white/15 bg-white/5 text-mist/50"
+                    : "border-white/15 bg-white/5 text-mist/70"
                 }`}
               >
                 {d.published ? "Published" : "Draft"}
@@ -221,7 +221,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
             <div>
               <label className="label">
                 Upload PDF {editing?.file_path ? "(replaces the current file)" : ""}
-                <span className="ml-1 font-normal text-neutral-300/70">
+                <span className="ml-1 font-normal text-neutral-300/85">
                   — protected, view-only
                 </span>
               </label>
@@ -235,7 +235,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
             <div>
               <label className="label">
                 …or link to an external file
-                <span className="ml-1 font-normal text-neutral-300/70">
+                <span className="ml-1 font-normal text-neutral-300/85">
                   — opens externally, not protected
                 </span>
               </label>
@@ -264,7 +264,7 @@ export default function DocumentManager({ docs }: { docs: Doc[] }) {
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
               />
             </div>
-            <label className="flex items-center gap-2 text-sm text-mist/70">
+            <label className="flex items-center gap-2 text-sm text-mist/84">
               <input
                 type="checkbox"
                 checked={form.published}

@@ -19,8 +19,12 @@ import { clamp, makeLayer, smoothstep, type Viewport } from "./util";
 
 /** Pages shorter than this still get a gentle, partial play-through. */
 const MIN_STORY_PX = 2200;
-/** Where in the scroll the street hands over to the desk. */
-const HANDOVER: [number, number] = [0.44, 0.58];
+/**
+ * Where in the scroll the street hands over to the desk. Pages can mark an
+ * empty spacer with `data-scene-handover` so the cross-fade lands in clear
+ * space; otherwise these fractions are used.
+ */
+const FALLBACK_HANDOVER: [number, number] = [0.44, 0.58];
 /** Walking pace of the crowd when nobody is scrolling, in metres/second. */
 const STROLL_SPEED = 1.15;
 /** Idle walking only needs ~30fps; scrolling still renders every frame. */
@@ -51,6 +55,7 @@ export default function ScrollScene() {
     let bufA: ReturnType<typeof makeLayer> | null = null;
     let bufB: ReturnType<typeof makeLayer> | null = null;
 
+    let handover: [number, number] = FALLBACK_HANDOVER;
     let current = -1; // smoothed progress
     let trail = 0; // smoothed scroll speed
     let frame = 0;
@@ -58,10 +63,30 @@ export default function ScrollScene() {
     let strolled = 0; // metres the crowd has walked on its own
     let lastPaint = 0;
 
+    const span = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      return Math.max(scrollable, MIN_STORY_PX);
+    };
+
     const target = () => {
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
       if (scrollable <= 0) return 0;
-      return clamp(window.scrollY / Math.max(scrollable, MIN_STORY_PX));
+      return clamp(window.scrollY / span());
+    };
+
+    /** Fade while the marked spacer crosses the middle of the screen. */
+    const measure = () => {
+      const marker = document.querySelector("[data-scene-handover]");
+      if (!marker) {
+        handover = FALLBACK_HANDOVER;
+        return;
+      }
+      const r = marker.getBoundingClientRect();
+      const top = r.top + window.scrollY;
+      const from = top - window.innerHeight * 0.38; // spacer top reaches 38% down
+      const to = top + r.height - window.innerHeight * 0.4; // bottom reaches 40%
+      const s = span();
+      handover = [clamp(from / s, 0, 0.9), clamp(Math.max(to, from + 80) / s, 0.05, 0.96)];
     };
 
     const resize = () => {
@@ -81,14 +106,14 @@ export default function ScrollScene() {
 
     const drawDesk = (c: CanvasRenderingContext2D, p: number) => {
       c.drawImage(desk!, 0, 0, vp.w, vp.h);
-      drawPapers(c, vp, papers, clamp((p - 0.5) / 0.48));
+      drawPapers(c, vp, papers, clamp((p - handover[1]) / Math.max(0.08, 0.95 - handover[1])));
     };
 
     const paint = (p: number) => {
       if (!street || !desk) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.globalAlpha = 1;
-      const toDesk = smoothstep(HANDOVER[0], HANDOVER[1], p);
+      const toDesk = smoothstep(handover[0], handover[1], p);
 
       if (toDesk <= 0.001) return drawStreet(ctx, p);
       if (toDesk >= 0.999) return drawDesk(ctx, p);
@@ -123,7 +148,7 @@ export default function ScrollScene() {
       trail += (Math.min(1, speed * 260) - trail) * 0.2;
 
       const scrolling = Math.abs(goal - current) > 0.00005 || trail > 0.01;
-      const streetOnScreen = smoothstep(HANDOVER[0], HANDOVER[1], current) < 0.999;
+      const streetOnScreen = smoothstep(handover[0], handover[1], current) < 0.999;
       if (streetOnScreen) strolled += (STROLL_SPEED * dt) / 1000;
 
       if (scrolling || now - lastPaint >= IDLE_FRAME_MS) {
@@ -143,10 +168,12 @@ export default function ScrollScene() {
     };
 
     const onResize = () => {
+      measure();
       resize();
       wake();
     };
 
+    measure();
     resize();
     current = target(); // start where the page already is, no fly-in
     wake();
@@ -155,7 +182,10 @@ export default function ScrollScene() {
     window.addEventListener("resize", onResize);
     reduce.addEventListener("change", wake);
     // content height changes (images, data loading) shift the progress
-    const ro = new ResizeObserver(wake);
+    const ro = new ResizeObserver(() => {
+      measure();
+      wake();
+    });
     ro.observe(document.body);
 
     return () => {
@@ -174,8 +204,8 @@ export default function ScrollScene() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-ink">
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-      {/* vignette keeps the edges dark and the foreground text legible */}
-      <div className="absolute inset-0 bg-[radial-gradient(120%_85%_at_50%_45%,transparent_40%,rgba(0,0,0,0.6)_100%)]" />
+      {/* a soft vignette keeps the corners calm behind the navigation and text */}
+      <div className="absolute inset-0 bg-[radial-gradient(125%_90%_at_50%_45%,transparent_45%,rgba(16,18,22,0.4)_100%)]" />
       {/* film grain */}
       <div
         className="absolute inset-0 opacity-[0.06] mix-blend-overlay"

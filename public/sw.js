@@ -1,5 +1,5 @@
 /* CESR Coach service worker — network-first with offline fallback. */
-const CACHE = "cesr-coach-v2"; // bump when cached assets (logo, icons) change
+const CACHE = "cesr-coach-v3"; // bump when cached assets (logo, icons) change
 const OFFLINE_URL = "/offline.html";
 const PRECACHE = [OFFLINE_URL, "/branding/logo.svg", "/icons/icon-192.png"];
 

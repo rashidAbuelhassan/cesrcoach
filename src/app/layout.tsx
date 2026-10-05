@@ -4,6 +4,7 @@ import "./globals.css";
 import { site } from "@/config/site";
 import ScrollScene from "@/components/scroll-scene/ScrollScene";
 import PwaProvider from "@/components/PwaProvider";
+import VisitTracker from "@/components/VisitTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
+  themeColor: "#2b2e33",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -65,6 +66,7 @@ export default function RootLayout({
         <ScrollScene />
         {children}
         <PwaProvider />
+        <VisitTracker />
       </body>
     </html>
   );

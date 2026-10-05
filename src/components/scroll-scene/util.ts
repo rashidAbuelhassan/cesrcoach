@@ -37,3 +37,15 @@ export function makeLayer(vp: Viewport, dpr: number) {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   return { canvas, ctx };
 }
+
+/**
+ * Where the subject of each scene sits across the screen. Wide screens put it
+ * right of centre so page text can sit on the left and the scene stays in view.
+ */
+export function focusX(vp: Viewport) {
+  const wide = vp.w >= 1024 && vp.w / vp.h > 1.2;
+  return vp.w * (wide ? 0.64 : 0.5);
+}
+
+/** Tall, narrow screens (phones): text stacks above the scene. */
+export const isPortrait = (vp: Viewport) => vp.h > vp.w * 1.1;

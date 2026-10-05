@@ -1,5 +1,15 @@
-import { addPerson, STILL, walkPose, type Look } from "./figure";
-import { clamp, grey, lerp, makeLayer, mulberry32, smoothstep, type Viewport } from "./util";
+import { addPerson, drawBackpack, STILL, walkPose, type Look } from "./figure";
+import {
+  clamp,
+  focusX,
+  grey,
+  isPortrait,
+  lerp,
+  makeLayer,
+  mulberry32,
+  smoothstep,
+  type Viewport,
+} from "./util";
 
 /*
  * Scene 1 — a figure stands still in the middle of a street, back to the
@@ -46,12 +56,14 @@ export function createCrowd(seed = 11): Walker[] {
           hair: h < 0.45 ? "long" : h < 0.65 ? "bun" : h < 0.85 ? "pony" : "short",
           bag: g < 0.12 ? 1 : g < 0.42 ? 2 : 0,
           hem: 0.46 + r() * 0.16,
+          pack: g > 0.8,
         }
       : {
           outfit: o < 0.3 ? "coat" : "suit",
           hair: "short",
           bag: g < 0.24 ? 1 : g < 0.34 ? 2 : 0,
           hem: 0.5 + r() * 0.08,
+          pack: g > 0.82,
         };
     crowd.push({
       x: side * (0.8 + r() * 2.7),
@@ -71,7 +83,9 @@ function camera(vp: Viewport) {
   const f = vp.h * 0.95;
   // squeeze the street on narrow (portrait) screens so people stay in frame
   const lat = clamp(vp.w / vp.h / 1.5, 0.42, 1);
-  return { f, lat, horizon: vp.h * 0.47, cx: vp.w / 2 };
+  // phones: drop the horizon so the headline has the sky to itself
+  const horizon = vp.h * (isPortrait(vp) ? 0.6 : 0.47);
+  return { f, lat, horizon, cx: focusX(vp) };
 }
 
 type Cam = ReturnType<typeof camera>;
@@ -89,22 +103,25 @@ export function paintStreetLayer(vp: Viewport, dpr: number) {
   const { canvas, ctx } = makeLayer(vp, dpr);
   const cam = camera(vp);
   const { w, h } = vp;
+  const hz = cam.horizon / h;
 
-  // sky → glow at the horizon → dark pavement
+  // overcast sky → bright haze at the end of the street → pavement that
+  // darkens toward the viewer
   const sky = ctx.createLinearGradient(0, 0, 0, h);
-  sky.addColorStop(0, grey(8));
-  sky.addColorStop(0.3, grey(17));
-  sky.addColorStop(0.47, grey(50));
-  sky.addColorStop(0.56, grey(36));
-  sky.addColorStop(0.78, grey(24));
-  sky.addColorStop(1, grey(15));
+  sky.addColorStop(0, grey(88));
+  sky.addColorStop(hz * 0.5, grey(122));
+  sky.addColorStop(Math.max(0, hz - 0.07), grey(178));
+  sky.addColorStop(hz, grey(218));
+  sky.addColorStop(Math.min(1, hz + 0.012), grey(168));
+  sky.addColorStop(hz + (1 - hz) * 0.35, grey(132));
+  sky.addColorStop(1, grey(92));
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, w, h);
 
-  // light at the end of the street
-  const glow = ctx.createRadialGradient(cam.cx, cam.horizon, 0, cam.cx, cam.horizon, w * 0.6);
-  glow.addColorStop(0, grey(255, 0.11));
-  glow.addColorStop(0.35, grey(255, 0.035));
+  // the light at the end of the street
+  const glow = ctx.createRadialGradient(cam.cx, cam.horizon, 0, cam.cx, cam.horizon, w * 0.55);
+  glow.addColorStop(0, grey(255, 0.34));
+  glow.addColorStop(0.3, grey(255, 0.12));
   glow.addColorStop(1, grey(255, 0));
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, w, h);
@@ -115,13 +132,13 @@ export function paintStreetLayer(vp: Viewport, dpr: number) {
     const X = k * 1.8 * cam.lat;
     const a = project(cam, X, 0, 1.2);
     const b = project(cam, X, 0, 90);
-    ctx.strokeStyle = grey(255, Math.abs(k) === 3 ? 0.07 : 0.035);
+    ctx.strokeStyle = grey(255, Math.abs(k) === 3 ? 0.16 : 0.08);
     ctx.beginPath();
     ctx.moveTo(a.x, a.y);
     ctx.lineTo(b.x, b.y);
     ctx.stroke();
   }
-  ctx.strokeStyle = grey(255, 0.03);
+  ctx.strokeStyle = grey(255, 0.07);
   for (let z = 2.2; z < 90; z *= 1.28) {
     const a = project(cam, -14, 0, z);
     const b = project(cam, 14, 0, z);
@@ -131,7 +148,7 @@ export function paintStreetLayer(vp: Viewport, dpr: number) {
     ctx.stroke();
   }
 
-  // buildings lining both sides of the street
+  // buildings lining both sides: dark and close, fading into the haze with distance
   const r = mulberry32(3);
   for (const side of [-1, 1]) {
     const X = side * 6.4 * cam.lat;
@@ -148,7 +165,8 @@ export function paintStreetLayer(vp: Viewport, dpr: number) {
       const p2 = project(cam, X, b.top, b.z1);
       const p3 = project(cam, X, b.top, b.z2);
       const p4 = project(cam, X, 0, b.z2);
-      ctx.fillStyle = grey(11);
+      const haze = Math.pow(clamp(b.z1 / 80), 0.75);
+      ctx.fillStyle = grey(lerp(58, 190, haze));
       ctx.beginPath();
       ctx.moveTo(p1.x, p1.y);
       ctx.lineTo(p2.x, p2.y);
@@ -156,14 +174,14 @@ export function paintStreetLayer(vp: Viewport, dpr: number) {
       ctx.lineTo(p4.x, p4.y);
       ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = grey(255, 0.05);
+      ctx.strokeStyle = grey(255, 0.16 * (1 - haze * 0.6));
       ctx.beginPath();
       ctx.moveTo(p2.x, p2.y);
       ctx.lineTo(p3.x, p3.y);
       ctx.stroke();
 
-      // windows — dimmer up close so they never read as light panels
-      const nearDim = clamp(b.z1 / 22, 0.3, 1);
+      // lit windows, brighter than the facade but never panels of light
+      const nearDim = clamp(b.z1 / 22, 0.35, 1);
       for (let wy = 2.6; wy < b.top - 1.2; wy += 3.2) {
         for (let wz = b.z1 + 0.8; wz < b.z2 - 1; wz += 2.3) {
           if (r() > 0.24) continue;
@@ -171,7 +189,7 @@ export function paintStreetLayer(vp: Viewport, dpr: number) {
           const q2 = project(cam, X, wy + 1.5, wz);
           const q3 = project(cam, X, wy + 1.5, wz + 1.1);
           const q4 = project(cam, X, wy, wz + 1.1);
-          ctx.fillStyle = grey(255, (0.04 + r() * 0.08) * nearDim);
+          ctx.fillStyle = grey(255, (0.1 + r() * 0.16) * nearDim * (1 - haze * 0.6));
           ctx.beginPath();
           ctx.moveTo(q1.x, q1.y);
           ctx.lineTo(q2.x, q2.y);
@@ -220,7 +238,7 @@ export function drawCrowd(
     if (visibility <= 0.01) continue;
 
     // far figures melt into the haze, near ones are near-black
-    const tone = lerp(2, 30, Math.pow(clamp((z - 2) / 30), 0.8));
+    const tone = lerp(16, 150, Math.pow(clamp((z - 2) / 30), 0.8));
 
     items.push({
       z,
@@ -255,7 +273,7 @@ export function drawCrowd(
       ctx.translate(p.x, p.y + len * 0.42);
       ctx.scale(0.36 * p.s, len * 0.6);
       const shadow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
-      shadow.addColorStop(0, grey(0, 0.6));
+      shadow.addColorStop(0, grey(0, 0.38));
       shadow.addColorStop(1, grey(0, 0));
       ctx.fillStyle = shadow;
       ctx.beginPath();
@@ -264,11 +282,12 @@ export function drawCrowd(
       ctx.restore();
 
       const path = new Path2D();
-      // slim, in a suit, ears just catching the glow
-      addPerson(path, p.x, p.y, p.s, 1.84, 0.92, STILL, { outfit: "suit", hair: "short", ears: true });
+      // slim, in a suit, ears just catching the glow, rucksack on his back
+      const man = { outfit: "suit", hair: "short", ears: true, pack: true } as const;
+      addPerson(path, p.x, p.y, p.s, 1.84, 0.92, STILL, man);
 
       // rim light: a lighter copy peeking out around the edge
-      ctx.fillStyle = grey(150, 0.36);
+      ctx.fillStyle = grey(245, 0.5);
       for (const [dx, dy] of [
         [0, -1.4],
         [-1.1, -0.4],
@@ -279,8 +298,9 @@ export function drawCrowd(
         ctx.fill(path, "nonzero");
         ctx.restore();
       }
-      ctx.fillStyle = grey(4);
+      ctx.fillStyle = grey(8);
       ctx.fill(path, "nonzero");
+      drawBackpack(ctx, p.x, p.y, p.s, 1.84, 0.92, STILL);
     },
   });
 

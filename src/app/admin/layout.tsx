@@ -26,6 +26,11 @@ export default async function AdminLayout({
 
   if (profile?.role !== "admin") redirect("/members");
 
+  const { count: newEnquiries } = await supabase
+    .from("coach_enquiries")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "new");
+
   return (
     <div className="flex flex-1 flex-col">
       <Navbar />
@@ -35,7 +40,7 @@ export default async function AdminLayout({
             🛡 Admin console
           </span>
         </div>
-        <AdminNav />
+        <AdminNav newEnquiries={newEnquiries ?? 0} />
         <div className="mt-8">{children}</div>
       </main>
       <Footer />

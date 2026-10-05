@@ -18,7 +18,7 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
 
   if (videos.length === 0) {
     return (
-      <p className="glass rounded-3xl px-6 py-14 text-center text-sm text-mist/50">
+      <p className="glass rounded-3xl px-6 py-14 text-center text-sm text-mist/70">
         No presentations published yet — new videos will appear here as soon as
         they&apos;re released. 🎥
       </p>
@@ -71,7 +71,7 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
               </span>
             </div>
             <div className="p-5">
-              <div className="flex items-center gap-2 text-xs text-mist/50">
+              <div className="flex items-center gap-2 text-xs text-mist/70">
                 <span className="chip">{v.category}</span>
                 {v.duration_minutes ? (
                   <span>⏱ {formatDuration(v.duration_minutes)}</span>
@@ -79,7 +79,7 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
               </div>
               <h3 className="mt-2.5 font-bold leading-snug">{v.title}</h3>
               {v.description && (
-                <p className="mt-1.5 line-clamp-2 text-sm text-mist/55">
+                <p className="mt-1.5 line-clamp-2 text-sm text-mist/73">
                   {v.description}
                 </p>
               )}
@@ -110,7 +110,7 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
             </div>
             <PlayerFrame url={playing.video_url} title={playing.title} />
             {playing.description && (
-              <p className="mt-4 text-sm text-mist/60">{playing.description}</p>
+              <p className="mt-4 text-sm text-mist/77">{playing.description}</p>
             )}
           </div>
         </div>

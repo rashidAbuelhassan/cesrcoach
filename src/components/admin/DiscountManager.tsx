@@ -161,7 +161,7 @@ export default function DiscountManager({
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">🏷 Discount codes</h1>
-          <p className="mt-2 text-mist/60">
+          <p className="mt-2 text-mist/77">
             Give members a percentage or fixed amount off a session. Codes are
             checked on our server at checkout, so the discount can&apos;t be
             faked from the browser.
@@ -180,7 +180,7 @@ export default function DiscountManager({
 
       <div className="space-y-3">
         {codes.length === 0 && (
-          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/50">
+          <p className="glass rounded-3xl px-6 py-12 text-center text-sm text-mist/70">
             No discount codes yet — create one to start offering them.
           </p>
         )}
@@ -202,7 +202,7 @@ export default function DiscountManager({
               </button>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold">{describe(c)}</p>
-                <p className="truncate text-xs text-mist/50">
+                <p className="truncate text-xs text-mist/70">
                   {c.description || "No description"}
                 </p>
               </div>
@@ -222,7 +222,7 @@ export default function DiscountManager({
                   className={`chip cursor-pointer ${
                     c.active
                       ? "border-white/30 bg-white/10 text-white"
-                      : "border-white/15 bg-white/5 text-mist/50"
+                      : "border-white/15 bg-white/5 text-mist/70"
                   }`}
                 >
                   {c.active ? "Active" : "Paused"}
@@ -278,7 +278,7 @@ export default function DiscountManager({
                 value={form.code}
                 onChange={(e) => setForm({ ...form, code: e.target.value })}
               />
-              <p className="mt-1.5 text-xs text-mist/45">
+              <p className="mt-1.5 text-xs text-mist/66">
                 Members type this at booking. Not case-sensitive.
               </p>
             </div>
@@ -373,7 +373,7 @@ export default function DiscountManager({
               />
             </div>
 
-            <label className="flex items-center gap-2 text-sm text-mist/70">
+            <label className="flex items-center gap-2 text-sm text-mist/84">
               <input
                 type="checkbox"
                 checked={form.active}
