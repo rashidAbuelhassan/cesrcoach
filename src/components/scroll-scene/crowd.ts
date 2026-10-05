@@ -84,7 +84,7 @@ function camera(vp: Viewport) {
   // squeeze the street on narrow (portrait) screens so people stay in frame
   const lat = clamp(vp.w / vp.h / 1.5, 0.42, 1);
   // phones: drop the horizon so the headline has the sky to itself
-  const horizon = vp.h * (isPortrait(vp) ? 0.6 : 0.47);
+  const horizon = vp.h * (isPortrait(vp) ? 0.64 : 0.47);
   return { f, lat, horizon, cx: focusX(vp) };
 }
 

@@ -90,22 +90,22 @@ export default async function Home() {
 
       {/* ---------- HERO ---------- */}
       {/* Text sits to one side (and high up on phones) so the scene behind stays in view. */}
-      <section className="relative flex min-h-[100svh] items-start px-4 pt-32 pb-16 sm:pt-40 lg:items-center lg:pt-28">
+      <section className="relative flex min-h-[100svh] items-start px-4 pt-28 pb-16 sm:pt-40 lg:items-center lg:pt-28">
         <div className="mx-auto w-full max-w-6xl">
           <div className="mx-auto max-w-xl text-center lg:mx-0 lg:text-left">
-            <span className="chip">
+            <span className="chip hidden sm:inline-flex">
               <span className="h-1.5 w-1.5 rounded-full bg-white" />
               Consultant-led CESR &amp; Portfolio Pathway coaching
             </span>
-            <h1 className="on-scene mt-6 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 className="on-scene text-[1.9rem] font-bold leading-[1.1] tracking-tight sm:mt-6 sm:text-5xl lg:text-6xl">
               Your route to the <span className="text-aurora">Specialist Register</span>, guided by those
               who&apos;ve walked it.
             </h1>
-            <p className="on-scene mx-auto mt-5 max-w-md text-base text-mist/90 sm:text-lg lg:mx-0">
+            <p className="on-scene mx-auto mt-3 max-w-md text-[0.95rem] text-mist/90 sm:mt-5 sm:text-lg lg:mx-0">
               Experienced NHS consultants coaching doctors through the CESR
               (Portfolio Pathway) route, from first question to final submission.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3 sm:mt-8 lg:justify-start">
               <Link href="/register" className="btn-liquid px-8 py-3.5 text-sm">
                 Start your journey
               </Link>
@@ -113,7 +113,7 @@ export default async function Home() {
                 Explore our services
               </Link>
             </div>
-            <ul className="mt-8 flex flex-wrap justify-center gap-2 lg:justify-start">
+            <ul className="mt-8 hidden flex-wrap justify-center gap-2 sm:flex lg:justify-start">
               {["1-to-1 portfolio clinics", "100% online", "24/7 member library"].map((t) => (
                 <li key={t} className="chip">
                   {t}
