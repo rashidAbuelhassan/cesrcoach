@@ -594,6 +594,18 @@ function BookingModal({
             </div>
           )}
 
+          <p className="text-xs leading-relaxed text-mist/80">
+            By booking you agree to our{" "}
+            <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white">
+              Terms of Service
+            </a>
+            , including your 14-day right to cancel, and our{" "}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-white">
+              Privacy Policy
+            </a>
+            .
+          </p>
+
           <button type="submit" disabled={loading || !agreed} className="btn-liquid w-full py-3 text-sm">
             {loading
               ? "One moment…"

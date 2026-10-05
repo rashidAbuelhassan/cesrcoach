@@ -16,6 +16,14 @@ Home Screen on iOS & Android).
   email, optional phone/specialty/stage and their question. Stored in
   `coach_enquiries` (anon insert-only), with a honeypot, a minimum fill time,
   server-side validation and a per-email flood limit in the database.
+- **Privacy Policy** (`/privacy`) and **Terms of Service** (`/terms`) — written
+  for UK/EU GDPR and UK consumer law, linked from the footer, the sign-up form
+  (required tick-box), the booking form and the contact form. Edit the text in
+  `src/app/privacy/page.tsx` and `src/app/terms/page.tsx`; set the legal name,
+  company number, postal address and last-updated date in the `legal` object in
+  `src/config/site.ts` (blank lines are simply not shown). Review the retention
+  periods and refund wording against how you actually operate, and have a
+  solicitor check both pages before relying on them.
 - Services and team content are pulled live from the database, so admins can
   edit them without deployments.
 

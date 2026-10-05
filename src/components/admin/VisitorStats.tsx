@@ -4,6 +4,8 @@ import { formatDate } from "@/lib/utils";
 const PAGE_NAMES: Record<string, string> = {
   "/": "Homepage",
   "/contact": "Contact form",
+  "/privacy": "Privacy policy",
+  "/terms": "Terms of service",
   "/register": "Register",
   "/login": "Sign in",
   "/members": "Member dashboard",

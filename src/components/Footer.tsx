@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HashLink from "./HashLink";
 import { companion, site } from "@/config/site";
 
 export default function Footer({
@@ -22,9 +23,9 @@ export default function Footer({
           <div>
             <p className="text-sm font-semibold text-mist/90">Explore</p>
             <ul className="mt-3 space-y-2 text-sm text-mist/77">
-              <li><Link className="hover:text-white" href="/#pathway">The CESR pathway</Link></li>
-              <li><Link className="hover:text-white" href="/#team">Our consultants</Link></li>
-              <li><Link className="hover:text-white" href="/#services">Our services</Link></li>
+              <li><HashLink className="hover:text-white" href="/#pathway">The CESR pathway</HashLink></li>
+              <li><HashLink className="hover:text-white" href="/#team">Our consultants</HashLink></li>
+              <li><HashLink className="hover:text-white" href="/#services">Our services</HashLink></li>
               <li><Link className="hover:text-white" href="/members">Member area</Link></li>
               <li>
                 <a
@@ -53,12 +54,17 @@ export default function Footer({
               </li>
               <li>United Kingdom</li>
             </ul>
+            <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm text-mist/77">
+              <li><Link className="hover:text-white" href="/privacy">Privacy policy</Link></li>
+              <li><Link className="hover:text-white" href="/terms">Terms of service</Link></li>
+            </ul>
           </div>
         </div>
         <div className="mt-8 border-t border-white/10 pt-5 text-center text-xs text-mist/64">
           © {new Date().getFullYear()} {siteName}. All rights reserved. CESR is
           now formally known as the Portfolio Pathway (GMC). We count visits
-          anonymously, without cookies.
+          anonymously, without cookies. <Link className="underline underline-offset-2 hover:text-white" href="/privacy">Privacy</Link>{" · "}
+          <Link className="underline underline-offset-2 hover:text-white" href="/terms">Terms</Link>
         </div>
       </div>
     </footer>

@@ -13,6 +13,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [needsConfirm, setNeedsConfirm] = useState(false);
+  const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
@@ -110,7 +111,27 @@ export default function RegisterPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" disabled={loading} className="btn-liquid w-full py-3 text-sm">
+        <label className="flex items-start gap-3 text-xs leading-relaxed text-mist/84">
+          <input
+            type="checkbox"
+            required
+            checked={accepted}
+            onChange={(e) => setAccepted(e.target.checked)}
+            className="mt-0.5 accent-neutral-300"
+          />
+          <span>
+            I have read and agree to the{" "}
+            <Link href="/terms" target="_blank" className="font-semibold text-neutral-200 underline underline-offset-2">
+              Terms of Service
+            </Link>{" "}
+            and have read the{" "}
+            <Link href="/privacy" target="_blank" className="font-semibold text-neutral-200 underline underline-offset-2">
+              Privacy Policy
+            </Link>
+            .
+          </span>
+        </label>
+        <button type="submit" disabled={loading || !accepted} className="btn-liquid w-full py-3 text-sm">
           {loading ? "Creating account…" : "Create my account"}
         </button>
         <p className="text-center text-sm text-mist/70">

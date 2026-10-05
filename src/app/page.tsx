@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import HashLink from "@/components/HashLink";
 import { createClient } from "@/lib/supabase/server";
 import { getBranding } from "@/lib/settings";
 import { formatDuration } from "@/lib/utils";
@@ -109,9 +110,9 @@ export default async function Home() {
               <Link href="/register" className="btn-liquid px-8 py-3.5 text-sm">
                 Start your journey
               </Link>
-              <Link href="/#services" className="btn-ghost px-8 py-3.5 text-sm">
+              <HashLink href="/#services" className="btn-ghost px-8 py-3.5 text-sm">
                 Explore our services
-              </Link>
+              </HashLink>
             </div>
             <ul className="mt-8 hidden flex-wrap justify-center gap-2 sm:flex lg:justify-start">
               {["1-to-1 portfolio clinics", "100% online", "24/7 member library"].map((t) => (

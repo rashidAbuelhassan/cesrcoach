@@ -260,7 +260,11 @@ export default function ContactForm({ contactEmail }: { contactEmail: string }) 
         </button>
         <p className="text-xs leading-relaxed text-mist/80">
           We use your details only to answer your question. Nothing is shared or
-          added to a mailing list.
+          added to a mailing list. See our{" "}
+          <Link href="/privacy" className="underline underline-offset-2 hover:text-white">
+            Privacy Policy
+          </Link>
+          .
         </p>
       </div>
     </form>

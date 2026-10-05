@@ -19,6 +19,25 @@ export const site = {
   contactEmail: "hello@cesrcoach.com",
 };
 
+/**
+ * Who is legally behind the site. Shown in the Privacy Policy and Terms.
+ * UK law expects an online trader to publish its legal name and a postal
+ * address — fill `entity`, `companyNumber` and `address` in once known; any
+ * line left empty is simply not shown.
+ */
+export const legal = {
+  /** e.g. "CESR Coach Ltd" — falls back to the trading name when empty. */
+  entity: "",
+  /** Companies House number, if registered. */
+  companyNumber: "",
+  /** Registered / correspondence address. */
+  address: "",
+  /** Shown as "Last updated" on both pages. */
+  updated: "5 October 2026",
+  /** Where privacy requests go; defaults to the general contact address. */
+  privacyEmail: "",
+};
+
 /** Our sister app for day-to-day portfolio tracking. */
 export const companion = {
   name: "CESR Companion",

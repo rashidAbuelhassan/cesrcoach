@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
+import HashLink from "./HashLink";
 import { site } from "@/config/site";
 
 interface LogoProps {
@@ -21,12 +21,12 @@ export default function Logo({
   href = "/",
 }: LogoProps) {
   return (
-    <Link href={href} className="flex items-center gap-2 shrink-0" aria-label={siteName}>
+    <HashLink href={href} className="flex items-center gap-2 shrink-0" aria-label={siteName}>
       <img
         src={logoUrl || site.logo}
         alt={siteName}
         className={`${className} w-auto`}
       />
-    </Link>
+    </HashLink>
   );
 }
