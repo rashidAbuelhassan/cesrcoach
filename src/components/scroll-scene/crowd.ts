@@ -266,21 +266,6 @@ export function drawCrowd(
     draw: () => {
       const p = project(cam, 0, 0, HERO_Z);
 
-      // soft shadow stretching toward the viewer (the light is ahead of him)
-      const tip = project(cam, 0, 0, HERO_Z - 1.6);
-      const len = tip.y - p.y;
-      ctx.save();
-      ctx.translate(p.x, p.y + len * 0.42);
-      ctx.scale(0.36 * p.s, len * 0.6);
-      const shadow = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
-      shadow.addColorStop(0, grey(0, 0.38));
-      shadow.addColorStop(1, grey(0, 0));
-      ctx.fillStyle = shadow;
-      ctx.beginPath();
-      ctx.arc(0, 0, 1, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-
       const path = new Path2D();
       // slim, in a suit, ears just catching the glow, rucksack on his back
       const man = { outfit: "suit", hair: "short", ears: true, pack: true } as const;
