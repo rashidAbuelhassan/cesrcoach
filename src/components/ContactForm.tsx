@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { track } from "@/lib/analytics";
 import { useRef, useState } from "react";
 import {
   ENQUIRY_LIMITS,
@@ -71,6 +72,7 @@ export default function ContactForm({ contactEmail }: { contactEmail: string }) 
       setSentTo(values.email.trim());
       setValues(empty);
       setStatus("sent");
+      track("enquiry_sent");
     } catch {
       setServerError("We couldn't reach the server. Check your connection and try again.");
       setStatus("idle");

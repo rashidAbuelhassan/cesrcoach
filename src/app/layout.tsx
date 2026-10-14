@@ -5,6 +5,7 @@ import { site } from "@/config/site";
 import ScrollScene from "@/components/scroll-scene/ScrollScene";
 import PwaProvider from "@/components/PwaProvider";
 import VisitTracker from "@/components/VisitTracker";
+import PostHogTracker from "@/components/PostHogTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,6 +68,7 @@ export default function RootLayout({
         {children}
         <PwaProvider />
         <VisitTracker />
+        <PostHogTracker />
       </body>
     </html>
   );
