@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AuthShell from "@/components/AuthShell";
 import { createClient } from "@/lib/supabase/client";
-import { track } from "@/lib/analytics";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -37,8 +36,6 @@ export default function RegisterPage() {
       setLoading(false);
       return;
     }
-
-    track("account_created");
 
     // If email confirmation is enabled there is no session yet.
     if (!data.session) {
